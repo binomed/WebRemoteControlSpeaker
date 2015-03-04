@@ -10,15 +10,15 @@ components.directive('sws', ['$rootScope'
     priority : 1000, // It is the hight priority of the app and it have to rest like this
     scope: false,   
     controller: ['$scope',function($scope){
-      var revealIframeAction = null;
-      // Register the iframe controller for manipulating the reveal presentation in the iframe
-      this.registerControl = function(controlRevealDistant){
-        revealIframeAction = controlRevealDistant;
+      var engineIframeAction = null;
+      // Register the iframe controller for manipulating the engine presentation in the iframe
+      this.registerControl = function(controlengineDistant){
+        engineIframeAction = controlengineDistant;
       }
 
-      //  Call the reveal action (left / right / next / prev / up / down / show (current indices from scope) / reset (go to slide 0))
-      this.revealAction = function(action){
-        revealIframeAction(action, $scope);
+      //  Call the engine action (left / right / next / prev / up / down / show (current indices from scope) / reset (go to slide 0))
+      this.engineAction = function(action){
+        engineIframeAction(action, $scope);
       }
 
       var indicesSav = null;
@@ -33,7 +33,7 @@ components.directive('sws', ['$rootScope'
           $scope.model.indices.h = $scope.model.indicesDist.h;
           $scope.model.indices.v = $scope.model.indicesDist.v;
           $scope.model.indices.f = $scope.model.indicesDist.f;
-          revealIframeAction('show', $scope);
+          engineIframeAction('show', $scope);
         }
       }
 
@@ -43,7 +43,7 @@ components.directive('sws', ['$rootScope'
           $scope.model.indices.h = indicesSav.h;
           $scope.model.indices.v = indicesSav.v;
           $scope.model.indices.f = indicesSav.f;
-          revealIframeAction('show', $scope);
+          engineIframeAction('show', $scope);
           indicesSav = null;
         }
       }
@@ -90,7 +90,7 @@ components.directive('sws', ['$rootScope'
           indices : {
               h : 0,
               v : 0
-          }, // Basic initialization of indices of reveal presentation
+          }, // Basic initialization of indices of engine presentation
           currentSlideNumber : 1, // current slide number on client side
           nextSlideNumber : 1, // next slide number on preview 
           nbSlides : 0, // Total Number of slides        

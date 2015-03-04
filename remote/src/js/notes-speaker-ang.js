@@ -1,5 +1,5 @@
 /*
-* Reveal Sockets Notes : Remote App V1.0.0
+* Engine Presentations Sockets Notes : Remote App V2.0.0
 *
 */
 'use strict';

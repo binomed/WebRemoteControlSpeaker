@@ -19,7 +19,7 @@ components.directive('slidingMenu', [
       * Swype management
       */
 
-      // We add a managment of gesture in order to control the reveal presentation
+      // We add a managment of gesture in order to control the engine presentation
       // We have to avoid to detect drag on controls (except when controls are not shown)
       var expandDirection = true;
       var lastState = 'collapse';

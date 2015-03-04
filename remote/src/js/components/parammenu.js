@@ -34,7 +34,7 @@ components.directive('paramMenu', ['$rootScope'
       }
 
       scope.reset = function(){
-        swsControl.revealAction('reset')
+        swsControl.engineAction('reset')
         scope.ui.showMenuClass = 'collapse';
       }
 

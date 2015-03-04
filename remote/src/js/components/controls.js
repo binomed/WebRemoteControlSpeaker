@@ -32,28 +32,28 @@ components.directive('controls', ['$timeout'
       scope.leftClick = function($event){
         if (!$event.target.hasAttribute('disabled')) {
           reset();
-          iframeCtrl.revealAction('left');
+          iframeCtrl.engineAction('left');
         }
       }
       
       scope.rightClick = function($event){
         if (!$event.target.hasAttribute('disabled')) {
           reset();
-          iframeCtrl.revealAction('right');
+          iframeCtrl.engineAction('right');
         }
       }
       
       scope.upClick = function($event){
         if (!$event.target.hasAttribute('disabled')) {
           reset();
-          iframeCtrl.revealAction('up');
+          iframeCtrl.engineAction('up');
         }
       }
       
       scope.downClick = function($event){
         if (!$event.target.hasAttribute('disabled')) {
           reset();
-          iframeCtrl.revealAction('down');
+          iframeCtrl.engineAction('down');
         }
       }
       
@@ -67,7 +67,7 @@ components.directive('controls', ['$timeout'
               data : 'show', 
               index: scope.model.indices
           });
-          iframeCtrl.revealAction('next');
+          iframeCtrl.engineAction('next');
         }
       }
 
@@ -76,7 +76,7 @@ components.directive('controls', ['$timeout'
         scope.model.indices.h = indices.h;
         scope.model.indices.v = indices.v;
         scope.model.indices.f = indices.f;
-        iframeCtrl.revealAction('show');
+        iframeCtrl.engineAction('show');
       }
 
       function reset(){
@@ -92,19 +92,19 @@ components.directive('controls', ['$timeout'
       }
 
 
-      // We add a managment of gesture in order to control the reveal presentation
+      // We add a managment of gesture in order to control the engine presentation
       $(iElement[0]).hammer().on('release', function(event){
         if (event.gesture && event.gesture.direction && event.gesture.distance > 1){
           event.gesture.preventDefault();
           reset();
           if (event.gesture.direction === 'left' && !scope.ui.controls.right){
-            iframeCtrl.revealAction('right');
+            iframeCtrl.engineAction('right');
           }else if (event.gesture.direction === 'right' && !scope.ui.controls.left){
-            iframeCtrl.revealAction('left');
+            iframeCtrl.engineAction('left');
           }else if (event.gesture.direction === 'up' && !scope.ui.controls.down){
-            iframeCtrl.revealAction('down');
+            iframeCtrl.engineAction('down');
           }else if (event.gesture.direction === 'down' && !scope.ui.controls.up){
-            iframeCtrl.revealAction('up');
+            iframeCtrl.engineAction('up');
           }
 
         }

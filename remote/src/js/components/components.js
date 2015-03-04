@@ -3,5 +3,5 @@
 */
 'use strict';
 
-var components = angular.module('sws.components',[])
+var components = angular.module('sws.components',['sws.engines'])
 ;
