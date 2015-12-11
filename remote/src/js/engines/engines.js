@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var engines = angular.module('sws.enginces')
+var engines = angular.module('sws.engines',[])
 .run([function(){
     
 }]);

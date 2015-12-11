@@ -7,26 +7,26 @@ components.directive('iframeControl', ['$rootScope', '$timeout'
   ,function ($rootScope, $timeout ) {
 
     
-   var revealIFrame = null;
+   var presentationIFrame = null;
 
    // Function to manipulate the presentation
-   var revealIFrameAction = function(action, scope){
+   var engineIFrameAction = function(action, scope){
       if (action === 'next'){
-        revealIFrame.next();
+        presentationIFrame.next();
       }else if (action === 'prev'){
-        revealIFrame.prev();          
+        presentationIFrame.prev();          
       }else if (action === 'up'){
-        revealIFrame.up();          
+        presentationIFrame.up();          
       }else if (action === 'down'){
-        revealIFrame.down();          
+        presentationIFrame.down();          
       }else if (action === 'left'){
-        revealIFrame.left();          
+        presentationIFrame.left();          
       }else if (action === 'right'){
-        revealIFrame.right();          
+        presentationIFrame.right();          
       }else if (action === 'reset'){
-        revealIFrame.slide( 0, 0, -1 );          
+        presentationIFrame.slide( 0, 0, -1 );          
       }else if (action === 'show'){
-        revealIFrame.slide( scope.model.indices.h, scope.model.indices.v, scope.model.indices.f ? scope.model.indices.f : 0 );          
+        presentationIFrame.slide( scope.model.indices.h, scope.model.indices.v, scope.model.indices.f ? scope.model.indices.f : 0 );          
       }
    }
 
@@ -39,14 +39,14 @@ components.directive('iframeControl', ['$rootScope', '$timeout'
     controller: ['$scope', function($scope){
 
       // Add a method for sharing action to directives
-      this.revealAction = function(action){
-        revealIFrameAction(action,$scope);      
+      this.engineAction = function(action){
+        engineIFrameAction(action,$scope);      
       }
     }],
     link: function postLink(scope, iElement, iAttrs, swsControl) { 
 
       // We share the possibility to navigate in the main directive (just the method)
-      swsControl.registerControl(revealIFrameAction);
+      swsControl.registerControl(engineIFrameAction);
 
       var iframe = iElement.find('iframe')[0];
 
@@ -89,9 +89,9 @@ components.directive('iframeControl', ['$rootScope', '$timeout'
 
       var onIFrameLoad = function(){
         console.log('IFrame load ! ');
-        revealIFrame = iframe.contentWindow.Reveal;
+        presentationIFrame = iframe.contentWindow.Reveal;
         // Configuration of presentation to hide controls
-        revealIFrame.initialize({
+        presentationIFrame.initialize({
             controls: true,
             transition : 'default',
             transitionSpeed : 'fast',
@@ -103,9 +103,9 @@ components.directive('iframeControl', ['$rootScope', '$timeout'
         });
         
         // We listen to reaveal events in order to ajust the screen
-        revealIFrame.addEventListener( 'slidechanged', revealChangeListener);
-        revealIFrame.addEventListener( 'fragmentshown', revealFragementShowListener);
-        revealIFrame.addEventListener( 'fragmenthidden', revealFragementHiddeListener);
+        presentationIFrame.addEventListener( 'slidechanged', revealChangeListener);
+        presentationIFrame.addEventListener( 'fragmentshown', revealFragementShowListener);
+        presentationIFrame.addEventListener( 'fragmenthidden', revealFragementHiddeListener);
         
         updateControls();
         scope.ui.iframeLoad = true;
@@ -115,7 +115,7 @@ components.directive('iframeControl', ['$rootScope', '$timeout'
       // We delay the update of model 
       var revealChangeListener = function(event){
          $timeout(function(){          
-            scope.model.indices = revealIFrame.getIndices();
+            scope.model.indices = presentationIFrame.getIndices();
             scope.model.nextSlideNumber = scope.model.mapPosition[scope.model.indices.h+'-'+scope.model.indices.v];
             
             updateControls();
@@ -124,12 +124,12 @@ components.directive('iframeControl', ['$rootScope', '$timeout'
 
 
       var revealFragementShowListener = function(event){
-        scope.model.indices = revealIFrame.getIndices();
+        scope.model.indices = presentationIFrame.getIndices();
       }
 
 
       var revealFragementHiddeListener = function(event){
-        scope.model.indices = revealIFrame.getIndices();
+        scope.model.indices = presentationIFrame.getIndices();
       }
 
       iframe.onload = onIFrameLoad;
