@@ -23,9 +23,7 @@
   list-style: none;
   top: calc(45px + 5px);
   top: -webkit-calc(45px + 5px);
-  -moz-box-shadow: rgba(0, 0, 0, 0.75) 0px 1px 3px inset;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.75) 0px 1px 3px inset;
-  box-shadow: rgba(0, 0, 0, 0.75) 0px 1px 3px inset;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.75) inset;
   padding: 0;
   margin: 0;
 }
@@ -36,9 +34,7 @@
   width: auto;
   height: auto;
   font-size: 14pt;
-  -moz-box-shadow: rgba(0, 0, 0, 0.75) 0px -1px 1px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.75) 0px -1px 1px;
-  box-shadow: rgba(0, 0, 0, 0.75) 0px -1px 1px;
+  box-shadow: 0px -1px 1px rgba(0, 0, 0, 0.75);
   text-align: left;
   padding-left: 2.5em;
   color: #675C53;

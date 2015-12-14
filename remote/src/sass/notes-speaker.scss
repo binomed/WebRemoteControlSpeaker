@@ -53,26 +53,21 @@ body {
 }
 
 .main-content-app-scroll.collapse{
-  @include transition-property(width, opacity, left, transform);
-  @include transition-duration(0.2s);
-  @include transition-timing-function(ease-in);
-  @include translateX(0);
+  transition: opacity 0.2s ease-in, left 0.2s ease-in, width 0.2s ease-in, transform 0.2s ease-in,;
+  transform : translateX(0);  
 }
 
 .main-content-app-scroll.expand-menu, .main-content-app-scroll.expand-plugin{
-  
-  @include transition-property(width, opacity, left, transform);
-  @include transition-duration(0.2s);
-  @include transition-timing-function(ease-in);
-  @include box-shadow(rgba(black, 0.75) 2px 0px 5px);
+  transition: opacity 0.2s ease-in, left 0.2s ease-in, width 0.2s ease-in, transform 0.2s ease-in,;
+  box-shadow: 2px 0px 5px rgba(black, 0.75);
 }
 
 .main-content-app-scroll.expand-menu{  
-  @include translateX($menu-width);  
+  transform : translateX($menu-width);
 }
 
 .main-content-app-scroll.expand-plugin{
-  @include translateX(-$menu-width);
+  transform : translateX(-$menu-width);
 }
 
 

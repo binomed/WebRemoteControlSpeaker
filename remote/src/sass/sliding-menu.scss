@@ -1,6 +1,5 @@
 @import 'colors';
 @import 'vars';
-@import "compass/css3";
 
 
 
@@ -34,7 +33,7 @@
       padding-left:$margin;
   		position: relative;
       background-color: $bg-color-menu-item;
-      @include box-shadow(rgba(black, 0.75) 0px -1px 1px);
+      box-shadow: 0px -1px 1px rgba(black,0.75);
   		border-top: thin solid white;
   		color: white;
   		line-height: $row-height;

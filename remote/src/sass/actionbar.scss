@@ -1,4 +1,3 @@
-@import "compass";
 @import "colors";
 @import "vars";
 
@@ -98,7 +97,7 @@
 
 
 .elapsed_time, .elapsed_bg{
-    @include background-image(linear-gradient(top, $color-normal-stop-1, $color-normal-stop-2));
+    background: linear-gradient(top, $color-normal-stop-1, $color-normal-stop-2) no-repeat;    
     position: absolute;    
     border-top: thin solid $color-actions;
     height:$margin-timer;
@@ -113,10 +112,10 @@
 }
 
 .elapsed_time.alert{
-    @include background-image(linear-gradient(top , $color-alert-stop-1, $color-alert-stop-2));
+    background: linear-gradient(top, $color-alert-stop-1, $color-alert-stop-2) no-repeat;
 }
 .elapsed_time.advanced{
-    @include background-image(linear-gradient(top , $color-advanced-stop-1, $color-advanced-stop-2));
+    background: linear-gradient(top, $color-advanced-stop-1, $color-advanced-stop-2) no-repeat;
 }
 
 .timeEllapesd{

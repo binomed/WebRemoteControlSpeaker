@@ -1,4 +1,3 @@
-@import "compass/css3";
 @import "colors";
 @import "vars";
 
@@ -96,9 +95,7 @@ $height-back : 30px;
     margin-left:-($width-back + 30px);
     margin-top:-($height-back / 2);
     color:black;
-    @include transition-property(opacity, left);
-    @include transition-duration(0.2s);
-    @include transition-timing-function(ease-in);
+    transition: opacity 0.2s ease-in, left 0.2s ease-in;
 }
 
 #preview #back.visible{
@@ -163,9 +160,7 @@ $height-back : 30px;
 
 
 #preview #show.hide, #preview #back.visible.hide{
-    @include transition-property(opacity);
-    @include transition-duration(6s);
-    @include transition-timing-function(ease-in);
+    transition : opacity 6s ease-in;
     opacity: 0.2;
 }
 

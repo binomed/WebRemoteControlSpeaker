@@ -41,5 +41,5 @@ $color-advanced-stop-2 : #DD9700;
 $color-plugin: #E0E1DD;
 
 @mixin shadow{
-	@include box-shadow(rgba(black, 0.75) 0px 0px 5px);
+	box-shadow: 0px 0px 5px rgba(black, 0.75);
 }

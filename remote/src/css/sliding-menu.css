@@ -18,7 +18,7 @@
  *                                  
  *                                  
  */
-/* line 7, ../sass/sliding-menu.scss */
+/* line 6, ../sass/sliding-menu.scss */
 .sliding-menu, .plugin-menu {
   position: absolute;
   /*left: 0;*/
@@ -35,7 +35,7 @@
   font-size: 18pt;
   font-weight: 400;
 }
-/* line 24, ../sass/sliding-menu.scss */
+/* line 23, ../sass/sliding-menu.scss */
 .sliding-menu .menu-title, .plugin-menu .menu-title {
   padding-left: 10px;
   margin-bottom: -10px;
@@ -43,57 +43,55 @@
   height: 50px;
   line-height: 50px;
 }
-/* line 32, ../sass/sliding-menu.scss */
+/* line 31, ../sass/sliding-menu.scss */
 .sliding-menu .menu-icon, .plugin-menu .menu-icon {
   font-family: 'open_sansregular';
   padding-left: 10px;
   position: relative;
   background-color: #575757;
-  -moz-box-shadow: rgba(0, 0, 0, 0.75) 0px -1px 1px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.75) 0px -1px 1px;
-  box-shadow: rgba(0, 0, 0, 0.75) 0px -1px 1px;
+  box-shadow: 0px -1px 1px rgba(0, 0, 0, 0.75);
   border-top: thin solid white;
   color: white;
   line-height: 45px;
   height: 45px;
   font-size: 14pt;
 }
-/* line 44, ../sass/sliding-menu.scss */
+/* line 43, ../sass/sliding-menu.scss */
 .sliding-menu .menu-icon .fa, .plugin-menu .menu-icon .fa {
   color: #FFFFFF;
 }
-/* line 48, ../sass/sliding-menu.scss */
+/* line 47, ../sass/sliding-menu.scss */
 .sliding-menu .menu-icon .fa-stack, .plugin-menu .menu-icon .fa-stack {
   width: 1em;
   height: 1em;
   line-height: 1em;
 }
-/* line 54, ../sass/sliding-menu.scss */
+/* line 53, ../sass/sliding-menu.scss */
 .sliding-menu .menu-icon .fa-stack-2x, .plugin-menu .menu-icon .fa-stack-2x {
   font-size: 1em;
 }
-/* line 58, ../sass/sliding-menu.scss */
+/* line 57, ../sass/sliding-menu.scss */
 .sliding-menu .menu-icon .fa-stack-1x, .plugin-menu .menu-icon .fa-stack-1x {
   font-size: 0.8em;
 }
-/* line 62, ../sass/sliding-menu.scss */
+/* line 61, ../sass/sliding-menu.scss */
 .sliding-menu .menu-icon .fa.fa-inverse, .plugin-menu .menu-icon .fa.fa-inverse {
   color: #939183;
 }
-/* line 66, ../sass/sliding-menu.scss */
+/* line 65, ../sass/sliding-menu.scss */
 .sliding-menu .menu-icon .menu-icon-text, .plugin-menu .menu-icon .menu-icon-text {
   position: absolute;
   top: 0;
   left: 2.5em;
 }
 
-/* line 77, ../sass/sliding-menu.scss */
+/* line 76, ../sass/sliding-menu.scss */
 .plugin-menu {
   left: initial;
   right: -300px;
 }
 
-/* line 85, ../sass/sliding-menu.scss */
+/* line 84, ../sass/sliding-menu.scss */
 #config_interval {
   width: 4.5em;
   display: inline;
