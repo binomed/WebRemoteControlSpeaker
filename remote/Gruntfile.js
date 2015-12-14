@@ -43,7 +43,7 @@ module.exports = function (grunt) {
         },
         assets: {
           fonts:     'fonts',
-          fontsAwesome: 'bower_components/font-awesome/fonts',
+          fontsAwesome: '../node_modules/font-awesome/fonts',
           images:   'images'
         }
     },

@@ -173,7 +173,7 @@
 
 /* line 137, ../sass/nav.scss */
 #preview .slide-preview-number {
-  background-color: #e0dac7;
+  background-color: #E0DAC7;
   position: absolute;
   width: auto;
   top: -1px;
@@ -182,7 +182,7 @@
   right: -1px;
   height: 40px;
   font-size: 12pt;
-  color: #675c53;
+  color: #675C53;
 }
 /* line 149, ../sass/nav.scss */
 #preview .slide-preview-number .next-slide {
@@ -214,5 +214,3 @@
   transition-timing-function: ease-in;
   opacity: 0.2;
 }
-
-/*# sourceMappingURL=nav.css.map */

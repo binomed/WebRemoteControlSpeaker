@@ -28,7 +28,7 @@
   height: calc(100% - 40px - 7px);
   height: -webkit-calc(100% - 40px - 7px);
   background-color: #939183;
-  color: white;
+  color: #FFFFFF;
   left: -300px;
   z-index: 100;
   overflow: auto;
@@ -60,7 +60,7 @@
 }
 /* line 44, ../sass/sliding-menu.scss */
 .sliding-menu .menu-icon .fa, .plugin-menu .menu-icon .fa {
-  color: white;
+  color: #FFFFFF;
 }
 /* line 48, ../sass/sliding-menu.scss */
 .sliding-menu .menu-icon .fa-stack, .plugin-menu .menu-icon .fa-stack {
@@ -98,5 +98,3 @@
   width: 4.5em;
   display: inline;
 }
-
-/*# sourceMappingURL=sliding-menu.css.map */

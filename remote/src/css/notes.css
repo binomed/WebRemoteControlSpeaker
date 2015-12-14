@@ -109,7 +109,7 @@ body {
     /*top: calc( 40px + (2 * 7px) - 70px);
     top: -webkit-calc( 40px + (2 * 7px) - 70px);
 */
-  color: #e0dac7;
+  color: #E0DAC7;
 }
 
 /* line 38, ../sass/notes.scss */
@@ -120,7 +120,7 @@ body {
 /* line 43, ../sass/notes.scss */
 #notes .title-abs, #sws-plugins-area-content .title-abs {
   position: absolute;
-  background-color: #e0dac7;
+  background-color: #E0DAC7;
   color: #575757;
   font-size: 14pt;
   line-height: 45px;
@@ -217,9 +217,9 @@ body {
 
 /* line 132, ../sass/notes.scss */
 .slide-number {
-  background-color: #e0dac7;
-  border-top: thin solid #675c53;
-  border-left: thin solid #675c53;
+  background-color: #E0DAC7;
+  border-top: thin solid #675C53;
+  border-left: thin solid #675C53;
   position: absolute;
   width: auto;
   text-align: right;
@@ -228,12 +228,12 @@ body {
   bottom: -1px;
   height: 40px;
   font-size: 12pt;
-  color: #675c53;
+  color: #675C53;
 }
 
 /* line 147, ../sass/notes.scss */
 .curent-slide {
-  color: #b7183b;
+  color: #B7183B;
   font-size: 19.5pt;
 }
 
