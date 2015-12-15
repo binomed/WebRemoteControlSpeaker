@@ -18,7 +18,6 @@
  *                                  
  *                                  
  */
-/* line 6, ../sass/sliding-menu.scss */
 .sliding-menu, .plugin-menu {
   position: absolute;
   /*left: 0;*/
@@ -33,66 +32,45 @@
   z-index: 100;
   overflow: auto;
   font-size: 18pt;
-  font-weight: 400;
-}
-/* line 23, ../sass/sliding-menu.scss */
-.sliding-menu .menu-title, .plugin-menu .menu-title {
-  padding-left: 10px;
-  margin-bottom: -10px;
-  text-transform: uppercase;
-  height: 50px;
-  line-height: 50px;
-}
-/* line 31, ../sass/sliding-menu.scss */
-.sliding-menu .menu-icon, .plugin-menu .menu-icon {
-  font-family: 'open_sansregular';
-  padding-left: 10px;
-  position: relative;
-  background-color: #575757;
-  box-shadow: 0px -1px 1px rgba(0, 0, 0, 0.75);
-  border-top: thin solid white;
-  color: white;
-  line-height: 45px;
-  height: 45px;
-  font-size: 14pt;
-}
-/* line 43, ../sass/sliding-menu.scss */
-.sliding-menu .menu-icon .fa, .plugin-menu .menu-icon .fa {
-  color: #FFFFFF;
-}
-/* line 47, ../sass/sliding-menu.scss */
-.sliding-menu .menu-icon .fa-stack, .plugin-menu .menu-icon .fa-stack {
-  width: 1em;
-  height: 1em;
-  line-height: 1em;
-}
-/* line 53, ../sass/sliding-menu.scss */
-.sliding-menu .menu-icon .fa-stack-2x, .plugin-menu .menu-icon .fa-stack-2x {
-  font-size: 1em;
-}
-/* line 57, ../sass/sliding-menu.scss */
-.sliding-menu .menu-icon .fa-stack-1x, .plugin-menu .menu-icon .fa-stack-1x {
-  font-size: 0.8em;
-}
-/* line 61, ../sass/sliding-menu.scss */
-.sliding-menu .menu-icon .fa.fa-inverse, .plugin-menu .menu-icon .fa.fa-inverse {
-  color: #939183;
-}
-/* line 65, ../sass/sliding-menu.scss */
-.sliding-menu .menu-icon .menu-icon-text, .plugin-menu .menu-icon .menu-icon-text {
-  position: absolute;
-  top: 0;
-  left: 2.5em;
-}
+  font-weight: 400; }
+  .sliding-menu .menu-title, .plugin-menu .menu-title {
+    padding-left: 10px;
+    margin-bottom: -10px;
+    text-transform: uppercase;
+    height: 50px;
+    line-height: 50px; }
+  .sliding-menu .menu-icon, .plugin-menu .menu-icon {
+    font-family: 'open_sansregular';
+    padding-left: 10px;
+    position: relative;
+    background-color: #575757;
+    box-shadow: 0px -1px 1px rgba(0, 0, 0, 0.75);
+    border-top: thin solid white;
+    color: white;
+    line-height: 45px;
+    height: 45px;
+    font-size: 14pt; }
+    .sliding-menu .menu-icon .fa, .plugin-menu .menu-icon .fa {
+      color: #FFFFFF; }
+    .sliding-menu .menu-icon .fa-stack, .plugin-menu .menu-icon .fa-stack {
+      width: 1em;
+      height: 1em;
+      line-height: 1em; }
+    .sliding-menu .menu-icon .fa-stack-2x, .plugin-menu .menu-icon .fa-stack-2x {
+      font-size: 1em; }
+    .sliding-menu .menu-icon .fa-stack-1x, .plugin-menu .menu-icon .fa-stack-1x {
+      font-size: 0.8em; }
+    .sliding-menu .menu-icon .fa.fa-inverse, .plugin-menu .menu-icon .fa.fa-inverse {
+      color: #939183; }
+    .sliding-menu .menu-icon .menu-icon-text, .plugin-menu .menu-icon .menu-icon-text {
+      position: absolute;
+      top: 0;
+      left: 2.5em; }
 
-/* line 76, ../sass/sliding-menu.scss */
 .plugin-menu {
   left: initial;
-  right: -300px;
-}
+  right: -300px; }
 
-/* line 84, ../sass/sliding-menu.scss */
 #config_interval {
   width: 4.5em;
-  display: inline;
-}
+  display: inline; }
