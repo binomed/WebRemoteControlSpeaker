@@ -1,20 +1,19 @@
 #!/bin/bash
 echo "Start Remote build"
 cd remote
-npm install
-bower install
+sudo npm install
 echo "Remote build done"
 echo ""
 echo "Start Reveal build"
 cd ../reveal_plugin
-npm install
+sudo npm install
 echo "Reveal build done"
 echo ""
 echo "Start Server build"
 cd ../server
-npm install
+sudo npm install
 cd src
-npm install
+sudo npm install
 echo "Server build done"
 echo ""
 cd ../..

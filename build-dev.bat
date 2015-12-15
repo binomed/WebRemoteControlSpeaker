@@ -1,7 +1,6 @@
 echo "Start Remote build"
 cd remote 
 call npm install 
-call bower install
 echo "Remote build done"
 echo ""
 echo "Start Reveal build"
