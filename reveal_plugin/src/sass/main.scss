@@ -1,5 +1,3 @@
-@import "compass";
-@import "compass/css3";
 @import "fonts";
 
 $width : 600px;
@@ -24,10 +22,7 @@ $percent-bottom : $height - $percent-top;
 	margin-left: -($width / 2);
 	color : $color;
 	background-color: $bg-color;
-	@include box-shadow(rgba(black, 0.75) 5px 5px 10px);
-	/*border-radius: 10px;*/
-	/*border: thin solid black;*/
-	/*padding: 20px;*/
+	box-shadow: 5px 5px 10px rgba(black, 0.75);
 	text-align: center;
 
 
