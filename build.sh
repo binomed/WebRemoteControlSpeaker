@@ -1,25 +1,23 @@
 #!/bin/bash
 echo "Start Remote build"
 cd remote
-npm install
-bower install
-grunt release_build
+sudo npm install
+gulp build
 echo "Remote build done"
 echo ""
 echo "Start Reveal build"
 cd ../reveal_plugin
-npm install
-grunt release_build
+sudo npm install
+gulp build
 echo "Reveal build done"
 echo ""
 echo "Start Server build"
 cd ../server
-npm install
-bower install
-grunt release
+sudo npm install
+gulp build
 echo "Server build done"
 echo ""
 cd ../dist/server
 echo "Load node modules for the server"
-npm install 
+sudo npm install 
 cd ../..
