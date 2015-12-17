@@ -13,6 +13,5 @@ cd ../server
 call npm install 
 cd src
 call npm install
-call bower install
 echo "Server build done"
 cd ../..
