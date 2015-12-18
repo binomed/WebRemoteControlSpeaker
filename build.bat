@@ -4,11 +4,11 @@ call npm install
 call gulp build
 echo "Remote build done"
 echo ""
-echo "Start Reveal build"
-cd ../reveal_plugin 
+echo "Start Plugins build"
+cd ../plugins 
 call npm install 
 call gulp build
-echo "Reveal build done"
+echo "Plugins build done"
 echo ""
 echo "Start Server build"
 cd ../server 

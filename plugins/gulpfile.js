@@ -12,7 +12,7 @@ var minifyCss = require('gulp-minify-css');
 var del = require("del");
 var runSequence = require('run-sequence');
 
-var distPlugins = "../dist/reveal_plugin/"
+var distPlugins = "../dist/plugins/"
 
 gulp.task("clean", function () {
   return del.sync([

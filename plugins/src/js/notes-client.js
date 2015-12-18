@@ -29,7 +29,7 @@ var UtilClientNotes = (function () {
           if(script.src && script.src.match(/notes-client\.js$/))
           { 
             var path = script.src;
-            return path.substring(0, path.indexOf('reveal_plugin'));
+            return path.substring(0, path.indexOf('plugins'));
           }
         }
       return "";
@@ -92,14 +92,14 @@ var RevealClientNotes = (function () {
   
   // Initialise with the configuration file
   var initConfig = function(){
-        UtilClientNotes.ajaxJSONGet(UtilClientNotes.extractPath()+'/reveal_plugin/conf/conf.json', function(data){    
+        UtilClientNotes.ajaxJSONGet(UtilClientNotes.extractPath()+'/plugins/conf/conf.json', function(data){    
             conf = data;
             initWS();
             loadAdditionnalScripts();
         });
 
         // We also list the ips file
-        UtilClientNotes.ajaxJSONGet(UtilClientNotes.extractPath()+'/reveal_plugin/conf/ips.json', function(data) {
+        UtilClientNotes.ajaxJSONGet(UtilClientNotes.extractPath()+'/plugins/conf/ips.json', function(data) {
           ips = data;
         });
 
@@ -340,7 +340,7 @@ var RevealClientNotes = (function () {
 
   // Load all the additionnals javascript libraries needed (QrCode)
   var loadAdditionnalScripts = function(){
-    var path = UtilClientNotes.extractPath()+'reveal_plugin/'+(conf.devMode ? 'src/' : '');
+    var path = UtilClientNotes.extractPath()+'plugins/'+(conf.devMode ? 'src/' : '');
     loadScript(path+'components/qrcode/qrcode.min.js');
     loadCss(path+'css/main.css');
   }

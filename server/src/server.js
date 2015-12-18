@@ -92,12 +92,12 @@ var confFileJSON = JSON.stringify(conf);
 if (conf.devMode){
     confFileArray.push(__dirname+'/../conf/conf.json'); // Server
     confFileArray.push(__dirname+'/../../remote/conf/conf.json'); // Remote
-    confFileArray.push(__dirname+'/../../reveal_plugin/conf/conf.json'); // Reveal Client
+    confFileArray.push(__dirname+'/../../plugins/conf/conf.json'); // Reveal Client
 }else{
     confFileArray.push(__dirname+'/../conf/conf.json'); // Base
     confFileArray.push(__dirname+'/conf/conf.json'); // Server
     confFileArray.push(__dirname+'/../remote/conf/conf.json'); // Remote
-    confFileArray.push(__dirname+'/../reveal_plugin/conf/conf.json'); // Reveal Client
+    confFileArray.push(__dirname+'/../plugins/conf/conf.json'); // Reveal Client
 }
 for (var i =0; i < confFileArray.length; i++){
 
@@ -204,9 +204,9 @@ function writeFile(){
         console.log('Write ip file');
         var pathIpFile = null;
         if (conf.devMode){
-            pathIpFile = __dirname+'/../../reveal_plugin/conf/ips.json'; // Reveal Client
+            pathIpFile = __dirname+'/../../plugins/conf/ips.json'; // Reveal Client
         }else{
-            pathIpFile = __dirname+'/../reveal_plugin/conf/ips.json'; // Reveal Client
+            pathIpFile = __dirname+'/../plugins/conf/ips.json'; // Reveal Client
         }
 
         fs.writeFile(pathIpFile, JSON.stringify(jsonNetWork), function(err) {

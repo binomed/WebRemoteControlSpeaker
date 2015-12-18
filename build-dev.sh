@@ -4,10 +4,10 @@ cd remote
 sudo npm install
 echo "Remote build done"
 echo ""
-echo "Start Reveal build"
-cd ../reveal_plugin
+echo "Start Plugins build"
+cd ../plugins
 sudo npm install
-echo "Reveal build done"
+echo "Plugins build done"
 echo ""
 echo "Start Server build"
 cd ../server
