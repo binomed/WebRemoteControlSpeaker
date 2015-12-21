@@ -1,7 +1,7 @@
-revealjs-sockets-notes
+web-remote-control-slides
 ======================
 
-Reveal Sockets plugin for speakers that offer a remote control of the presentation from your mobile located in the same network loop.
+Web Remote Control is a plugin for speakers that offer a remote control of the presentation from your mobile located in the same network loop.
 
 The basic features ares : 
 
@@ -21,7 +21,7 @@ This plugin use :
 1. For NodeJS you have to install [node.js](http://nodejs.org/download/). Don't forget to select to add node to the path ! 
 
 
-**It is important that you have the right to write on the directory where the reveal presentation is because the start of the server will write some files on your File System.**
+**It is important that you have the right to write on the directory where the presentation is because the start of the server will write some files on your File System.**
 
 # Use the build version
 
@@ -40,13 +40,13 @@ If you are behind a proxy, you have to configure npm to go throught proxy [npm b
 ## Install
 
 1. Download of clone the repository
-2. Copy this directory into : 'YourRevealPresentation/plugin/sockets-notes'
+2. Copy this directory into : 'YourPresentation/plugin/web-remote-control'
 
 ## Build, the project
 
 A build.bat or build.sh was write to build the project to a dist directory
 
-1. Go to 'YourRevealPresentation/plugin/sockets-notes'
+1. Go to 'YourPresentation/plugin/web-remote-control'
 2. run 'build.bat' or 'build.sh'
 
 This should create a "dist" directory with the project compile and it has normally download all the necessary dependancies
@@ -56,15 +56,16 @@ This should create a "dist" directory with the project compile and it has normal
 
 You have to add thoses line in your html
 
-1. ```{ src: '{$REVEAL_HOME_DIRECTORY}/plugin/sockets-notes/dist/plugins/js/notes-client.js', async: true, callback: function() { RevealClientNotes.init({}); } }``` in the dependancies of Reveal
+1. ```{ src: '{$HOME_DIRECTORY}/plugin/web-remote-control/dist/plugins/js/notes-client.js', async: true, callback: function() { WebRemoteClientNotes.init({}); } }``` in the dependancies of Reveal
 2. the object to pass to init method has thoses parameters
  1. controlsColor : The color of controls in remote (default is 'white')
 3. ```<script src="/socket.io/socket.io.js"></script>``` in the import section of your javascripts
 4. You have to check that markdown plugin is present in your presentation
 5. You have to check that you have the file lib/js/head.min.js in your presentation
 
+
 According to the number of plugins you want to use with the remote control, add as many lines as you want somes plugins in the reveal dependancies : 
-```{ src: '{$REVEAL\_HOME\_DIRECTORY}/plugin/sockets-notes/dist/plugins/plugins/*{thePluginYouWant}*.js', async: true}```
+```{ src: '{$HOME\_DIRECTORY}/plugin/web-remote-control/dist/plugins/plugins/*{thePluginYouWant}*.js', async: true}```
 
 Here is the list of plugin and their paths (according to plugins/plugins directory) : 
 
@@ -76,8 +77,8 @@ Here is the list of plugin and their paths (according to plugins/plugins directo
 
 ### Use it
 
-1. Start the server from your revealPresentation folder root with ```node plugin/sockets-notes/dist/server/server.js -r REVEAL_DIRECTORY_PATH``` (The REVEAL\_DIRECTORY\_PATH is corresponding to the relative path according to the curent directory where the reveal presentation with the plugin is present (A directory where plugin/sockets-notes is present)). If your reveal presentation is on the root of the server (I.E. the plugin directory is aside of the index.html) juste start the server with ```node plugin/sockets-notes/dist/server/server.js```
-2. Launch your reveal presentation on http://localhost:8080/{youRevealPresentation}.html
+1. Start the server from your Presentation folder root with ```node plugin/web-remote-control/dist/server/server.js -r DIRECTORY_PATH``` (The DIRECTORY\_PATH is corresponding to the relative path according to the curent directory where the reveal presentation with the plugin is present (A directory where plugin/sockets-notes is present)). If your reveal presentation is on the root of the server (I.E. the plugin directory is aside of the index.html) juste start the server with ```node plugin/web-remote-control/dist/server/server.js```
+2. Launch your presentation on http://localhost:8080/{youPresentation}.html
 2. Tap on your keyboard CRTL+Q
 3. Select the right network and click on it
 4. Scan the QrCode with your smartphone
@@ -92,7 +93,7 @@ If you want to work with the source, you will have to install [Compass](http://c
 
 The build task use previously don't use compass, so if you want to build a part of the project, you have to run ```grunt release``` instead of ```grunt release_build``` (cf [https://github.com/chriseppstein/compass/issues/1108](https://github.com/chriseppstein/compass/issues/1108))
 
-When you will work with the server, don't forget to specify that your are in development mode : ```node plugin/sockets-notes/dist/server/server.js -d true```
+When you will work with the server, don't forget to specify that your are in development mode : ```node plugin/web-remote-control/dist/server/server.js -d true```
 
 
 

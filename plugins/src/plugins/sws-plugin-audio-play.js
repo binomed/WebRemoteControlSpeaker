@@ -12,4 +12,4 @@ function callBack(object){
 	}
 }
 
-RevealClientNotes.registerPlugin('ap', callBack);
+WebRemoteControl.registerPlugin('ap', callBack);

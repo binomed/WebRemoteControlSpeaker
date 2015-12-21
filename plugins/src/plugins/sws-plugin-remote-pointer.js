@@ -1,7 +1,7 @@
 /*
 * Remote Pointer plugin
 *
-* Will show a pointer on reveal presentation corresponding to move of finger on mobile 
+* Will show a pointer on the presentation corresponding to move of finger on mobile 
 */
 SWSRemotePointer = (function(){
 
@@ -16,7 +16,6 @@ SWSRemotePointer = (function(){
 			pointerDiv.style['border-radius'] = '10px';			
 			pointerDiv.style['z-index'] = '200';
 
-			//var revealDiv = document.querySelector('.reveal');
 			document.body.appendChild(pointerDiv);
 		}
 
@@ -31,7 +30,7 @@ SWSRemotePointer = (function(){
 		
 	}
 
-	RevealClientNotes.registerPlugin('rp', callBack);
+	WebRemoteControl.registerPlugin('rp', callBack);
 
 	return{
 

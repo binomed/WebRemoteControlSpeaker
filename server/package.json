@@ -1,7 +1,7 @@
 {
   "author": "JefBinomed",
-  "name": "SpeakerWS-Server-Grunt",
-  "version": "1.0.0",
+  "name": "WebRemoteControl-Server",
+  "version": "2.0.0",
   "dependencies": {},
   "devDependencies": {   
     "del": "^1.2.1",

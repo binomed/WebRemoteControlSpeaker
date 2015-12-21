@@ -1,5 +1,5 @@
 /**
- * Speaker Websoket plugins
+ * Web Remote Control plugins
  */
 'use strict';
 
@@ -11,13 +11,13 @@ var engines = angular.module('sws.engines',[])
 /*
 * Factory that provides RevealJS Engine
 */
-engines.factory('EngineFactory',['RevealEngine',function(revealEngine){
+engines.factory('EngineFactory',['Engine',function(remoteEngine){
 
 	var engine = null;
 	
 	function getEngine(iFrame){
 		if (!engine){
-			engine = revealEngine;
+			engine = remoteEngine;
 		}
 		return engine;
 	}

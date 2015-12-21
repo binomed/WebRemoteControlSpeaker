@@ -1,19 +1,25 @@
 'use strict';
 
 /*
-* Reveal Sockets Notes : Plugin Client V1.0.0
+* Web Remote Control : Plugin Client V2.0.0
 *
 */
 
 var UtilClientNotes = (function () {
     var ajaxJSONGet = function(url, callback){
+        ajaxGet(url, function(data){
+          callback(JSON.parse(data));
+        });
+    };
+
+    var ajaxGet = function(url, callback){
         var http_request = new XMLHttpRequest();
         http_request.open("GET", url, true);
         http_request.onreadystatechange = function () {
           var done = 4;
           var ok = 200;
           if (http_request.readyState === done && http_request.status === ok){
-            callback(JSON.parse(http_request.responseText));
+            callback(http_request.responseText);
           }
         };
         http_request.send();
@@ -36,16 +42,17 @@ var UtilClientNotes = (function () {
     };
 
     return {
+      ajaxGet : ajaxGet,
       ajaxJSONGet : ajaxJSONGet,
       extractPath : extractPath
     }
 })();
 
 /**
- * Handles opening of and synchronization with the reveal.js
+ * Handles opening of and synchronization with the presentation
  * notes window.
  */
-var RevealClientNotes = (function () {
+var WebRemoteControl = (function () {
 
   /*
   * **************************************
@@ -67,7 +74,7 @@ var RevealClientNotes = (function () {
   * **************************************
   */
   
-  // We init the client side (websocket + reveal Listener)
+  // We init the client side (websocket + engine Listener)
 	var init = function(conf){
 
     // We check if this script ins't in the iframe of the remote control
@@ -75,8 +82,9 @@ var RevealClientNotes = (function () {
         console.log('Initialize Client side');
         additionnalConfiguration = conf;
         checkAdditionnalConfiguration();
+        loadPlugins(conf.plugins);
         initConfig();
-        initRevealListener();
+        initEngineListener();
     }        
   };    
 
@@ -106,6 +114,14 @@ var RevealClientNotes = (function () {
         document.onkeydown = keyPress;
       
   };    	
+
+  var loadPlugins = function(pluginUrls){
+    if(pluginUrls && pluginUrls.length > 0){
+      for (var i = 0; i < pluginUrls.length; i++){
+        loadScript(UtilClientNotes.extractPath()+pluginUrls[i].src);
+      }
+    }
+  }
 
   // Use to detect the call of server presentation
   var keyPress = function(e){
@@ -186,6 +202,7 @@ var RevealClientNotes = (function () {
     var totalSlides = 0;
     var mapPosition = {};
 
+    // TODO : make it generic
     // Method take from revealJS lib and rearange
 
     var HORIZONTAL_SLIDES_SELECTOR = '.reveal .slides>section',
@@ -314,7 +331,7 @@ var RevealClientNotes = (function () {
   }
 
   // Listen to Reveal Events
-	var initRevealListener = function (){
+	var initEngineListener = function (){
 		Reveal.addEventListener( 'slidechanged', reavealCallBack);
 	};
 

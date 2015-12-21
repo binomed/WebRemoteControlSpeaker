@@ -9,6 +9,6 @@ node $PATH_TO_SERVER_JS/server.js [options]
 
 Where options are : 
 
-* -r : specify the path to reveal js
+* -e : specify the path to presentation js
 * -d : true if in dev mode
 * -p : specify the port of presentation (default 8080)

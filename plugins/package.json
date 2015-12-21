@@ -1,7 +1,7 @@
 {
   "author": "JefBinomed",
-  "name": "SpeakerWS-RevealClient",
-  "version": "1.0.0",
+  "name": "WebRemoteControl-Client",
+  "version": "2.0.0",
   "dependencies": {},
   "devDependencies": {
     "browser-sync": "^2.6.9",

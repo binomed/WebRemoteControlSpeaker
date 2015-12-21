@@ -18,7 +18,7 @@ sws.controller('SwsCtrl',
             //Init the webSocket and time management
             $scope.connect();
             // Load markdown engine
-            $.getScript('http://'+window.location.hostname+':'+data.port+data.revealPath+'/plugin/markdown/marked.js', function(){
+            $.getScript('http://'+window.location.hostname+':'+data.port+data.enginePath+'/plugin/markdown/marked.js', function(){
                 console.log("Script markdown loaded and executed.");
             // Here you can use anything you defined in the loaded script
             });

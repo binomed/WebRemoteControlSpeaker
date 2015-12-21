@@ -1,20 +1,20 @@
 'use strict';
 
 /*
-* Reveal Sockets Notes : Server V1.0.0
+* Web Remote Control : Server V2.0.0
 *
 */
 
 // Configuration part
 var fs = require('fs');
-// If set as parameters, we get the reveal directory path
+// If set as parameters, we get the engine directory path
 var conf = {
     devMode : false,
     port : 8080,
-    revealPath : ''
+    enginePath : ''
 };
 var argList = ['-h','--help',
-    '-r', '--reveal',
+    '-e', '--engine',
     '-p', '--port',
     '-d', '--dev'
 ];
@@ -32,13 +32,13 @@ function manageArgs(args){
         for (var i = 1; i<args.length;i++){
             newArgs.push(args[i]);
         }
-    }else if (args[0] === '-r' || args[0] === '--reveal'){
+    }else if (args[0] === '-e' || args[0] === '--engine'){
         if (args.length<2 || argList.indexOf(args[1]) != -1){
             showHelp = true;
         }
-        conf.revealPath = args[1]; 
-        if (conf.revealPath[0] != '/' || conf.revealPath[0] != '\\'){
-            conf.revealPath = '/'+conf.revealPath;
+        conf.enginePath = args[1]; 
+        if (conf.enginePath[0] != '/' || conf.enginePath[0] != '\\'){
+            conf.enginePath = '/'+conf.enginePath;
         }
         for (var i = 2; i<args.length;i++){
             newArgs.push(args[i]);
@@ -67,7 +67,7 @@ function manageArgs(args){
         console.log(' Parameters : \n');
         console.log(' * -h | --help : The command help. ');
         console.log(' * -p | --port : The port to use (defaut : 8080). ');
-        console.log(' * -r | --reveal : The path of reveal js presentation (defaut : consider that the path is the directory of presentation). ');
+        console.log(' * -e | --engine : The path of engine js presentation (defaut : consider that the path is the directory of presentation). ');
         console.log(' * -d | --dev : Specify if we\'re in developpement mode (the path load are different) : set true or false (default is false).');
         return true;
     }
@@ -92,12 +92,12 @@ var confFileJSON = JSON.stringify(conf);
 if (conf.devMode){
     confFileArray.push(__dirname+'/../conf/conf.json'); // Server
     confFileArray.push(__dirname+'/../../remote/conf/conf.json'); // Remote
-    confFileArray.push(__dirname+'/../../plugins/conf/conf.json'); // Reveal Client
+    confFileArray.push(__dirname+'/../../plugins/conf/conf.json'); // Client
 }else{
     confFileArray.push(__dirname+'/../conf/conf.json'); // Base
     confFileArray.push(__dirname+'/conf/conf.json'); // Server
     confFileArray.push(__dirname+'/../remote/conf/conf.json'); // Remote
-    confFileArray.push(__dirname+'/../plugins/conf/conf.json'); // Reveal Client
+    confFileArray.push(__dirname+'/../plugins/conf/conf.json'); // Client
 }
 for (var i =0; i < confFileArray.length; i++){
 
@@ -154,7 +154,7 @@ for (var dev in ifaces) {
             id: index,
             name:dev,
             ip : details.address, 
-            revealPath : conf.revealPath
+            enginePath : conf.enginePath
         });
       console.log(dev+(alias?':'+alias:''),details.address);
       index++;
@@ -173,7 +173,7 @@ var request = http.get('http://api.externalip.net/ip'
                 id : jsonNetWork.length,
                 name : 'public ip',
                 ip : ''+data, 
-                revealPath : conf.revealPath
+                enginePath : conf.enginePath
             });
             console.log('public ip found : '+data);
             
@@ -204,9 +204,9 @@ function writeFile(){
         console.log('Write ip file');
         var pathIpFile = null;
         if (conf.devMode){
-            pathIpFile = __dirname+'/../../plugins/conf/ips.json'; // Reveal Client
+            pathIpFile = __dirname+'/../../plugins/conf/ips.json'; // Client
         }else{
-            pathIpFile = __dirname+'/../plugins/conf/ips.json'; // Reveal Client
+            pathIpFile = __dirname+'/../plugins/conf/ips.json'; // Client
         }
 
         fs.writeFile(pathIpFile, JSON.stringify(jsonNetWork), function(err) {

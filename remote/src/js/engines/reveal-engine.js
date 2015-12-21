@@ -1,8 +1,8 @@
 
 /*
-* Factory that provides RevealJS Engine
+* Factory that provides presentation Engine
 */
-engines.factory('RevealEngine',[function(){
+engines.factory('Engine',[function(){
 
 	
 	function isIframeEngine(iframe){

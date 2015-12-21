@@ -29,4 +29,4 @@ function callBack(object){
 	}
 }
 
-RevealClientNotes.registerPlugin('vp', callBack);
+WebRemoteControl.registerPlugin('vp', callBack);

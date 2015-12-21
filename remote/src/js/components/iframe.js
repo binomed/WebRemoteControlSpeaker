@@ -89,6 +89,7 @@ components.directive('iframeControl', ['$rootScope', '$timeout'
 
       var onIFrameLoad = function(){
         console.log('IFrame load ! ');
+        // TODO : make it generic
         presentationIFrame = iframe.contentWindow.Reveal;
         // Configuration of presentation to hide controls
         presentationIFrame.initialize({

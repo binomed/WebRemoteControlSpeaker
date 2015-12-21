@@ -1,1 +1,1 @@
-#Reveal Sockets Plugin - Remote Part
+#Web Remote Control Plugin - Remote Part
