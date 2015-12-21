@@ -39,6 +39,12 @@ gulp.task("mincss", function () {
     .pipe(gulp.dest(distPlugins+"/css"));
 });
 
+gulp.task("uglify-engines", function () {
+  return gulp.src("./src/engines/*.js")    
+    .pipe(uglify())
+    .pipe(gulp.dest(distPlugins+"/engines"));
+});
+
 gulp.task("uglify-plugins", function () {
   return gulp.src("./src/plugins/*.js")    
     .pipe(uglify())
@@ -87,6 +93,6 @@ gulp.task('build', function(){
   runSequence(
     'clean',
     'sass-prod',
-    ['copy','uglify', 'uglify-plugins', 'mincss']
+    ['copy','uglify', 'uglify-plugins', 'uglify-engines', 'mincss']
   );
 });
