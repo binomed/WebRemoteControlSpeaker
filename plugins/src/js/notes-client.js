@@ -116,10 +116,17 @@ var WebRemoteControl = (function () {
   };    	
 
   var loadPlugins = function(pluginUrls){
+
     if(pluginUrls && pluginUrls.length > 0){
+      var loader = new ScriptLoader();
       for (var i = 0; i < pluginUrls.length; i++){
-        loadScript(UtilClientNotes.extractPath()+pluginUrls[i].src);
+        loader.add(UtilClientNotes.extractPath()+pluginUrls[i].src)
+        //loadScript(UtilClientNotes.extractPath()+pluginUrls[i].src);
       }
+      loader.loaded(function(failedCallbackF) {
+          console.log("Error.");
+          //reload this file
+      });
     }
   }
 
@@ -342,6 +349,37 @@ var WebRemoteControl = (function () {
     js_script.src = url;
     js_script.async = true;
     document.getElementsByTagName('head')[0].appendChild(js_script);
+  }
+
+  function ScriptLoader() {
+      var promises = [];
+
+      this.add = function(url) {
+          var promise = new Promise(function(resolve, reject) {
+
+              var script = document.createElement('script');
+              script.src = url;
+
+              script.addEventListener('load', function() {
+                  resolve(script);
+              }, false);
+
+              script.addEventListener('error', function() {
+                  reject(script);
+                  console.log('was rej');
+              }, false);
+
+              document.body.appendChild(script);
+          });
+
+          promises.push(promise);
+      };
+
+      this.loaded = function(callbackOnFailed) {
+          Promise.all(promises).then(function(result1) {
+              console.log('Script loaded from:', result1);
+          }, callbackOnFailed);
+      };
   }
 
   // Function that load a script
