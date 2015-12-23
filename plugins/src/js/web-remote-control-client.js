@@ -5,53 +5,6 @@
 *
 */
 
-var UtilClientNotes = (function () {
-    var ajaxJSONGet = function(url, callback){
-        ajaxGet(url, function(data){
-          callback(JSON.parse(data));
-        });
-    };
-
-    var ajaxGet = function(url, callback){
-        var http_request = new XMLHttpRequest();
-        http_request.open("GET", url, true);
-        http_request.onreadystatechange = function () {
-          var done = 4;
-          var ok = 200;
-          if (http_request.readyState === done && http_request.status === ok){
-            callback(http_request.responseText);
-          }
-        };
-        http_request.send();
-    };
-
-    var extractPath = function(){
-      var scripts = document.getElementsByTagName("script");
-
-        for(var idx = 0; idx < scripts.length; idx++)
-        {
-          var script = scripts.item(idx);
-
-          if(script.src && script.src.match(/notes-client\.js$/))
-          { 
-            var path = script.src;
-            return path.substring(0, path.indexOf('plugins'));
-          }
-        }
-      return "";
-    };
-
-    return {
-      ajaxGet : ajaxGet,
-      ajaxJSONGet : ajaxJSONGet,
-      extractPath : extractPath
-    }
-})();
-
-/**
- * Handles opening of and synchronization with the presentation
- * notes window.
- */
 var WebRemoteControl = (function () {
 
   /*
@@ -65,69 +18,163 @@ var WebRemoteControl = (function () {
     socket = null,
     ips = null,
     qrCode = null,
-    pluginList = {},
-    VERSION = '1.0.0';
+    pluginList = {};
+
+  const VERSION = '2.0.0';
 
   /*
   * **************************************
   * ---------INNER METHODS----------------
   * **************************************
   */
-  
-  // We init the client side (websocket + engine Listener)
-	var init = function(conf){
 
-    // We check if this script ins't in the iframe of the remote control
-    if(!window.parent || !window.parent.document.body.getAttribute('sws-remote-iframe-desactiv')){
-        console.log('Initialize Client side');
-        additionnalConfiguration = conf;
-        checkAdditionnalConfiguration();
-        loadPlugins(conf.plugins);
-        initConfig();
-        initEngineListener();
-    }        
-  };    
+
+  var ajaxJSONGet = function(url){
+    return new Promise(function(resolve, reject){
+      var http_request = new XMLHttpRequest();
+      http_request.open("GET", url, true);
+      http_request.onload = function () {
+        if (this.status >= 200 && this.status < 300){
+          resolve(JSON.parse(http_request.responseText));
+        }else{
+          reject(this.statusText);
+        }
+      };
+      http_request.onerror = function(){
+        reject(this.statusText);
+      }
+      http_request.send();
+    });
+    
+  };
+
+  var extractPath = function(){
+    var scripts = document.getElementsByTagName("script");
+
+    for(var idx = 0; idx < scripts.length; idx++){
+      var script = scripts.item(idx);
+
+      if(script.src && script.src.match(/web-remote-control-client\.js$/))
+      { 
+        var path = script.src;
+        return path.substring(0, path.indexOf('plugins'));
+      }
+    }
+    return "";
+  };
+
+  function ScriptLoader() {
+    var promises = [];
+
+    this.add = function(url, type) {
+      var promise = new Promise(function(resolve, reject) {
+
+
+        var elementToAttach = null;
+        var tag = document.createElement(type);
+        switch(type){
+          case 'script':
+            tag.src = url;
+            tag.type = "text/javascript";
+            elementToAttach = document.body;
+          break;
+          case 'link':
+            tag.rel = "stylesheet";
+            tag.type = "text/css";    
+            tag.href = url;
+            tag.media = 'all';
+            elementToAttach = document.getElementsByTagName('head')[0];
+          break;
+        }
+
+        tag.addEventListener('load', function() {
+            resolve(tag);
+        }, false);
+
+        tag.addEventListener('error', function() {
+            console.log('%s was rej',url);
+            reject(tag);
+        }, false);
+
+
+        elementToAttach.appendChild(tag);
+      });
+
+      promises.push(promise);
+    };
+
+    this.loaded = function() {
+      return new Promise(function(resolve, reject){
+        Promise.all(promises).then(function(results) {
+          resolve(results);
+        }, function(error){
+          reject(error);
+        });
+      });
+    };
+  }
+
+  // Load all the additionnals javascript libraries needed (QrCode)
+  var loadAdditionnalScripts = function(){
+    let path = extractPath()+'plugins/'+(conf.devMode ? 'src/' : '');
+    let loader = new ScriptLoader();
+    loader.add(path+'components/qrcode/qrcode.min.js', 'script');
+    loader.add(path+'css/main.css', 'link');
+    return loader.loaded();    
+  }
 
   var checkAdditionnalConfiguration = function(){
-    if (!additionnalConfiguration){
-      additionnalConfiguration = {};
-    }
+    return new Promise(function(resolve, reject){
+      if (!additionnalConfiguration){
+        additionnalConfiguration = {};
+      }
 
-    if (!additionnalConfiguration.controlsColor){
-      additionnalConfiguration.controlsColor = 'white';
-    }
+      if (!additionnalConfiguration.controlsColor){
+        additionnalConfiguration.controlsColor = 'white';
+      }
+      resolve();
+    });
   };
   
   // Initialise with the configuration file
   var initConfig = function(){
-        UtilClientNotes.ajaxJSONGet(UtilClientNotes.extractPath()+'/plugins/conf/conf.json', function(data){    
-            conf = data;
-            initWS();
-            loadAdditionnalScripts();
-        });
+    document.onkeydown = keyPress;
 
-        // We also list the ips file
-        UtilClientNotes.ajaxJSONGet(UtilClientNotes.extractPath()+'/plugins/conf/ips.json', function(data) {
-          ips = data;
-        });
+    return new Promise(function(resolve, reject){
+      Promise.all([
+        ajaxJSONGet(extractPath()+'/plugins/conf/conf.json'),
+        ajaxJSONGet(extractPath()+'/plugins/conf/ips.json')
+        ])
+      .then(function(values){
+        let confData = values[0];
+        conf = confData;
+        initWS();
+        loadAdditionnalScripts();
+        let ipData = values[1];
+        ips = ipData;
+        resolve();
+      }, function(error){
+        reject(error);
+      });
 
-        document.onkeydown = keyPress;
+    });         
+
       
-  };    	
+  };      
 
   var loadPlugins = function(pluginUrls){
-
     if(pluginUrls && pluginUrls.length > 0){
       var loader = new ScriptLoader();
       for (var i = 0; i < pluginUrls.length; i++){
-        loader.add(UtilClientNotes.extractPath()+pluginUrls[i].src)
-        //loadScript(UtilClientNotes.extractPath()+pluginUrls[i].src);
+        loader.add(pluginUrls[i].src, 'script');
+        //loadScript(extractPath()+pluginUrls[i].src);
       }
-      loader.loaded(function(failedCallbackF) {
-          console.log("Error.");
-          //reload this file
-      });
+      return loader.loaded();
     }
+    return new Promise(function(){
+      resolve();
+    });
+    
   }
 
   // Use to detect the call of server presentation
@@ -171,7 +218,7 @@ var WebRemoteControl = (function () {
       list += "</select>";
       list += "<button id='sws-show-qr-code-generate'>Generate</button>";
       document.querySelector('#listIp').innerHTML = list;
-      var pathPlugin = UtilClientNotes.extractPath();
+      var pathPlugin = extractPath();
       document.querySelector('#sws-show-qr-code-generate').addEventListener('click', function(event){
         var get_id = document.getElementById('sws-show-qr-code-select');
         var result = get_id.options[get_id.selectedIndex].value;
@@ -241,7 +288,7 @@ var WebRemoteControl = (function () {
   }
   
   // Init the WebSocket connection
-	var initWS = function(){
+  var initWS = function(){
         // Get the number of slides
 
         var confNbSlides = countNbSlides();      
@@ -267,7 +314,7 @@ var WebRemoteControl = (function () {
         socket.on('message', function (data) {
             if( data.type === "operation" && data.data === "show"){
                 Reveal.slide( data.index.h, data.index.v, data.index.f ? data.index.f : 0 );
-            }else if( data.type === "ping"){	  		               
+            }else if( data.type === "ping"){                       
 
                 if (document.querySelector('#sws-show-qr-code')){
                   document.querySelector('#sws-show-qr-code').style.display = 'none';
@@ -308,7 +355,7 @@ var WebRemoteControl = (function () {
                 
             }
         });
-	}; 
+  }; 
 
   var reavealCallBack = function(event){
     // We get the curent slide 
@@ -338,78 +385,43 @@ var WebRemoteControl = (function () {
   }
 
   // Listen to Reveal Events
-	var initEngineListener = function (){
-		Reveal.addEventListener( 'slidechanged', reavealCallBack);
-	};
+  var initEngineListener = function (){
+    Reveal.addEventListener( 'slidechanged', reavealCallBack);
+  };
 
-  // Function that load a script
-  var loadScript = function(url){
-    var js_script = document.createElement('script');
-    js_script.type = "text/javascript";
-    js_script.src = url;
-    js_script.async = true;
-    document.getElementsByTagName('head')[0].appendChild(js_script);
-  }
-
-  function ScriptLoader() {
-      var promises = [];
-
-      this.add = function(url) {
-          var promise = new Promise(function(resolve, reject) {
-
-              var script = document.createElement('script');
-              script.src = url;
-
-              script.addEventListener('load', function() {
-                  resolve(script);
-              }, false);
-
-              script.addEventListener('error', function() {
-                  reject(script);
-                  console.log('was rej');
-              }, false);
-
-              document.body.appendChild(script);
-          });
-
-          promises.push(promise);
-      };
-
-      this.loaded = function(callbackOnFailed) {
-          Promise.all(promises).then(function(result1) {
-              console.log('Script loaded from:', result1);
-          }, callbackOnFailed);
-      };
-  }
-
-  // Function that load a script
-  var loadCss = function(url){
-    var css_script = document.createElement('link');
-    css_script.rel = "stylesheet";
-    css_script.type = "text/css";    
-    css_script.href = url;
-    css_script.media = 'all';
-    css_script.async = true;
-    document.getElementsByTagName('head')[0].appendChild(css_script);
-  }
-
-  // Load all the additionnals javascript libraries needed (QrCode)
-  var loadAdditionnalScripts = function(){
-    var path = UtilClientNotes.extractPath()+'plugins/'+(conf.devMode ? 'src/' : '');
-    loadScript(path+'components/qrcode/qrcode.min.js');
-    loadCss(path+'css/main.css');
-  }
+  
 
   /*
   * **************************************
   * --------EXPOSED METHODS----------------
   * **************************************
   */
-
-  
-
+ 
   var registerPlugin = function (id, callbackAction){
     pluginList[id] = callbackAction;
+  }
+  
+
+  // We init the client side (websocket + engine Listener)
+  var init = function(conf){
+    // We check if this script ins't in the iframe of the remote control
+    if(!window.parent || !window.parent.document.body.getAttribute('sws-remote-iframe-desactiv')){
+        console.log('Initialize Client side');
+        additionnalConfiguration = conf;
+        checkAdditionnalConfiguration()
+        .then(function(){
+          return loadPlugins(conf.plugins);
+        })
+        .then(function(){
+          return initConfig();
+        })
+        .then(function(){
+          initEngineListener();
+        })
+        .catch(function(err){
+          console.error('Error : %s \n %s', err.message, err.stack);
+        });        
+    }        
   }
 
   /*
@@ -418,11 +430,9 @@ var WebRemoteControl = (function () {
   * **************************************
   */
 
-  //init();
 
   return {
-    registerPlugin : registerPlugin, 
-    init : init
-  };
-    
+    init : init,
+    registerPlugin : registerPlugin
+  }
 })();
