@@ -1,6 +1,6 @@
 'use strict';
 
-var GenericEngine = (function(){
+var GenericEngine = (function({
 
 	function goToSlide(params){
 
@@ -14,10 +14,15 @@ var GenericEngine = (function(){
 
 	}
 
+	function getPosition(){
+
+	}
+
 	return{
 		goToSlide : goToSlide,
 		initEngineListener : initEngineListener,
-		countNbSlides : countNbSlides
+		countNbSlides : countNbSlides,
+		getPosition : getPosition
 	}
 	
 })();

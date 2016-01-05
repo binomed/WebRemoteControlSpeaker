@@ -2,12 +2,46 @@
 
 var RevealEngine = (function(){
 
-	function goToSlide(params){
+	var callBackEngine = null;
 
+	var revealCallBack = function(event){
+		// We get the curent slide 
+		let slideElement = Reveal.getCurrentSlide(),
+		  messageData = null;
+
+		// We get the notes and init the indexs
+		let notes = slideElement.querySelector( 'aside.notes' );
+
+		// We prepare the message data to send through websocket
+		messageData = {
+		  notes : notes ? notes.innerHTML : '',
+		  markdown : notes ? typeof notes.getAttribute( 'data-markdown' ) === 'string' : false
+		};
+
+		callBackEngine({
+			notes : notes,
+			data : messageData
+		});		
+	}
+
+	/*
+	* **************************************
+	* --------EXPOSED METHODS----------------
+	* **************************************
+	*/
+
+	function getPosition(){
+		return Reveal.getIndices();
+	}
+
+
+	function goToSlide(params){
+		Reveal.slide( params.index.h, params.index.v, params.index.f ? params.index.f : 0 );
 	}
 
 	function initEngineListener(callBack){
-
+		callBackEngine = callBack;
+		Reveal.addEventListener( 'slidechanged', revealCallBack);
 	}
 
 	function countNbSlides(){
@@ -47,7 +81,8 @@ var RevealEngine = (function(){
 	return{
 		goToSlide : goToSlide,
 		initEngineListener : initEngineListener,
-		countNbSlides : countNbSlides
+		countNbSlides : countNbSlides,
+		getPosition : getPosition
 	}
 	
 })();

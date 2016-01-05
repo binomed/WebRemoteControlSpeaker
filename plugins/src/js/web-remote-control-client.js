@@ -18,7 +18,8 @@ var WebRemoteControl = (function () {
     socket = null,
     ips = null,
     qrCode = null,
-    pluginList = {};
+    pluginList = {},
+    engine = null;
 
   const VERSION = '2.0.0';
 
@@ -132,6 +133,11 @@ var WebRemoteControl = (function () {
       if (!additionnalConfiguration.controlsColor){
         additionnalConfiguration.controlsColor = 'white';
       }
+
+      if (!additionnalConfiguration.engine || !additionnalConfiguration.engine.name){
+        reject('No Engine Select');
+      }
+
       resolve();
     });
   };
@@ -148,7 +154,7 @@ var WebRemoteControl = (function () {
       .then(function(values){
         let confData = values[0];
         conf = confData;
-        initWS();
+        //initWS();
         loadAdditionnalScripts();
         let ipData = values[1];
         ips = ipData;
@@ -167,7 +173,6 @@ var WebRemoteControl = (function () {
       var loader = new ScriptLoader();
       for (var i = 0; i < pluginUrls.length; i++){
         loader.add(pluginUrls[i].src, 'script');
-        //loadScript(extractPath()+pluginUrls[i].src);
       }
       return loader.loaded();
     }
@@ -247,51 +252,12 @@ var WebRemoteControl = (function () {
     return Array.prototype.slice.call( o );
 
   }
-
-
-  /**
-  *  Return the number of slides of the presentation and gives a mapping of position for each index
-  */
-  var countNbSlides = function(){
-    var totalSlides = 0;
-    var mapPosition = {};
-
-    // TODO : make it generic
-    // Method take from revealJS lib and rearange
-
-    var HORIZONTAL_SLIDES_SELECTOR = '.reveal .slides>section',
-      SLIDES_SELECTOR = '.reveal .slides section';
-
-    var horizontalSlides = toArray( document.querySelectorAll( HORIZONTAL_SLIDES_SELECTOR ) );
-
-    // The number of past and total slides
-    var totalCount = document.querySelectorAll( SLIDES_SELECTOR + ':not(.stack)' ).length;    
-
-    // Step through all slides and count the past ones
-    for( var i = 0; i < horizontalSlides.length; i++ ) {
-      var horizontalSlide = horizontalSlides[i];
-      var verticalSlides = toArray( horizontalSlide.querySelectorAll( 'section' ) );
-      if (verticalSlides.length >0){
-        for (var j = 0; j < verticalSlides.length; j++){
-          mapPosition[i+'-'+j] = totalSlides+j+1;  
-        }
-      }else{
-        mapPosition[i+'-0'] = totalSlides+1;
-      }
-      totalSlides += verticalSlides.length > 0 ? verticalSlides.length : 1;
-    }
-
-    return {
-      nbSlides : totalSlides,
-      map : mapPosition
-    }
-  }
-  
+   
   // Init the WebSocket connection
   var initWS = function(){
         // Get the number of slides
 
-        var confNbSlides = countNbSlides();      
+        var confNbSlides = engine.countNbSlides();      
         
         // Connect to websocket
         socket = io.connect('http://'+window.location.hostname+':'+conf.port);
@@ -307,13 +273,13 @@ var WebRemoteControl = (function () {
             // If we are on the slides of speaker, we specify the controls values
            socket.emit('message', {
                type :"config", 
-               indices : Reveal.getIndices()
+               indices : engine.getPosition()
            });
         });
         // On message recieve
         socket.on('message', function (data) {
             if( data.type === "operation" && data.data === "show"){
-                Reveal.slide( data.index.h, data.index.v, data.index.f ? data.index.f : 0 );
+                engine.goToSlide(data);                
             }else if( data.type === "ping"){                       
 
                 if (document.querySelector('#sws-show-qr-code')){
@@ -330,7 +296,7 @@ var WebRemoteControl = (function () {
                 });
                 socket.emit('message', {
                     type :"config", 
-                    indices : Reveal.getIndices()
+                    indices : engine.getPosition()
                   
                 });
             }else if( data.type === "ping-plugin"){                      
@@ -357,36 +323,43 @@ var WebRemoteControl = (function () {
         });
   }; 
 
-  var reavealCallBack = function(event){
-    // We get the curent slide 
-    var slideElement = Reveal.getCurrentSlide(),
-      messageData = null;
-    
-    // We get the notes and init the indexs
-    var notes = slideElement.querySelector( 'aside.notes' );
-
-    // We prepare the message data to send through websocket
-    messageData = {
-      notes : notes ? notes.innerHTML : '',
-      markdown : notes ? typeof notes.getAttribute( 'data-markdown' ) === 'string' : false
-    };
-
-          // If we're on client slides
-    if (socket &&  messageData.notes !== undefined) {
-      socket.emit('message', {type : 'notes', data : messageData});       
+  var engineCallBack = function(event){
+    // If we're on client slides
+    if (socket &&  event.data.notes !== undefined) {
+      socket.emit('message', {type : 'notes', data : event.data});       
     }
     // If we're on speaker slides
     if (socket){                            
         socket.emit("message", {
             type:'config', 
-            indices : Reveal.getIndices()
+            indices : engine.getPosition()
         });                
     }   
   }
 
-  // Listen to Reveal Events
-  var initEngineListener = function (){
-    Reveal.addEventListener( 'slidechanged', reavealCallBack);
+  var loadEngine = function (engineConf){
+    var loader = new ScriptLoader();
+    let path = extractPath()+'plugins/'+(conf.devMode ? 'src/' : '');
+    loader.add(`${path}/engines/${engineConf.name}-client-engine.js`, 'script');
+    return loader.loaded();
+  }
+
+  // Init the correct Engine
+  var initEngine = function (engineConf){
+    return new Promise(function( resolve, reject){
+      switch(engineConf.name){
+        case 'revealjs':
+            engine = RevealEngine;            
+            break;
+      }
+
+      if (engine){
+        engine.initEngineListener(engineCallBack)
+        resolve();
+      }else{
+        reject('Engine not initialize ! ');
+      }
+    });          
   };
 
   
@@ -410,13 +383,25 @@ var WebRemoteControl = (function () {
         additionnalConfiguration = conf;
         checkAdditionnalConfiguration()
         .then(function(){
-          return loadPlugins(conf.plugins);
-        })
-        .then(function(){
           return initConfig();
         })
         .then(function(){
-          initEngineListener();
+          return loadEngine(conf.engine);
+        })
+        .then(function(){
+          return initEngine(conf.engine);
+        })
+        .then(function(){
+          return new Promise(function(resolve, reject){
+            initWS();
+            resolve();
+          });
+        })
+        .then(function(){
+          return loadPlugins(conf.plugins);
+        })
+        .then(function(){
+          console.info('All is load ! ');
         })
         .catch(function(err){
           console.error('Error : %s \n %s', err.message, err.stack);

@@ -55,10 +55,11 @@ This should create a "dist" directory with the project compile and it has normal
 You have to add thoses line in your html
 
 1. ```<script src="/plugin/web-remote-control/dist/plugins/js/web-remote-control-client.js"></script>``` 
-2. initialize the RemoteControl object ```WebRemoteControl.init();```
+2. initialize the RemoteControl object ```WebRemoteControl.init({engine: {name: 'revealjs'}});```
 3. the object to pass to init method has thoses parameters
- 1. controlsColor : The color of controls in remote (default is 'white')
- 2. plugins : The list of plugins to activate. Each plugin is a javascript object with an src attribute that reference the path to the desire plugin
+ 1. engine : the engine of presentation to use. Support engines are for the moment : revealjs.
+ 2. controlsColor : The color of controls in remote (default is 'white')
+ 3. plugins : The list of plugins to activate. Each plugin is a javascript object with an src attribute that reference the path to the desire plugin
 4. ```<script src="/socket.io/socket.io.js"></script>``` in the import section of your javascripts
 
 According to the number of plugins you want to use with the remote control, add as many lines as you want somes plugins in the plugins attribute : 
