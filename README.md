@@ -29,13 +29,11 @@ This plugin use :
 
 The build is based on those tools
 
- * Grunt
- * Bower (and implicitly git)
+ * Gulp
 
-1. For Grunt : just execute ```npm install -g grunt-cli``` 
-2. For bower : just execute ```npm install -g bower```
+1. For Gulp : just execute ```npm install -g gulp-cli``` 
 
-If you are behind a proxy, you have to configure npm to go throught proxy [npm behind proxy](http://jjasonclark.com/how-to-setup-node-behind-web-proxy) and for bower, you have to set HTTP\_PROXY and HTTPS\_PROXY as env var and you might have to specify to use https over git protocol : [https://coderwall.com/p/sitezg/](https://coderwall.com/p/sitezg/)
+If you are behind a proxy, you have to configure npm to go throught proxy [npm behind proxy](http://jjasonclark.com/how-to-setup-node-behind-web-proxy) 
 
 ## Install
 
@@ -47,7 +45,7 @@ If you are behind a proxy, you have to configure npm to go throught proxy [npm b
 A build.bat or build.sh was write to build the project to a dist directory
 
 1. Go to 'YourPresentation/plugin/web-remote-control'
-2. run 'build.bat' or 'build.sh'
+2. run 'build.bat' or 'build.sh' (for unix don't forget to give executive rights)
 
 This should create a "dist" directory with the project compile and it has normally download all the necessary dependancies
 
@@ -56,16 +54,15 @@ This should create a "dist" directory with the project compile and it has normal
 
 You have to add thoses line in your html
 
-1. ```{ src: '{$HOME_DIRECTORY}/plugin/web-remote-control/dist/plugins/js/notes-client.js', async: true, callback: function() { WebRemoteClientNotes.init({}); } }``` in the dependancies of Reveal
-2. the object to pass to init method has thoses parameters
+1. ```<script src="/plugin/web-remote-control/dist/plugins/js/web-remote-control-client.js"></script>``` 
+2. initialize the RemoteControl object ```WebRemoteControl.init();```
+3. the object to pass to init method has thoses parameters
  1. controlsColor : The color of controls in remote (default is 'white')
-3. ```<script src="/socket.io/socket.io.js"></script>``` in the import section of your javascripts
-4. You have to check that markdown plugin is present in your presentation
-5. You have to check that you have the file lib/js/head.min.js in your presentation
+ 2. plugins : The list of plugins to activate. Each plugin is a javascript object with an src attribute that reference the path to the desire plugin
+4. ```<script src="/socket.io/socket.io.js"></script>``` in the import section of your javascripts
 
-
-According to the number of plugins you want to use with the remote control, add as many lines as you want somes plugins in the reveal dependancies : 
-```{ src: '{$HOME\_DIRECTORY}/plugin/web-remote-control/dist/plugins/plugins/*{thePluginYouWant}*.js', async: true}```
+According to the number of plugins you want to use with the remote control, add as many lines as you want somes plugins in the plugins attribute : 
+ ```{ src: '{$HOME\_DIRECTORY}/plugin/web-remote-control/dist/plugins/plugins/*{thePluginYouWant}*.js'}``` 
 
 Here is the list of plugin and their paths (according to plugins/plugins directory) : 
 
@@ -74,6 +71,14 @@ Here is the list of plugin and their paths (according to plugins/plugins directo
  * ```sws-plugin-remote-pointer.js``` : Allow you to use your finger as laser pointer on the client presentation.
  * ```sws-plugin-sensor-pointer.js``` : Allow you to use your phone as laser pointer on the client presentation.
  *  More to come soon
+
+#### Spesifics installations
+
+* Reveal JS
+1. You have to check that markdown plugin is present in your presentation
+2. You have to check that you have the file lib/js/head.min.js in your presentation
+
+
 
 ### Use it
 
@@ -89,9 +94,7 @@ Here is the list of plugin and their paths (according to plugins/plugins directo
 
 # Use the development version
 
-If you want to work with the source, you will have to install [Compass](http://compass-style.org/install/). And you have to install the sourcemaps for compass : ```gem install compass-sourcemaps --pre``` and ```gem install compass --pre```
-
-The build task use previously don't use compass, so if you want to build a part of the project, you have to run ```grunt release``` instead of ```grunt release_build``` (cf [https://github.com/chriseppstein/compass/issues/1108](https://github.com/chriseppstein/compass/issues/1108))
+If you want to build a part of the project, you have to run ```grunt release```
 
 When you will work with the server, don't forget to specify that your are in development mode : ```node plugin/web-remote-control/dist/server/server.js -d true```
 
