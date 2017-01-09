@@ -46,7 +46,7 @@ var WebRemoteControl = (function () {
       }
       http_request.send();
     });
-    
+
   };
 
   var extractPath = function(){
@@ -56,7 +56,7 @@ var WebRemoteControl = (function () {
       var script = scripts.item(idx);
 
       if(script.src && script.src.match(/web-remote-control-client\.js$/))
-      { 
+      {
         var path = script.src;
         return path.substring(0, path.indexOf('plugins'));
       }
@@ -81,7 +81,7 @@ var WebRemoteControl = (function () {
           break;
           case 'link':
             tag.rel = "stylesheet";
-            tag.type = "text/css";    
+            tag.type = "text/css";
             tag.href = url;
             tag.media = 'all';
             elementToAttach = document.getElementsByTagName('head')[0];
@@ -121,7 +121,7 @@ var WebRemoteControl = (function () {
     let loader = new ScriptLoader();
     loader.add(path+'components/qrcode/qrcode.min.js', 'script');
     loader.add(path+'css/main.css', 'link');
-    return loader.loaded();    
+    return loader.loaded();
   }
 
   var checkAdditionnalConfiguration = function(){
@@ -141,7 +141,7 @@ var WebRemoteControl = (function () {
       resolve();
     });
   };
-  
+
   // Initialise with the configuration file
   var initConfig = function(){
     document.onkeydown = keyPress;
@@ -163,10 +163,10 @@ var WebRemoteControl = (function () {
         reject(error);
       });
 
-    });         
+    });
 
-      
-  };      
+
+  };
 
   var loadPlugins = function(pluginUrls){
     if(pluginUrls && pluginUrls.length > 0){
@@ -176,10 +176,10 @@ var WebRemoteControl = (function () {
       }
       return loader.loaded();
     }
-    return new Promise(function(){
+    return new Promise(function(resolve, reject){
       resolve();
     });
-    
+
   }
 
   // Use to detect the call of server presentation
@@ -218,7 +218,7 @@ var WebRemoteControl = (function () {
         });
       var list = "<select id='sws-show-qr-code-select'>";
       for (var i = 0; i < ips.length; i++){
-          list+= "<option value='"+ips[i].id+"' id='ip"+ips[i].id+"' index='"+ips[i].id+"' >"+ips[i].name+"</option>";                
+          list+= "<option value='"+ips[i].id+"' id='ip"+ips[i].id+"' index='"+ips[i].id+"' >"+ips[i].name+"</option>";
       }
       list += "</select>";
       list += "<button id='sws-show-qr-code-generate'>Generate</button>";
@@ -236,7 +236,7 @@ var WebRemoteControl = (function () {
         document.querySelector("#qrCodeLink").setAttribute("href",urlRemote);
         document.querySelector("#sws-show-qr-url").innerHTML = '<span style="text-transform:uppercase; font-weight:bold;">Or goto : </span><br>'+urlRemote;
       });
-      
+
     }
 
     var area = document.querySelector('#sws-show-qr-code');
@@ -252,89 +252,89 @@ var WebRemoteControl = (function () {
     return Array.prototype.slice.call( o );
 
   }
-   
+
   // Init the WebSocket connection
   var initWS = function(){
         // Get the number of slides
 
-        var confNbSlides = engine.countNbSlides();      
-        
+        var confNbSlides = engine.countNbSlides();
+
         // Connect to websocket
         socket = io.connect('http://'+window.location.hostname+':'+conf.port);
         // On Connection message
-        socket.on('connect', function(){            
+        socket.on('connect', function(){
             socket.emit('message', {
-               type :"config", 
-               url : window.location.pathname, 
+               type :"config",
+               url : window.location.pathname,
                controlsColor : additionnalConfiguration.controlsColor,
-               nbSlides : confNbSlides.nbSlides, 
+               nbSlides : confNbSlides.nbSlides,
                mapPosition : confNbSlides.map
             });
             // If we are on the slides of speaker, we specify the controls values
            socket.emit('message', {
-               type :"config", 
+               type :"config",
                indices : engine.getPosition()
            });
         });
         // On message recieve
         socket.on('message', function (data) {
             if( data.type === "operation" && data.data === "show"){
-                engine.goToSlide(data);                
-            }else if( data.type === "ping"){                       
+                engine.goToSlide(data);
+            }else if( data.type === "ping"){
 
                 if (document.querySelector('#sws-show-qr-code')){
                   document.querySelector('#sws-show-qr-code').style.display = 'none';
                 }
 
-                // We have to check the controls in order to show the correct directions              
+                // We have to check the controls in order to show the correct directions
                 socket.emit('message', {
-                    type :"config", 
-                    url : window.location.pathname, 
+                    type :"config",
+                    url : window.location.pathname,
                     controlsColor : additionnalConfiguration.controlsColor,
-                    nbSlides : confNbSlides.nbSlides, 
+                    nbSlides : confNbSlides.nbSlides,
                     mapPosition : confNbSlides.map
                 });
                 socket.emit('message', {
-                    type :"config", 
+                    type :"config",
                     indices : engine.getPosition()
-                  
+
                 });
-            }else if( data.type === "ping-plugin"){                      
+            }else if( data.type === "ping-plugin"){
                 // We have to check the controls in order to show the correct directions
-              
+
                 var pluginIds = Object.keys(pluginList);
                 for (var i =0; i < pluginIds.length; i++){
                   socket.emit('message', {
-                    type :"plugin", 
-                    action :"activate", 
+                    type :"plugin",
+                    action :"activate",
                     id : pluginIds[i]
                   });
                 }
-                // Delegate to plugins 
-                
-            }else if( data.type === "communicate-plugin"){                      
-                // We have to check the controls in order to show the correct directions              
+                // Delegate to plugins
+
+            }else if( data.type === "communicate-plugin"){
+                // We have to check the controls in order to show the correct directions
                 if (data.id && pluginList[data.id] ){
                   pluginList[data.id](data.data);
                 }
-                
-                
+
+
             }
         });
-  }; 
+  };
 
   var engineCallBack = function(event){
     // If we're on client slides
     if (socket &&  event.data.notes !== undefined) {
-      socket.emit('message', {type : 'notes', data : event.data});       
+      socket.emit('message', {type : 'notes', data : event.data});
     }
     // If we're on speaker slides
-    if (socket){                            
+    if (socket){
         socket.emit("message", {
-            type:'config', 
+            type:'config',
             indices : engine.getPosition()
-        });                
-    }   
+        });
+    }
   }
 
   var loadEngine = function (engineConf){
@@ -349,7 +349,7 @@ var WebRemoteControl = (function () {
     return new Promise(function( resolve, reject){
       switch(engineConf.name){
         case 'revealjs':
-            engine = RevealEngine;            
+            engine = RevealEngine;
             break;
       }
 
@@ -359,21 +359,21 @@ var WebRemoteControl = (function () {
       }else{
         reject('Engine not initialize ! ');
       }
-    });          
+    });
   };
 
-  
+
 
   /*
   * **************************************
   * --------EXPOSED METHODS----------------
   * **************************************
   */
- 
+
   var registerPlugin = function (id, callbackAction){
     pluginList[id] = callbackAction;
   }
-  
+
 
   // We init the client side (websocket + engine Listener)
   var init = function(conf){
@@ -405,8 +405,8 @@ var WebRemoteControl = (function () {
         })
         .catch(function(err){
           console.error('Error : %s \n %s', err.message, err.stack);
-        });        
-    }        
+        });
+    }
   }
 
   /*
