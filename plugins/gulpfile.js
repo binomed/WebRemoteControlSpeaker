@@ -8,12 +8,12 @@ var sass = require('gulp-sass');
 var reload = browserSync.reload;
 
 var uglify = require("gulp-uglify");
-var gutil = require('gulp-util');
-var babelify = require('babelify');
-var browserify = require('browserify');
 var minifyCss = require('gulp-minify-css');
 var del = require("del");
 var runSequence = require('run-sequence');
+var gutil = require('gulp-util');
+var babelify = require('babelify');
+var browserify = require('browserify');
 var source     = require('vinyl-source-stream');
 var rename     = require('gulp-rename');
 var es = require('event-stream');
@@ -54,10 +54,7 @@ gulp.task('browserify',function(){
       .on('error', gutil.log)    
       .bundle()    
       .on('error', gutil.log)    
-      .pipe(source(entry))
-      .pipe(rename({
-        extname: '.bundle.js'
-      }))
+      .pipe(source(entry))      
       .pipe(gulp.dest('./.tmp'));
   });
 

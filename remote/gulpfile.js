@@ -14,8 +14,16 @@ var minifyCss = require('gulp-minify-css');
 var minifyHtml = require("gulp-minify-html");
 var del = require("del");
 var runSequence = require('run-sequence');
+var gutil = require('gulp-util');
+var babelify = require('babelify');
+var browserify = require('browserify');
+var source     = require('vinyl-source-stream');
+var rename     = require('gulp-rename');
+var es = require('event-stream');
 
-var distRemote = "../dist/remote/"
+var extensions = ['.js','.json','.es6'];
+
+var distRemote = "../dist/remote/";
 
 gulp.task("clean", function () {
   return del.sync([
@@ -27,6 +35,35 @@ gulp.task("clean", function () {
   });
 });
 
+
+gulp.task('browserify',function(){
+
+  // To Define. Do not Use it for now !
+  var files = [
+        './src/js/app.js',
+        './src/js/engines/reveal-engine.js',
+        './src/js/plugins/plugin-audio-play.js',
+        './src/js/plugins/plugin-remote-pointer.js',
+        './src/js/plugins/plugin-sensor-pointer.js',
+        './src/js/plugins/plugin-video-play.js',
+  ];
+
+  var taks = files.map(function(entry){
+    return browserify({
+        entries: [entry], 
+        debug:true, 
+        extensions: extensions
+      })
+      .transform(babelify)
+      .on('error', gutil.log)    
+      .bundle()    
+      .on('error', gutil.log)    
+      .pipe(source(entry))
+      .pipe(gulp.dest('./.tmp'));
+  });
+
+  return  es.merge.apply(null, taks);
+});
 
 gulp.task("copy-font-awesome", function () {
    return gulp.src([
