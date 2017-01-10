@@ -12,7 +12,7 @@ sws.controller('SwsCtrl',
         $http({
         	url: '../conf/conf.json',
         	method: 'GET'
-        }).success(function(data, status, headers, config){              
+        }).then(function(data, status, headers, config){              
             $scope.model.conf = data;
             console.log('Return from http !');
             //Init the webSocket and time management
@@ -22,7 +22,7 @@ sws.controller('SwsCtrl',
                 console.log("Script markdown loaded and executed.");
             // Here you can use anything you defined in the loaded script
             });
-        }).error(function(e){
+        },function(e){
             console.log("Error during getting config file : "+e);
         });
 
