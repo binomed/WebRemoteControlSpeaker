@@ -1,21 +1,9 @@
+# Dev
 .sass-cache
-dist
 node_modules
-remote/.sass-cache
-remote/.tmp
-remote/conf
-remote/node_modules
-remote/npm-debug.log
-remote/src/bower_components
-plugins/.sass-cache
-plugins/.tmp
-plugins/conf
-plugins/node_modules
-plugins/npm-debug.log
-server/.tmp
-server/.sass-cache
-server/conf
-server/node_modules
-server/src/bower_components
-server/src/node_modules
-server/src/npm-debug.log
+npm-debug.log
+yarn.lock
+# Build 
+.tmp
+dist
+conf
