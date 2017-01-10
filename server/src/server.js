@@ -121,18 +121,19 @@ for (var i =0; i < confFileArray.length; i++){
 }
 
 // Server part
-var connect = require('connect');
-    console.log(__dirname);
+var express = require('express');
+var app = express();
+console.log(__dirname);
 console.log(process.cwd());
-var app = connect.createServer(
-    connect.static(process.cwd())
-).listen(conf.port);
+var http = require('http');
+var server = http.createServer(app);
+server.listen(conf.port);
 console.log('Start server on port : '+conf.port);
 
+app.use(express.static(process.cwd()));
 // Define socket part
-var io   = require('socket.io');
-var wsServer = io.listen(app);
-wsServer.sockets.on('connection', function(socket) {
+var io   = require('socket.io')(server);
+io.on('connection', function(socket) {
     console.log('### connection');
     socket.on('message', function(message) {
         console.log('### message: '+message);
@@ -162,7 +163,6 @@ for (var dev in ifaces) {
     }
   });
 }
-var http = require('http');
 var wait = true;
 console.log('Check Public ip');
 var request = http.get('http://api.externalip.net/ip'
