@@ -8,11 +8,19 @@ var sass = require('gulp-sass');
 var reload = browserSync.reload;
 
 var uglify = require("gulp-uglify");
+var gutil = require('gulp-util');
+var babelify = require('babelify');
+var browserify = require('browserify');
 var minifyCss = require('gulp-minify-css');
 var del = require("del");
 var runSequence = require('run-sequence');
+var source     = require('vinyl-source-stream');
+var rename     = require('gulp-rename');
+var es = require('event-stream');
 
-var distPlugins = "../dist/plugins/"
+var extensions = ['.js','.json','.es6'];
+
+var distPlugins = "../dist/plugins/";
 
 gulp.task("clean", function () {
   return del.sync([
@@ -22,6 +30,38 @@ gulp.task("clean", function () {
   {
     force: true
   });
+});
+
+gulp.task('browserify',function(){
+
+  var files = [
+        './src/js/web-remote-control-client.js',
+        './src/engines/generic-client-engine.js',
+        './src/engines/revealjs-client-engine.js',
+        './src/plugins/sws-plugin-audio-play.js',
+        './src/plugins/sws-plugin-remote-pointer.js',
+        './src/plugins/sws-plugin-sensor-pointer.js',
+        './src/plugins/sws-plugin-video-play.js',
+  ];
+
+  var taks = files.map(function(entry){
+    return browserify({
+        entries: [entry], 
+        debug:true, 
+        extensions: extensions
+      })
+      .transform(babelify)
+      .on('error', gutil.log)    
+      .bundle()    
+      .on('error', gutil.log)    
+      .pipe(source(entry))
+      .pipe(rename({
+        extname: '.bundle.js'
+      }))
+      .pipe(gulp.dest('./.tmp'));
+  });
+
+  return  es.merge.apply(null, taks);
 });
 
 
