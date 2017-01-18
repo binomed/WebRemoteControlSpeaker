@@ -26,7 +26,7 @@ gulp.task("clean", function () {
   return del.sync([
     ".tmp",
     "../dist/**"
-  ], 
+  ],
   {
     force: true
   });
@@ -35,26 +35,29 @@ gulp.task("clean", function () {
 gulp.task('browserify',function(){
 
   var files = [
-        './src/js/web-remote-control-client.js',
-        './src/engines/generic-client-engine.js',
-        './src/engines/revealjs-client-engine.js',
-        './src/plugins/sws-plugin-audio-play.js',
-        './src/plugins/sws-plugin-remote-pointer.js',
-        './src/plugins/sws-plugin-sensor-pointer.js',
-        './src/plugins/sws-plugin-video-play.js',
+        {name: 'WebRemoteControl', path:'./src/js/web-remote-control-client.js'},
+        {name: 'GenericEngine', path:'./src/engines/generic-client-engine.js'},
+        {name: 'RevealEngine', path:'./src/engines/revealjs-client-engine.js'},
+        {name: '', path:'./src/plugins/sws-plugin-audio-play.js'},
+        {name: '', path:'./src/plugins/sws-plugin-remote-pointer.js'},
+        {name: '', path:'./src/plugins/sws-plugin-sensor-pointer.js'},
+        {name: '', path:'./src/plugins/sws-plugin-video-play.js'},
   ];
 
   var taks = files.map(function(entry){
     return browserify({
-        entries: [entry], 
-        debug:true, 
+        standalone : entry.name,
+        entries: [entry.path],
+        debug:true,
         extensions: extensions
       })
-      .transform(babelify)
-      .on('error', gutil.log)    
-      .bundle()    
-      .on('error', gutil.log)    
-      .pipe(source(entry))      
+      .transform(babelify.configure({
+        plugins: ['add-module-exports']
+      }))
+      .on('error', gutil.log)
+      .bundle()
+      .on('error', gutil.log)
+      .pipe(source(entry.path))
       .pipe(gulp.dest('./.tmp'));
   });
 
@@ -64,32 +67,32 @@ gulp.task('browserify',function(){
 
 gulp.task("copy", function () {
    return gulp.src([
-        "src/components/**", 
-        "src/font/**", 
+        "src/components/**",
+        "src/font/**",
         ], { "base" : "./src" })
     .pipe(gulp.dest(distPlugins));
 });
 
 gulp.task("mincss", function () {
-  return gulp.src("./src/css/*.css")    
+  return gulp.src("./src/css/*.css")
     .pipe(minifyCss())
     .pipe(gulp.dest(distPlugins+"/css"));
 });
 
 gulp.task("uglify-engines", function () {
-  return gulp.src("./src/engines/*.js")    
+  return gulp.src("./src/engines/*.js")
     .pipe(uglify())
     .pipe(gulp.dest(distPlugins+"/engines"));
 });
 
 gulp.task("uglify-plugins", function () {
-  return gulp.src("./src/plugins/*.js")    
+  return gulp.src("./src/plugins/*.js")
     .pipe(uglify())
     .pipe(gulp.dest(distPlugins+"/plugins"));
 });
 
 gulp.task("uglify", function () {
-  return gulp.src("./src/js/*.js")    
+  return gulp.src("./src/js/*.js")
     .pipe(uglify())
     .pipe(gulp.dest(distPlugins+"/js"));
 });
