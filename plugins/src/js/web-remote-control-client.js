@@ -339,7 +339,7 @@ var WebRemoteControl = (function () {
 
   var loadEngine = function (engineConf){
     var loader = new ScriptLoader();
-    let path = extractPath()+'plugins/'+(conf.devMode ? 'src/' : '');
+    let path = extractPath()+'plugins/'+(conf.devMode ? '.tmp/src/' : '');
     loader.add(`${path}/engines/${engineConf.name}-client-engine.js`, 'script');
     return loader.loaded();
   }
@@ -349,7 +349,7 @@ var WebRemoteControl = (function () {
     return new Promise(function( resolve, reject){
       switch(engineConf.name){
         case 'revealjs':
-            engine = RevealEngine;
+            engine = new RevealEngine();
             break;
       }
 
