@@ -1,28 +1,25 @@
 'use strict';
 
-var GenericEngine = (function({
+export class GenericEngine{
 
-	function goToSlide(params){
-
-	}
-
-	function initEngineListener(callBack){
+	constructor(){
 
 	}
 
-	function countNbSlides(){
+	goToSlide(params){
 
 	}
 
-	function getPosition(){
+	initEngineListener(callBack){
 
 	}
 
-	return{
-		goToSlide : goToSlide,
-		initEngineListener : initEngineListener,
-		countNbSlides : countNbSlides,
-		getPosition : getPosition
+	countNbSlides(){
+
 	}
-	
-})();
+
+	getPosition(){
+
+	}
+
+}
