@@ -1,71 +1,14 @@
 'use strict';
 
+import {ScriptLoader} from './helpers/script-loader.js';
+import {_ajaxJSONGet, _extractPath, _loadAdditionnalScripts} from './helpers/js-helpers.js';
+import {VERSION} from '../common/consts.js';
+
 /*
 * Web Remote Control : Plugin Client V2.0.0
 *
 */
-const VERSION = '2.0.0';
 
-
-/*
-* **************************************
-* ---------INNER CLASS----------------
-* **************************************
-*/
-
-class ScriptLoader{
-
-  constructor(){
-    this.promises = new Array();
-  }
-
-  add(url, type) {
-      const promise = new Promise((resolve, reject) => {
-
-
-      let elementToAttach = null;
-      const tag = document.createElement(type);
-      switch(type){
-        case 'script':
-          tag.src = url;
-          tag.type = "text/javascript";
-          elementToAttach = document.body;
-        break;
-        case 'link':
-          tag.rel = "stylesheet";
-          tag.type = "text/css";
-          tag.href = url;
-          tag.media = 'all';
-          elementToAttach = document.getElementsByTagName('head')[0];
-        break;
-      }
-
-      tag.addEventListener('load', () => {
-          resolve(tag);
-      }, false);
-
-      tag.addEventListener('error', () => {
-          console.log('%s was rej',url);
-          reject(tag);
-      }, false);
-
-
-      elementToAttach.appendChild(tag);
-    });
-
-    this.promises.push(promise);
-  };
-
-  loaded() {
-    return new Promise((resolve, reject) => {
-      Promise.all(this.promises).then((results) => {
-        resolve(results);
-      }, (error) => {
-        reject(error);
-      });
-    });
-  };
-}
 
 /*
 * **************************************
@@ -73,49 +16,7 @@ class ScriptLoader{
 * **************************************
 */
 
-function _ajaxJSONGet(url){
-  return new Promise((resolve, reject) => {
-    const http_request = new XMLHttpRequest();
-    http_request.open("GET", url, true);
-    http_request.onload = function() {
-      if (this.status >= 200 && this.status < 300){
-        resolve(JSON.parse(http_request.responseText));
-      }else{
-        reject(this.statusText);
-      }
-    };
-    http_request.onerror = function() {
-      reject(this.statusText);
-    }
-    http_request.send();
-  });
 
-};
-
-function _extractPath(){
-  const scripts = document.getElementsByTagName("script");
-
-  for(let idx = 0; idx < scripts.length; idx++){
-    const script = scripts.item(idx);
-
-    if(script.src && script.src.match(/web-remote-control-client\.js$/))
-    {
-      const path = script.src;
-      return path.substring(0, path.indexOf('plugins'));
-    }
-  }
-  return "";
-};
-
-
-// Load all the additionnals javascript libraries needed (QrCode)
-function _loadAdditionnalScripts(){
-  let path = _extractPath()+'plugins/'+(this.conf.devMode ? 'src/' : '');
-  let loader = new ScriptLoader();
-  loader.add(path+'components/qrcode/qrcode.min.js', 'script');
-  loader.add(path+'css/main.css', 'link');
-  return loader.loaded();
-}
 
 function _checkAdditionnalConfiguration(){
   return new Promise((resolve, reject) => {
@@ -148,7 +49,7 @@ function _initConfig(){
       const confData = values[0];
       this.conf = confData;
       //initWS();
-      _loadAdditionnalScripts.bind(this)();
+      _loadAdditionnalScripts.bind(this)(this.conf.devMode);
       const ipData = values[1];
       this.ips = ipData;
       resolve();
@@ -239,14 +140,6 @@ function _showRemoteQrCode(){
 
 }
 
-/**
- * Converts the target object to an array.
- */
-function _toArray( o ) {
-
-  return Array.prototype.slice.call( o );
-
-}
 
 // Init the WebSocket connection
 function _initWS(){
@@ -357,7 +250,9 @@ function _initEngine(engineConf){
   });
 };
 
-
+/**
+ * Class for remote Control client
+ */
 class WebRemoteControl {
 
   constructor(){
@@ -378,20 +273,17 @@ class WebRemoteControl {
   }
 
 
-
-
-  /*
-  * **************************************
-  * --------EXPOSED METHODS----------------
-  * **************************************
-  */
-
+  /**
+   * Register a plugin on client
+   */
   registerPlugin(id, callbackAction){
     this.pluginList[id] = callbackAction;
   }
 
 
-  // We init the client side (websocket + engine Listener)
+  /**
+   *  We init the client side (websocket + engine Listener)
+   */
   init(conf){
     // We check if this script ins't in the iframe of the remote control
     if(!window.parent || !window.parent.document.body.getAttribute('sws-remote-iframe-desactiv')){
