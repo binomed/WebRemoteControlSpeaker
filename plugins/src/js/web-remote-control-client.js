@@ -4,363 +4,379 @@
 * Web Remote Control : Plugin Client V2.0.0
 *
 */
-
-var WebRemoteControl = (function () {
-
-  /*
-  * **************************************
-  * ---------------MODEL------------------
-  * **************************************
-  */
-
-  var conf = null,
-    additionnalConfiguration = null,
-    socket = null,
-    ips = null,
-    qrCode = null,
-    pluginList = {},
-    engine = null;
-
-  const VERSION = '2.0.0';
-
-  /*
-  * **************************************
-  * ---------INNER METHODS----------------
-  * **************************************
-  */
+const VERSION = '2.0.0';
 
 
-  var ajaxJSONGet = function(url){
-    return new Promise(function(resolve, reject){
-      var http_request = new XMLHttpRequest();
-      http_request.open("GET", url, true);
-      http_request.onload = function () {
-        if (this.status >= 200 && this.status < 300){
-          resolve(JSON.parse(http_request.responseText));
-        }else{
-          reject(this.statusText);
-        }
-      };
-      http_request.onerror = function(){
-        reject(this.statusText);
-      }
-      http_request.send();
-    });
+/*
+* **************************************
+* ---------INNER CLASS----------------
+* **************************************
+*/
 
-  };
+class ScriptLoader{
 
-  var extractPath = function(){
-    var scripts = document.getElementsByTagName("script");
-
-    for(var idx = 0; idx < scripts.length; idx++){
-      var script = scripts.item(idx);
-
-      if(script.src && script.src.match(/web-remote-control-client\.js$/))
-      {
-        var path = script.src;
-        return path.substring(0, path.indexOf('plugins'));
-      }
-    }
-    return "";
-  };
-
-  function ScriptLoader() {
-    var promises = [];
-
-    this.add = function(url, type) {
-      var promise = new Promise(function(resolve, reject) {
-
-
-        var elementToAttach = null;
-        var tag = document.createElement(type);
-        switch(type){
-          case 'script':
-            tag.src = url;
-            tag.type = "text/javascript";
-            elementToAttach = document.body;
-          break;
-          case 'link':
-            tag.rel = "stylesheet";
-            tag.type = "text/css";
-            tag.href = url;
-            tag.media = 'all';
-            elementToAttach = document.getElementsByTagName('head')[0];
-          break;
-        }
-
-        tag.addEventListener('load', function() {
-            resolve(tag);
-        }, false);
-
-        tag.addEventListener('error', function() {
-            console.log('%s was rej',url);
-            reject(tag);
-        }, false);
-
-
-        elementToAttach.appendChild(tag);
-      });
-
-      promises.push(promise);
-    };
-
-    this.loaded = function() {
-      return new Promise(function(resolve, reject){
-        Promise.all(promises).then(function(results) {
-          resolve(results);
-        }, function(error){
-          reject(error);
-        });
-      });
-    };
+  constructor(){
+    this.promises = new Array();
   }
 
-  // Load all the additionnals javascript libraries needed (QrCode)
-  var loadAdditionnalScripts = function(){
-    let path = extractPath()+'plugins/'+(conf.devMode ? 'src/' : '');
-    let loader = new ScriptLoader();
-    loader.add(path+'components/qrcode/qrcode.min.js', 'script');
-    loader.add(path+'css/main.css', 'link');
-    return loader.loaded();
-  }
+  add(url, type) {
+      const promise = new Promise((resolve, reject) => {
 
-  var checkAdditionnalConfiguration = function(){
-    return new Promise(function(resolve, reject){
-      if (!additionnalConfiguration){
-        additionnalConfiguration = {};
+
+      let elementToAttach = null;
+      const tag = document.createElement(type);
+      switch(type){
+        case 'script':
+          tag.src = url;
+          tag.type = "text/javascript";
+          elementToAttach = document.body;
+        break;
+        case 'link':
+          tag.rel = "stylesheet";
+          tag.type = "text/css";
+          tag.href = url;
+          tag.media = 'all';
+          elementToAttach = document.getElementsByTagName('head')[0];
+        break;
       }
 
-      if (!additionnalConfiguration.controlsColor){
-        additionnalConfiguration.controlsColor = 'white';
-      }
+      tag.addEventListener('load', () => {
+          resolve(tag);
+      }, false);
 
-      if (!additionnalConfiguration.engine || !additionnalConfiguration.engine.name){
-        reject('No Engine Select');
-      }
+      tag.addEventListener('error', () => {
+          console.log('%s was rej',url);
+          reject(tag);
+      }, false);
 
-      resolve();
+
+      elementToAttach.appendChild(tag);
     });
+
+    this.promises.push(promise);
   };
 
-  // Initialise with the configuration file
-  var initConfig = function(){
-    document.onkeydown = keyPress;
-
-    return new Promise(function(resolve, reject){
-      Promise.all([
-        ajaxJSONGet(extractPath()+'/plugins/conf/conf.json'),
-        ajaxJSONGet(extractPath()+'/plugins/conf/ips.json')
-        ])
-      .then(function(values){
-        let confData = values[0];
-        conf = confData;
-        //initWS();
-        loadAdditionnalScripts();
-        let ipData = values[1];
-        ips = ipData;
-        resolve();
-      }, function(error){
+  loaded() {
+    return new Promise((resolve, reject) => {
+      Promise.all(this.promises).then((results) => {
+        resolve(results);
+      }, (error) => {
         reject(error);
       });
-
     });
-
-
   };
+}
 
-  var loadPlugins = function(pluginUrls){
-    if(pluginUrls && pluginUrls.length > 0){
-      var loader = new ScriptLoader();
-      for (var i = 0; i < pluginUrls.length; i++){
-        loader.add(pluginUrls[i].src, 'script');
+/*
+* **************************************
+* ---------INNER METHODS----------------
+* **************************************
+*/
+
+function _ajaxJSONGet(url){
+  return new Promise((resolve, reject) => {
+    const http_request = new XMLHttpRequest();
+    http_request.open("GET", url, true);
+    http_request.onload = function() {
+      if (this.status >= 200 && this.status < 300){
+        resolve(JSON.parse(http_request.responseText));
+      }else{
+        reject(this.statusText);
       }
-      return loader.loaded();
+    };
+    http_request.onerror = function() {
+      reject(this.statusText);
     }
-    return new Promise(function(resolve, reject){
+    http_request.send();
+  });
+
+};
+
+function _extractPath(){
+  const scripts = document.getElementsByTagName("script");
+
+  for(let idx = 0; idx < scripts.length; idx++){
+    const script = scripts.item(idx);
+
+    if(script.src && script.src.match(/web-remote-control-client\.js$/))
+    {
+      const path = script.src;
+      return path.substring(0, path.indexOf('plugins'));
+    }
+  }
+  return "";
+};
+
+
+// Load all the additionnals javascript libraries needed (QrCode)
+function _loadAdditionnalScripts(){
+  let path = _extractPath()+'plugins/'+(this.conf.devMode ? 'src/' : '');
+  let loader = new ScriptLoader();
+  loader.add(path+'components/qrcode/qrcode.min.js', 'script');
+  loader.add(path+'css/main.css', 'link');
+  return loader.loaded();
+}
+
+function _checkAdditionnalConfiguration(){
+  return new Promise((resolve, reject) => {
+    if (!this.additionnalConfiguration){
+      this.additionnalConfiguration = {};
+    }
+
+    if (!this.additionnalConfiguration.controlsColor){
+      this.additionnalConfiguration.controlsColor = 'white';
+    }
+
+    if (!this.additionnalConfiguration.engine || !this.additionnalConfiguration.engine.name){
+      reject('No Engine Select');
+    }
+
+    resolve();
+  });
+};
+
+// Initialise with the configuration file
+function _initConfig(){
+  document.onkeydown = _keyPress.bind(this);
+
+  return new Promise((resolve, reject) => {
+    Promise.all([
+      _ajaxJSONGet(_extractPath()+'/plugins/conf/conf.json'),
+      _ajaxJSONGet(_extractPath()+'/plugins/conf/ips.json')
+      ])
+    .then((values) => {
+      const confData = values[0];
+      this.conf = confData;
+      //initWS();
+      _loadAdditionnalScripts.bind(this)();
+      const ipData = values[1];
+      this.ips = ipData;
       resolve();
+    }, (error) => {
+      reject(error);
     });
 
-  }
-
-  // Use to detect the call of server presentation
-  var keyPress = function(e){
-    var evtobj = window.event? event : e
-    //keyCode = 80 = q for QRCode
-    if (evtobj.keyCode === 81 && evtobj.ctrlKey) showRemoteQrCode();
-  }
+  });
 
 
-  var showRemoteQrCode = function(){
+};
 
-    // We show the qrcode for the phone
-    if (!document.querySelector('#sws-show-qr-code')){
-      var container = document.createElement('DIV');
-      container.setAttribute('id', 'sws-show-qr-code');
-      container.innerHTML = '<div id="sws-show-qr-header">'+
-        '<h1 class="title">Choose, Generate and Scan !</h1><div class="close"> "Ctrl+Q" to hide</div>'+
-        '<p>Choose the right network interface and click on \'Generate\' button</p>'+
-        '<div id="listIp"></div>'+
-        '</div>'+
-        '<div id="sws-show-qr-bottom">'+
-        '<a id="qrCodeLink"><div id="qrCode"></div></a>'+
-        '<h1>Scan with your phone</h1>'+
-        '<div id="sws-show-qr-url"></div>'+
-        '</div>';
-
-      document.body.appendChild(container);
-      qrCode = new QRCode("qrCode", {
-            text: "",
-            width: 256,
-            height: 256,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-      var list = "<select id='sws-show-qr-code-select'>";
-      for (var i = 0; i < ips.length; i++){
-          list+= "<option value='"+ips[i].id+"' id='ip"+ips[i].id+"' index='"+ips[i].id+"' >"+ips[i].name+"</option>";
-      }
-      list += "</select>";
-      list += "<button id='sws-show-qr-code-generate'>Generate</button>";
-      document.querySelector('#listIp').innerHTML = list;
-      var pathPlugin = extractPath();
-      document.querySelector('#sws-show-qr-code-generate').addEventListener('click', function(event){
-        var get_id = document.getElementById('sws-show-qr-code-select');
-        var result = get_id.options[get_id.selectedIndex].value;
-        var urlRemote = "http://"+ips[result].ip // HOST
-          +":"+conf.port // PORT
-          +pathPlugin.substr(pathPlugin.indexOf(conf.port)+(''+conf.port).length, pathPlugin.length) // PATHNAME
-          +(conf.devMode ?"remote/src/" : "remote/")+"notes-speaker.html";
-        qrCode.clear();
-        qrCode.makeCode(urlRemote);
-        document.querySelector("#qrCodeLink").setAttribute("href",urlRemote);
-        document.querySelector("#sws-show-qr-url").innerHTML = '<span style="text-transform:uppercase; font-weight:bold;">Or goto : </span><br>'+urlRemote;
-      });
-
+function _loadPlugins(pluginUrls){
+  if(pluginUrls && pluginUrls.length > 0){
+    const loader = new ScriptLoader();
+    for (let i = 0; i < pluginUrls.length; i++){
+      loader.add(pluginUrls[i].src, 'script');
     }
-
-    var area = document.querySelector('#sws-show-qr-code');
-    area.style.display= area.style.display === 'none' ? '' : 'none';
-
-  }
-
-  /**
-   * Converts the target object to an array.
-   */
-  var toArray = function( o ) {
-
-    return Array.prototype.slice.call( o );
-
-  }
-
-  // Init the WebSocket connection
-  var initWS = function(){
-        // Get the number of slides
-
-        var confNbSlides = engine.countNbSlides();
-
-        // Connect to websocket
-        socket = io.connect('http://'+window.location.hostname+':'+conf.port);
-        // On Connection message
-        socket.on('connect', function(){
-            socket.emit('message', {
-               type :"config",
-               url : window.location.pathname,
-               controlsColor : additionnalConfiguration.controlsColor,
-               nbSlides : confNbSlides.nbSlides,
-               mapPosition : confNbSlides.map
-            });
-            // If we are on the slides of speaker, we specify the controls values
-           socket.emit('message', {
-               type :"config",
-               indices : engine.getPosition()
-           });
-        });
-        // On message recieve
-        socket.on('message', function (data) {
-            if( data.type === "operation" && data.data === "show"){
-                engine.goToSlide(data);
-            }else if( data.type === "ping"){
-
-                if (document.querySelector('#sws-show-qr-code')){
-                  document.querySelector('#sws-show-qr-code').style.display = 'none';
-                }
-
-                // We have to check the controls in order to show the correct directions
-                socket.emit('message', {
-                    type :"config",
-                    url : window.location.pathname,
-                    controlsColor : additionnalConfiguration.controlsColor,
-                    nbSlides : confNbSlides.nbSlides,
-                    mapPosition : confNbSlides.map
-                });
-                socket.emit('message', {
-                    type :"config",
-                    indices : engine.getPosition()
-
-                });
-            }else if( data.type === "ping-plugin"){
-                // We have to check the controls in order to show the correct directions
-
-                var pluginIds = Object.keys(pluginList);
-                for (var i =0; i < pluginIds.length; i++){
-                  socket.emit('message', {
-                    type :"plugin",
-                    action :"activate",
-                    id : pluginIds[i]
-                  });
-                }
-                // Delegate to plugins
-
-            }else if( data.type === "communicate-plugin"){
-                // We have to check the controls in order to show the correct directions
-                if (data.id && pluginList[data.id] ){
-                  pluginList[data.id](data.data);
-                }
-
-
-            }
-        });
-  };
-
-  var engineCallBack = function(event){
-    // If we're on client slides
-    if (socket &&  event.data.notes !== undefined) {
-      socket.emit('message', {type : 'notes', data : event.data});
-    }
-    // If we're on speaker slides
-    if (socket){
-        socket.emit("message", {
-            type:'config',
-            indices : engine.getPosition()
-        });
-    }
-  }
-
-  var loadEngine = function (engineConf){
-    var loader = new ScriptLoader();
-    let path = extractPath()+'plugins/'+(conf.devMode ? '.tmp/src/' : '');
-    loader.add(`${path}/engines/${engineConf.name}-client-engine.js`, 'script');
     return loader.loaded();
   }
+  return new Promise((resolve, reject) =>{
+    resolve();
+  });
 
-  // Init the correct Engine
-  var initEngine = function (engineConf){
-    return new Promise(function( resolve, reject){
-      switch(engineConf.name){
-        case 'revealjs':
-            engine = new RevealEngine();
-            break;
-      }
+}
 
-      if (engine){
-        engine.initEngineListener(engineCallBack)
-        resolve();
-      }else{
-        reject('Engine not initialize ! ');
-      }
+// Use to detect the call of server presentation
+function _keyPress(e){
+  const evtobj = window.event? event : e
+  //keyCode = 80 = q for QRCode
+  if (evtobj.keyCode === 81 && evtobj.ctrlKey) _showRemoteQrCode();
+}
+
+
+function _showRemoteQrCode(){
+
+  // We show the qrcode for the phone
+  if (!document.querySelector('#sws-show-qr-code')){
+    const container = document.createElement('DIV');
+    container.setAttribute('id', 'sws-show-qr-code');
+    container.innerHTML = `
+      <div id="sws-show-qr-header">
+        <h1 class="title">Choose, Generate and Scan !</h1>
+        <div class="close"> "Ctrl+Q" to hide</div>
+        <p>Choose the right network interface and click on 'Generate' button</p>
+        <div id="listIp"></div>
+      </div>
+      <div id="sws-show-qr-bottom">
+        <a id="qrCodeLink"><div id="qrCode"></div></a>
+        <h1>Scan with your phone</h1>
+        <div id="sws-show-qr-url"></div>
+      </div>`;
+
+    document.body.appendChild(container);
+    this.qrCode = new QRCode("qrCode", {
+          text: "",
+          width: 256,
+          height: 256,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+      });
+    let list = "<select id='sws-show-qr-code-select'>";
+    for (let i = 0; i < this.ips.length; i++){
+        list+= "<option value='"+this.ips[i].id+"' id='ip"+this.ips[i].id+"' index='"+this.ips[i].id+"' >"+this.ips[i].name+"</option>";
+    }
+    list += "</select>";
+    list += "<button id='sws-show-qr-code-generate'>Generate</button>";
+    document.querySelector('#listIp').innerHTML = list;
+    const pathPlugin = _extractPath();
+    document.querySelector('#sws-show-qr-code-generate').addEventListener('click', (event) => {
+      const get_id = document.getElementById('sws-show-qr-code-select');
+      const result = get_id.options[get_id.selectedIndex].value;
+      const urlRemote = "http://"+this.ips[result].ip // HOST
+        +":"+this.conf.port // PORT
+        +pathPlugin.substr(pathPlugin.indexOf(this.conf.port)+(''+this.conf.port).length, pathPlugin.length) // PATHNAME
+        +(this.conf.devMode ?"remote/src/" : "remote/")+"notes-speaker.html";
+      this.qrCode.clear();
+      this.qrCode.makeCode(urlRemote);
+      document.querySelector("#qrCodeLink").setAttribute("href",urlRemote);
+      document.querySelector("#sws-show-qr-url").innerHTML = '<span style="text-transform:uppercase; font-weight:bold;">Or goto : </span><br>'+urlRemote;
     });
-  };
+
+  }
+
+  const area = document.querySelector('#sws-show-qr-code');
+  area.style.display= area.style.display === 'none' ? '' : 'none';
+
+}
+
+/**
+ * Converts the target object to an array.
+ */
+function _toArray( o ) {
+
+  return Array.prototype.slice.call( o );
+
+}
+
+// Init the WebSocket connection
+function _initWS(){
+      // Get the number of slides
+
+      const confNbSlides = this.engine.countNbSlides();
+
+      // Connect to websocket
+      this.socket = io.connect('http://'+window.location.hostname+':'+this.conf.port);
+      // On Connection message
+      this.socket.on('connect', () =>{
+          this.socket.emit('message', {
+              type :"config",
+              url : window.location.pathname,
+              controlsColor : this.additionnalConfiguration.controlsColor,
+              nbSlides : confNbSlides.nbSlides,
+              mapPosition : confNbSlides.map
+          });
+          // If we are on the slides of speaker, we specify the controls values
+          this.socket.emit('message', {
+              type :"config",
+              indices : this.engine.getPosition()
+          });
+      });
+      // On message recieve
+      this.socket.on('message', (data) => {
+          if( data.type === "operation" && data.data === "show"){
+              this.engine.goToSlide(data);
+          }else if( data.type === "ping"){
+
+              if (document.querySelector('#sws-show-qr-code')){
+                document.querySelector('#sws-show-qr-code').style.display = 'none';
+              }
+
+              // We have to check the controls in order to show the correct directions
+              this.socket.emit('message', {
+                  type :"config",
+                  url : window.location.pathname,
+                  controlsColor : this.additionnalConfiguration.controlsColor,
+                  nbSlides : confNbSlides.nbSlides,
+                  mapPosition : confNbSlides.map
+              });
+              this.socket.emit('message', {
+                  type :"config",
+                  indices : this.engine.getPosition()
+
+              });
+          }else if( data.type === "ping-plugin"){
+              // We have to check the controls in order to show the correct directions
+
+              const pluginIds = Object.keys(pluginList);
+              for (let i =0; i < pluginIds.length; i++){
+                this.socket.emit('message', {
+                  type :"plugin",
+                  action :"activate",
+                  id : pluginIds[i]
+                });
+              }
+              // Delegate to plugins
+
+          }else if( data.type === "communicate-plugin"){
+              // We have to check the controls in order to show the correct directions
+              if (data.id && pluginList[data.id] ){
+                this.pluginList[data.id](data.data);
+              }
+
+
+          }
+      });
+};
+
+function _engineCallBack(event){
+  // If we're on client slides
+  if (this.socket &&  event.data.notes !== undefined) {
+    this.socket.emit('message', {type : 'notes', data : event.data});
+  }
+  // If we're on speaker slides
+  if (this.socket){
+      this.socket.emit("message", {
+          type:'config',
+          indices : this.engine.getPosition()
+      });
+  }
+}
+
+function _loadEngine(engineConf){
+  const loader = new ScriptLoader();
+  const path = _extractPath()+'plugins/'+(this.conf.devMode ? '.tmp/src/' : '');
+  loader.add(`${path}/engines/${engineConf.name}-client-engine.js`, 'script');
+  return loader.loaded();
+}
+
+// Init the correct Engine
+function _initEngine(engineConf){
+  return new Promise(( resolve, reject) => {
+    switch(engineConf.name){
+      case 'revealjs':
+          this.engine = new RevealEngine();
+          break;
+    }
+
+    if (this.engine){
+      this.engine.initEngineListener(_engineCallBack.bind(this));
+      resolve();
+    }else{
+      reject('Engine not initialize ! ');
+    }
+  });
+};
+
+
+class WebRemoteControl {
+
+  constructor(){
+    /*
+    * **************************************
+    * ---------------MODEL------------------
+    * **************************************
+    */
+    this.conf = null;
+    this.additionnalConfiguration = null;
+    this.socket = null;
+    this.ips = null;
+    this.qrCode = null;
+    this.pluginList = {};
+    this.engine = null;
+
+
+  }
+
 
 
 
@@ -370,54 +386,45 @@ var WebRemoteControl = (function () {
   * **************************************
   */
 
-  var registerPlugin = function (id, callbackAction){
-    pluginList[id] = callbackAction;
+  registerPlugin(id, callbackAction){
+    this.pluginList[id] = callbackAction;
   }
 
 
   // We init the client side (websocket + engine Listener)
-  var init = function(conf){
+  init(conf){
     // We check if this script ins't in the iframe of the remote control
     if(!window.parent || !window.parent.document.body.getAttribute('sws-remote-iframe-desactiv')){
         console.log('Initialize Client side');
-        additionnalConfiguration = conf;
-        checkAdditionnalConfiguration()
-        .then(function(){
-          return initConfig();
+        this.additionnalConfiguration = conf;
+        _checkAdditionnalConfiguration.bind(this)()
+        .then(_ => {
+          return _initConfig.bind(this)();
         })
-        .then(function(){
-          return loadEngine(conf.engine);
+        .then(_ => {
+          return _loadEngine.bind(this)(conf.engine);
         })
-        .then(function(){
-          return initEngine(conf.engine);
+        .then(_ => {
+          return _initEngine.bind(this)(conf.engine);
         })
-        .then(function(){
-          return new Promise(function(resolve, reject){
-            initWS();
+        .then(_ => {
+          return new Promise((resolve, reject) => {
+            _initWS.bind(this)();
             resolve();
           });
         })
-        .then(function(){
-          return loadPlugins(conf.plugins);
+        .then(_ => {
+          return _loadPlugins.bind(this)(conf.plugins);
         })
-        .then(function(){
+        .then(_ => {
           console.info('All is load ! ');
         })
-        .catch(function(err){
+        .catch((err) => {
           console.error('Error : %s \n %s', err.message, err.stack);
         });
     }
   }
 
-  /*
-  * **************************************
-  * --------INITIALIZATION----------------
-  * **************************************
-  */
+};
 
-
-  return {
-    init : init,
-    registerPlugin : registerPlugin
-  }
-})();
+export default new WebRemoteControl();
