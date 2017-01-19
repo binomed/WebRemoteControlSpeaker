@@ -1,6 +1,25 @@
 'use strict';
 import {GenericEngine} from './generic-client-engine.js';
 
+function _revealCallBack(event) {
+	// We get the curent slide
+	let slideElement = Reveal.getCurrentSlide(),
+		messageData = null;
+
+	// We get the notes and init the indexs
+	let notes = slideElement.querySelector( 'aside.notes' );
+
+	// We prepare the message data to send through websocket
+	messageData = {
+		notes : notes ? notes.innerHTML : '',
+		markdown : notes ? typeof notes.getAttribute( 'data-markdown' ) === 'string' : false
+	};
+
+	this.callBackEngine({
+		notes : notes,
+		data : messageData
+	});
+}
 
 export default class RevealEngine extends GenericEngine{
 
@@ -8,25 +27,6 @@ export default class RevealEngine extends GenericEngine{
 		super();
 		this.callBackEngine = null;
 
-		function revealCallBack(event) {
-			// We get the curent slide
-			let slideElement = Reveal.getCurrentSlide(),
-				messageData = null;
-
-			// We get the notes and init the indexs
-			let notes = slideElement.querySelector( 'aside.notes' );
-
-			// We prepare the message data to send through websocket
-			messageData = {
-				notes : notes ? notes.innerHTML : '',
-				markdown : notes ? typeof notes.getAttribute( 'data-markdown' ) === 'string' : false
-			};
-
-			this.callBackEngine({
-				notes : notes,
-				data : messageData
-			});
-		}
 	}
 
 	/*
@@ -46,7 +46,7 @@ export default class RevealEngine extends GenericEngine{
 
 	initEngineListener(callBack){
 		this.callBackEngine = callBack;
-		Reveal.addEventListener( 'slidechanged', revealCallBack.bind(this));
+		Reveal.addEventListener( 'slidechanged', _revealCallBack.bind(this));
 	}
 
 	countNbSlides(){
