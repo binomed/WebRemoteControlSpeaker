@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+	<title>Web Remote Control</title>
+
+	<link rel="icon" type="image/ico" href="./src/images/favicon.ico" />
+
+	<!-- Material Design Lite -->
+	<script src="./src/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+	<link rel="import" href="./src/partials/remote-app.html">
+
+	<!-- build:css css/app.css -->
+	<!-- Cardinal Css-->
+	<!--<link rel="stylesheet" href="components/cardinalcss/main.min.css">-->
+	<!-- Font awesome Css-->
+	<!--<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">-->
+	<!-- endbuild -->
+
+	<!-- Main Css -->
+	<link rel="stylesheet" href="./src/css/web-remote.css">
+
+	<!-- Socket IO mandatory import -->
+	<script src="/socket.io/socket.io.js"></script>
+
+	<!-- build:js js/app.js -->
+	<!-- Use for selections css manipulations -->
+	<script src="./src/components/modernizr/modernizr.js"></script>
+	<!-- endbuild -->
+</head>
+
+<body>
+	<remote-app></remote-app>
+
+	<script src="./src/js/app.js"></script>
+</body>
+
+</html>

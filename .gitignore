@@ -7,3 +7,4 @@ yarn.lock
 .tmp
 dist
 conf
+bower_components

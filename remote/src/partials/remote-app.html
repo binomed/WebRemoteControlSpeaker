@@ -1,0 +1,65 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-layout.html">
+<link rel="import" href="remote-header.html">
+
+<dom-module id="remote-app">
+  <template>
+
+	<!-- Styles MUST be inside template -->
+	<style>
+
+		:host {
+		display: block;
+		position: relative;
+		overflow: hidden;
+		}
+
+
+	</style>
+
+	<remote-header></remote-header>
+
+	<app-drawer id="drawer" swipe-open></app-drawer>
+
+
+
+</template>
+
+<script>
+
+// Extend Polymer.Element base class
+class RemoteApp extends Polymer.Element {
+
+	static get is() { return 'remote-app' }
+
+	static get config() {
+		// properties, observers meta data
+		return {
+			properties: {
+			
+			}
+		};
+	}
+
+
+	connectedCallback() {
+		super.connectedCallback();
+
+		const drawer = document.querySelector('app-drawer');
+		document.querySelector('remote-header').addEventListener('menu-open', function(){
+			console.log('tap');
+			drawer.toggle();
+		});
+	}
+
+	_testEvent(){
+		console.log('event');
+	}
+
+}
+
+// Register custom element definition using standard platform API
+customElements.define(RemoteApp.is, RemoteApp);
+
+</script>
+</dom-module>

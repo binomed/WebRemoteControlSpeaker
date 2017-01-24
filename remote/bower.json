@@ -1,0 +1,8 @@
+{
+  "name": "WebRemoteControl-Remote",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#2.0-preview",
+    "app-layout": "PolymerElements/app-layout#2.0-preview"
+  }
+}
