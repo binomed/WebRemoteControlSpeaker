@@ -1,5 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 
 
 <dom-module id="remote-header">
@@ -12,13 +15,23 @@
 			display: block;
 			position: relative;
 			overflow: hidden;
+
+			--bg-color-abs : #575757;
+		}
+
+
+		app-toolbar {
+			background-color: var(--bg-color-abs);
+			color: #fff;
 		}
 
 
 	</style>
 
 	<app-toolbar>
-		<paper-icon-button icon="menu" on-click="testClick"></paper-icon-button>
+		<paper-icon-button icon="menu" on-tap="_drawerLeft"></paper-icon-button>
+		<div main-title>AppName</div>
+		<paper-icon-button icon="extension" on-tap="_drawerRight"></paper-icon-button>
 	</app-toolbar>
 
 </template>
@@ -36,19 +49,24 @@ class RemoteHeader extends Polymer.Element {
 			properties: {
 			
 			}
+
 		};
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
 
-		/*document.querySelector('paper-icon-button').addEventListener('tap', function() {
+		/*this.querySelector('paper-icon-button').addEventListener('tap', function() {
 			this.dispatchEvent(new CustomEvent('menu-open'), {bubbles: true});
 		});*/
 	}
 
-	testClick(){
-		this.dispatchEvent(new CustomEvent('menu-open'), {bubbles: true});
+	_drawerLeft(){
+		this.dispatchEvent(new CustomEvent('toogle-drawer', {detail: {direction:'left'}}));
+	}
+
+	_drawerRight(){
+		this.dispatchEvent(new CustomEvent('toogle-drawer', {detail: {direction:'right'}}));
 	}
 
 }

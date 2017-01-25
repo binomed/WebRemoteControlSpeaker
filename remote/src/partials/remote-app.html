@@ -1,5 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/font-roboto/roboto.html">
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="remote-header.html">
 
 <dom-module id="remote-app">
@@ -14,12 +18,46 @@
 		overflow: hidden;
 		}
 
+		app-drawer {
+			--app-drawer-scrim-background: rgba(0, 0, 0, 0.8);
+			--app-drawer-content-container: {
+				background-color: #939183;
+			}
+		}
+
 
 	</style>
 
-	<remote-header></remote-header>
+	<remote-header on-toogle-drawer="_toggleDrawer"></remote-header>
 
-	<app-drawer id="drawer" swipe-open></app-drawer>
+	<app-drawer id="drawerLeft" swipe-open>
+		<div class="drawer-contents">
+			<paper-icon-item>
+				<iron-icon class="grayIcon" icon="fullscreen" item-icon></iron-icon>
+				<span>Full Screen</span>
+			</paper-icon-item>
+			<br>
+			<paper-icon-item>
+				<iron-icon class="grayIcon" icon="play-arrow" item-icon></iron-icon>
+				<span>Play</span>
+			</paper-icon-item>
+			<paper-icon-item>
+				<iron-icon class="grayIcon" icon="av-timer" item-icon></iron-icon>
+				<span>Reset timer</span>
+			</paper-icon-item>
+			<paper-icon-item>
+				<iron-icon class="grayIcon" icon="access-time" item-icon></iron-icon>
+				<span>Duration</span>
+				<input type="number">
+				<span>mn.</span>
+			</paper-icon-item>
+			<paper-icon-item>
+				<iron-icon class="grayIcon" icon="replay" item-icon></iron-icon>
+				<span>Go to first slide</span>
+			</paper-icon-item>
+		</div>
+	</app-drawer>
+	<app-drawer id="drawerRight" swipe-open align="right">test Right</app-drawer>
 
 
 
@@ -44,17 +82,30 @@ class RemoteApp extends Polymer.Element {
 
 	connectedCallback() {
 		super.connectedCallback();
-
-		const drawer = document.querySelector('app-drawer');
-		document.querySelector('remote-header').addEventListener('menu-open', function(){
-			console.log('tap');
-			drawer.toggle();
-		});
+		
 	}
 
-	_testEvent(){
-		console.log('event');
+	_toggleDrawer(event){
+		console.log(event.detail);
+		switch(event.detail.direction){
+			case 'left':
+				this._toggleLeftDrawer();
+			break;
+			case 'right':
+				this._toggleRightDrawer();
+			break;
+		}		
 	}
+
+	_toggleLeftDrawer(){		
+		this.$.drawerLeft.toggle();
+	}
+
+	_toggleRightDrawer(){
+		this.$.drawerRight.toggle();
+	}
+
+
 
 }
 
