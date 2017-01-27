@@ -1,0 +1,114 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+
+<dom-module id="drawer-left">
+	<template>
+
+		<!-- Styles MUST be inside template -->
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+			overflow: hidden;
+		}
+
+		app-drawer {
+			--app-drawer-scrim-background: rgba(0, 0, 0, 0.8);
+			--app-drawer-content-container: {
+				background-color: #939183;
+			}
+		}
+
+		paper-listbox {
+			padding:0;
+		}
+
+		paper-item{
+			--paper-item: {
+				background-color : #575757;
+				color: white;
+			}
+		}
+		input{
+			width:30%;
+			margin: 0 10px;
+		}
+
+
+	</style>
+
+<app-drawer id="drawerLeft" swipe-open>
+	<div class="drawer-contents">
+		<paper-listbox>
+			<paper-item>
+				<iron-icon icon="fullscreen" item-icon></iron-icon>
+				<span>Full Screen</span>
+			</paper-item>
+			<paper-item>
+				<iron-icon icon="av:play-arrow" item-icon></iron-icon>
+				<span>Play</span>
+			</paper-item>
+			<paper-item>
+				<iron-icon icon="av:av-timer" item-icon></iron-icon>
+				<span>Reset timer</span>
+			</paper-item>
+			<paper-item>
+				<iron-icon icon="image:timer" item-icon></iron-icon>
+					<span>Duration</span>
+					<input type="number">
+					<span>mn.</span>
+
+			</paper-item>
+			<paper-item>
+				<iron-icon icon="av:replay" item-icon></iron-icon>
+				<span>Go to first slide</span>
+			</paper-item>
+		</paper-listbox>
+	</div>
+</app-drawer>
+
+
+</template>
+
+<script>
+
+	// Extend Polymer.Element base class
+	class DrawerLeft extends Polymer.Element {
+
+		static get is() { return 'drawer-left' }
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+
+				}
+			};
+		}
+
+
+		connectedCallback() {
+			super.connectedCallback();
+
+		}
+
+		toggleDrawer(event) {
+			this.$.drawerLeft.toggle();
+		}
+
+	}
+
+	// Register custom element definition using standard platform API
+	customElements.define(DrawerLeft.is, DrawerLeft);
+
+</script>
+</dom-module>
