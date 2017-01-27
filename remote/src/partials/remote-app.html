@@ -2,20 +2,25 @@
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
-<link rel="import" href="../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="remote-header.html">
+<link rel="import" href="speaker-notes.html">
+<link rel="import" href="screen-preview.html">
+<link rel="import" href="drawer-left.html">
+<link rel="import" href="drawer-right.html">
 
 <dom-module id="remote-app">
-  <template>
+	<template>
 
-	<!-- Styles MUST be inside template -->
-	<style>
+		<!-- Styles MUST be inside template -->
+		<style>
 
 		:host {
-		display: block;
-		position: relative;
-		overflow: hidden;
+			display: block;
+			position: relative;
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
 		}
 
 		app-drawer {
@@ -25,92 +30,87 @@
 			}
 		}
 
+		.content{
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			align-content: stretch;
+			width: 100%;
+			height: 100%;
+		}
+
+		speaker-notes, screen-preview{
+			flex-grow:1;
+		}
+
 
 	</style>
 
+
+<drawer-left id="drawerLeft"></drawer-left>
+<drawer-right id="drawerRight"></drawer-right>
+
+<div class="content">
 	<remote-header on-toogle-drawer="_toggleDrawer"></remote-header>
-
-	<app-drawer id="drawerLeft" swipe-open>
-		<div class="drawer-contents">
-			<paper-icon-item>
-				<iron-icon class="grayIcon" icon="fullscreen" item-icon></iron-icon>
-				<span>Full Screen</span>
-			</paper-icon-item>
-			<br>
-			<paper-icon-item>
-				<iron-icon class="grayIcon" icon="play-arrow" item-icon></iron-icon>
-				<span>Play</span>
-			</paper-icon-item>
-			<paper-icon-item>
-				<iron-icon class="grayIcon" icon="av-timer" item-icon></iron-icon>
-				<span>Reset timer</span>
-			</paper-icon-item>
-			<paper-icon-item>
-				<iron-icon class="grayIcon" icon="access-time" item-icon></iron-icon>
-				<span>Duration</span>
-				<input type="number">
-				<span>mn.</span>
-			</paper-icon-item>
-			<paper-icon-item>
-				<iron-icon class="grayIcon" icon="replay" item-icon></iron-icon>
-				<span>Go to first slide</span>
-			</paper-icon-item>
-		</div>
-	</app-drawer>
-	<app-drawer id="drawerRight" swipe-open align="right">test Right</app-drawer>
-
+	<speaker-notes on-expand-notes="_expandNotes"></speaker-notes>
+	<screen-preview></screen-preview>
+</div>
 
 
 </template>
 
 <script>
 
-// Extend Polymer.Element base class
-class RemoteApp extends Polymer.Element {
+	// Extend Polymer.Element base class
+	class RemoteApp extends Polymer.Element {
 
-	static get is() { return 'remote-app' }
+		static get is() { return 'remote-app' }
 
-	static get config() {
-		// properties, observers meta data
-		return {
-			properties: {
-			
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+
+				}
+			};
+		}
+
+
+		connectedCallback() {
+			super.connectedCallback();
+
+		}
+
+		_expandNotes(event){
+
+		}
+
+		_toggleDrawer(event) {
+			console.log(event.detail);
+			switch (event.detail.direction) {
+				case 'left':
+					this._toggleLeftDrawer();
+					break;
+				case 'right':
+					this._toggleRightDrawer();
+					break;
 			}
-		};
+		}
+
+		_toggleLeftDrawer() {
+			this.$.drawerLeft.toggleDrawer();
+		}
+
+		_toggleRightDrawer() {
+			this.$.drawerRight.toggle();
+		}
+
+
+
 	}
 
-
-	connectedCallback() {
-		super.connectedCallback();
-		
-	}
-
-	_toggleDrawer(event){
-		console.log(event.detail);
-		switch(event.detail.direction){
-			case 'left':
-				this._toggleLeftDrawer();
-			break;
-			case 'right':
-				this._toggleRightDrawer();
-			break;
-		}		
-	}
-
-	_toggleLeftDrawer(){		
-		this.$.drawerLeft.toggle();
-	}
-
-	_toggleRightDrawer(){
-		this.$.drawerRight.toggle();
-	}
-
-
-
-}
-
-// Register custom element definition using standard platform API
-customElements.define(RemoteApp.is, RemoteApp);
+	// Register custom element definition using standard platform API
+	customElements.define(RemoteApp.is, RemoteApp);
 
 </script>
 </dom-module>

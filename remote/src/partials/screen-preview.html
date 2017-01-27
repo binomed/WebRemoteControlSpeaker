@@ -1,0 +1,55 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/font-roboto/roboto.html">
+
+<dom-module id="screen-preview">
+	<template>
+
+		<!-- Styles MUST be inside template -->
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+		}
+
+
+
+	</style>
+
+
+
+
+</template>
+
+<script>
+
+	// Extend Polymer.Element base class
+	class ScreenPreview extends Polymer.Element {
+
+		static get is() { return 'screen-preview' }
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+
+				}
+			};
+		}
+
+
+		connectedCallback() {
+			super.connectedCallback();
+
+		}
+
+	}
+
+	// Register custom element definition using standard platform API
+	customElements.define(ScreenPreview.is, ScreenPreview);
+
+</script>
+</dom-module>
