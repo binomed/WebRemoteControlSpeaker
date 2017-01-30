@@ -16,11 +16,28 @@
 			background: #575757;
 		}
 
-
+		.index-slides{
+			position: absolute;
+			right:0;
+			top:0;
+			width: auto;
+			text-align: right;
+			color: #675C53;
+			padding: 0 10px;
+			height: 40px;
+			font-size: 12pt;
+			background:#e0dac7;
+		}
+		
+		.index-slides .current-slide{
+			font-size: 18pt;
+		}
 
 	</style>
 
-
+	<div class="index-slides">	
+		<span class="current-slide">[[index]]</span> / [[slides]]
+	</div>
 
 
 </template>
@@ -36,7 +53,12 @@
 			// properties, observers meta data
 			return {
 				properties: {
-
+					index:{
+						type: Object
+					},
+					slides:{
+						type: Object
+					}
 				}
 			};
 		}
@@ -44,7 +66,8 @@
 
 		connectedCallback() {
 			super.connectedCallback();
-
+			this.index = 0;
+			this.slides = 24;
 		}
 
 	}

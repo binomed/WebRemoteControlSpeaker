@@ -41,14 +41,22 @@
 
 		speaker-notes, screen-preview{
 			flex-grow:1;
+			margin-top:10px;
+			margin-bottom: 10px;
+		}
+
+		.content.expand screen-notes{
+			
+		}
+
+		.content.expand screen-preview{
+			display: none;
 		}
 
 
 	</style>
 
 
-<drawer-left id="drawerLeft"></drawer-left>
-<drawer-right id="drawerRight"></drawer-right>
 
 <div class="content" id="contentRemote">
 	<remote-header on-toogle-drawer="_toggleDrawer"></remote-header>
@@ -56,6 +64,8 @@
 	<screen-preview></screen-preview>
 </div>
 
+<drawer-left id="drawerLeft"></drawer-left>
+<drawer-right id="drawerRight"></drawer-right>
 
 </template>
 
@@ -106,7 +116,7 @@
 		}
 
 		_toggleRightDrawer() {
-			this.$.drawerRight.toggle();
+			this.$.drawerRight.toggleDrawer();
 		}
 
 

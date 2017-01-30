@@ -29,13 +29,31 @@
 		}
 
 		#notes{
-			border-top:2px #575757;
+			border-top:10px solid #575757;
 			flex-grow:1;
 			background: white;
 		}
 		
 		#contentNotes.expand paper-icon-button{
 			transform: rotateX(180deg);
+		}
+
+		.index-slides{
+			position: absolute;
+			right:0;
+			bottom:0;
+			width: auto;
+			text-align: right;
+			color: #675C53;
+			padding: 0 10px;
+			height: 40px;
+			font-size: 12pt;
+			background:#e0dac7;
+		}
+
+		.index-slides .current-slide{
+			color: #B7183B;
+			font-size: 18pt;
 		}
 
 	</style>
@@ -46,6 +64,9 @@
 		<div main-title>Notes</div>
 	</app-toolbar>
 	<div id="notes">
+	</div>
+	<div class="index-slides">	
+		<span class="current-slide">[[index]]</span> / [[slides]]
 	</div>
 </div>
 
@@ -65,6 +86,12 @@
 				properties: {
 					expand:{
 						type: Object
+					},
+					index:{
+						type: Object
+					},
+					slides:{
+						type: Object
 					}
 				}
 			};
@@ -73,7 +100,8 @@
 
 		connectedCallback() {
 			super.connectedCallback();
-
+			this.index = 0;
+			this.slides = 24;
 		}
 
 		_expandNotes(){
