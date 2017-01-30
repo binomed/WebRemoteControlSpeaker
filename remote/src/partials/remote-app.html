@@ -50,7 +50,7 @@
 <drawer-left id="drawerLeft"></drawer-left>
 <drawer-right id="drawerRight"></drawer-right>
 
-<div class="content">
+<div class="content" id="contentRemote">
 	<remote-header on-toogle-drawer="_toggleDrawer"></remote-header>
 	<speaker-notes on-expand-notes="_expandNotes"></speaker-notes>
 	<screen-preview></screen-preview>
@@ -82,7 +82,11 @@
 		}
 
 		_expandNotes(event){
-
+			if (event.detail.expand){
+				this.$.contentRemote.classList.add('expand');
+			}else {
+				this.$.contentRemote.classList.remove('expand');
+			}
 		}
 
 		_toggleDrawer(event) {

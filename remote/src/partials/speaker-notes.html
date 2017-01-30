@@ -33,10 +33,14 @@
 			flex-grow:1;
 			background: white;
 		}
+		
+		#contentNotes.expand paper-icon-button{
+			transform: rotateX(180deg);
+		}
 
 	</style>
 
-<div class="content">
+<div class="content" id="contentNotes">
 	<app-toolbar>
 		<paper-icon-button icon="arrow-drop-down-circle" on-tap="_expandNotes"></paper-icon-button>
 		<div main-title>Notes</div>
@@ -59,7 +63,9 @@
 			// properties, observers meta data
 			return {
 				properties: {
-
+					expand:{
+						type: Object
+					}
 				}
 			};
 		}
@@ -71,7 +77,13 @@
 		}
 
 		_expandNotes(){
-			this.dispatchEvent(new CustomEvent('expand-notes', {detail: {expand:true}}));
+			this.expand = !this.expand;
+			if (this.expand){
+				this.$.contentNotes.classList.add('expand');
+			}else{
+				this.$.contentNotes.classList.remove('expand');
+			}
+			this.dispatchEvent(new CustomEvent('expand-notes', {detail: {expand:this.expand}}));
 		}
 	}
 
