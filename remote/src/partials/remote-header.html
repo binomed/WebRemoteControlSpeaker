@@ -17,6 +17,21 @@
 			overflow: hidden;
 
 			--bg-color-abs : #575757;
+			--color-normal-stop-1 : #A4FF00;
+			--color-normal-stop-2 : #7BBA09;
+			--color-alert : #be233a;
+			--color-alert-stop-1 : #FF8D00;
+			--color-alert-stop-2 : #FF0000;
+			--color-avanced : #FFBB33;
+			--color-advanced-stop-1 : #FFDD00;
+			--color-advanced-stop-2 : #DD9700;
+			--abs-height: 40px;
+			--color-actions : #939183;
+			--margin-timer: 7px;
+			--font-size-timer : 27pt;
+			--font-color-timer : #FFFFFF;
+			--font-size-slide-number : 12pt;
+			--font-color-mute : var(--color-actions);
 		}
 
 
@@ -26,14 +41,107 @@
 		}
 
 
+		.elapsed {
+			position:relative;
+			text-align: center;
+			// width:calc(100% - (var(--abs-height) * 2 + 2px));
+			// width:-webkit-calc(100% - (var(--abs-height) * 2 + 2px));
+			// height:var(--abs-height);
+			// top:0;
+			// left:calc(var(--abs-height) * 1 + 1px);
+			// left:-webkit-calc(var(--abs-height) * 1 + 1px);
+			color: var(--font-color);
+			vertical-align:middle;
+			
+		}
+
+
+
+		.elapsed_time, .elapsed_bg{
+			background: linear-gradient(top, var(--color-normal-stop-1), var(--color-normal-stop-2) no-repeat;    
+			position: absolute;    
+			border-top: thin solid var(--color-actions);
+			height:var(--margin-timer);
+			width:100%;
+			// top:var(--abs-height);
+			left:0;
+		}
+
+		.elapsed_bg{
+			background-image: none;
+			background-color: white;
+		}
+
+		.elapsed_time.alert{
+			background: linear-gradient(top, var(--color-alert-stop-1), var(--color-alert-stop-2) no-repeat;
+		}
+		.elapsed_time.advanced{
+			background: linear-gradient(top, var(--color-advanced-stop-1), var(--color-advanced-stop-2) no-repeat;
+		}
+
+		.timeEllapesd{
+			font-weight: 400;
+			font-size: var(--font-size-timer);
+			// line-height:var(--abs-height);
+			color:var(--font-color-timer);
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;    
+			text-align: center;
+		}
+
+		.totalTime{
+			font-weight: 400;
+			font-size: var(--font-size-slide-number);
+			color:var(--font-color-mute);
+			
+		}
+
+		.elapsed .mute {
+			color: var(--font-color-mute);
+		}
+
+		.actions_times{
+			position: absolute;
+			background-color:var(--bg-color-abs);
+			top:0;
+			right:var(--abs-height);
+			height:var(--abs-height);
+			width:var(--abs-height);
+		}
+
+		#action_time_play, #action_time_pause{
+			position:absolute;
+			border-left : thin solid var(--color-actions);
+			border-right : thin solid var(--color-actions);
+			top: 0;
+			width:var(--abs-height);
+			height:var(--abs-height);    
+			text-align:center;
+			color:var(--color-actions);
+			
+		}
+
+
 	</style>
 
 	<app-toolbar>
 		<paper-icon-button icon="menu" on-tap="_drawerLeft"></paper-icon-button>
-		<div main-title>AppName</div>
+		<div main-title id="ellapsedTime">
+			<div class="elapsed" ng-show="showTime">
+				<div class="timeEllapesd">
+					<span id="hours" ng-class="classHours" ng-show="showHours">[[hours]] : </span><span id="minutes" ng-class="classMinutes">[[minutes]]</span><span
+						id="seconds"> : [[seconds]]</span><span class="totalTime">&nbsp;/&nbsp;[[interval]]:00</span>
+				</div>
+			</div>
+			<!--<div class="elapsed_bg">
+			</div>
+			<div id="progress_elapsed_time" class="elapsed_time">
+			</div>-->
+		</div>
 		<paper-icon-button icon="extension" on-tap="_drawerRight"></paper-icon-button>
 	</app-toolbar>
-
 </template>
 
 <script>
@@ -47,7 +155,11 @@ class RemoteHeader extends Polymer.Element {
 		// properties, observers meta data
 		return {
 			properties: {
-			
+				hours: Number,
+				minutes: Number,
+				seconds: Number,
+				interval: Number,
+
 			}
 
 		};
@@ -55,6 +167,17 @@ class RemoteHeader extends Polymer.Element {
 
 	connectedCallback() {
 		super.connectedCallback();
+
+		this.interval = 60;
+		let now = moment();
+		setInterval( _ => {
+			let diff = moment().diff(now);
+			//console.info(diff);
+			//console.info(Math.floor(diff / 60), Math.floor(diff / 60 * 1000), Math.floor(diff % (60 * 1000) / 1000));
+			this.hours = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(Math.floor(diff / (60 * 60 * 1000)));
+			this.minutes = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(Math.floor(diff / (60 * 1000)));
+			this.seconds= new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(Math.floor(diff % (60 * 1000) / 1000));
+		}, 500);
 
 		/*this.querySelector('paper-icon-button').addEventListener('tap', function() {
 			this.dispatchEvent(new CustomEvent('menu-open'), {bubbles: true});

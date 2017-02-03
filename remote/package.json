@@ -10,7 +10,8 @@
     "font-awesome": "^4.5.0",
     "hammerjs": "^2.0.4",
     "jquery": "^2.1.4",
-    "jquery-hammerjs": "^2.0.0"
+    "jquery-hammerjs": "^2.0.0",
+    "moment": "^2.17.1"
   },
   "devDependencies": {
     "babel-plugin-add-module-exports": "^0.2.1",
