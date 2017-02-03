@@ -104,10 +104,12 @@
 
 }
 
-$default-font : "open_sanssemibold";
-$font-notes : Arial,sans-serif;
+:root{
+    --default-font : "open_sanssemibold";
+    --font-notes : Arial,sans-serif;
+}
 
 body{
-	font-family: $default-font;
+	font-family: var(--default-font);
 	/*font-weight: 600;*/
 }

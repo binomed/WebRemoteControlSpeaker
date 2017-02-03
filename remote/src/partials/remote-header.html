@@ -15,23 +15,6 @@
 			display: block;
 			position: relative;
 			overflow: hidden;
-
-			--bg-color-abs : #575757;
-			--color-normal-stop-1 : #A4FF00;
-			--color-normal-stop-2 : #7BBA09;
-			--color-alert : #be233a;
-			--color-alert-stop-1 : #FF8D00;
-			--color-alert-stop-2 : #FF0000;
-			--color-avanced : #FFBB33;
-			--color-advanced-stop-1 : #FFDD00;
-			--color-advanced-stop-2 : #DD9700;
-			--abs-height: 40px;
-			--color-actions : #939183;
-			--margin-timer: 7px;
-			--font-size-timer : 27pt;
-			--font-color-timer : #FFFFFF;
-			--font-size-slide-number : 12pt;
-			--font-color-mute : var(--color-actions);
 		}
 
 
@@ -44,13 +27,7 @@
 		.elapsed {
 			position:relative;
 			text-align: center;
-			// width:calc(100% - (var(--abs-height) * 2 + 2px));
-			// width:-webkit-calc(100% - (var(--abs-height) * 2 + 2px));
-			// height:var(--abs-height);
-			// top:0;
-			// left:calc(var(--abs-height) * 1 + 1px);
-			// left:-webkit-calc(var(--abs-height) * 1 + 1px);
-			color: var(--font-color);
+			color: var(--font-color-timer);
 			vertical-align:middle;
 			
 		}
@@ -63,7 +40,6 @@
 			border-top: thin solid var(--color-actions);
 			height:var(--margin-timer);
 			width:100%;
-			// top:var(--abs-height);
 			left:0;
 		}
 
@@ -82,7 +58,6 @@
 		.timeEllapesd{
 			font-weight: 400;
 			font-size: var(--font-size-timer);
-			// line-height:var(--abs-height);
 			color:var(--font-color-timer);
 			position: absolute;
 			width: 100%;
