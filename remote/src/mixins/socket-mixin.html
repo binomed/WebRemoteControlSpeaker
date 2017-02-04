@@ -1,0 +1,48 @@
+<script>
+
+	const SocketMixin = subclass => class extends ModelMixin(subclass) {
+
+        static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+                    socketIO: Object
+                }
+            };
+        }
+
+        connectedCallback() {
+			super.connectedCallback();
+            console.log(this.conf);
+            if ( typeof io != 'undefined'){                
+                this.socketIO = io.connect('http://'+window.location.hostname+':'+this.conf.port);
+                
+                // Socket IO connect
+                this.socketIO.on('connect',_ => {
+                    // Send a ping message for getting config
+                   this.socketIO.emit('message', {
+                       type:'ping'
+                   }); 
+
+                   
+                   // Ask for plugins
+                   this.socketIO.emit('message', {
+                       type:'ping-plugin'
+                   }); 
+                    
+                });
+             
+
+                // Message from presentation
+                this.socketIO.on("message", this._presentationMessage.bind(this));
+            }
+		}
+        
+        
+        _presentationMessage(json){
+            // To overide
+        }
+
+    };
+
+</script>
