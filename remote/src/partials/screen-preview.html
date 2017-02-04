@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../mixins/model-mixin.html">
 
 <dom-module id="screen-preview">
 	<template>
@@ -36,7 +37,7 @@
 	</style>
 
 	<div class="index-slides">	
-		<span class="current-slide">[[index]]</span> / [[slides]]
+		<span class="current-slide">[[nextSlideNumber]]</span> / [[nbSlides]]
 	</div>
 
 
@@ -45,7 +46,7 @@
 <script>
 
 	// Extend Polymer.Element base class
-	class ScreenPreview extends Polymer.Element {
+	class ScreenPreview extends ModelMixin(Polymer.Element) {
 
 		static get is() { return 'screen-preview' }
 
@@ -53,12 +54,7 @@
 			// properties, observers meta data
 			return {
 				properties: {
-					index:{
-						type: Object
-					},
-					slides:{
-						type: Object
-					}
+					
 				}
 			};
 		}
