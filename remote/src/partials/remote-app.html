@@ -4,6 +4,7 @@
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../mixins/model-mixin.html">
 <link rel="import" href="remote-header.html">
 <link rel="import" href="speaker-notes.html">
 <link rel="import" href="screen-preview.html">
@@ -63,7 +64,7 @@
 <script>
 
 	// Extend Polymer.Element base class
-	class RemoteApp extends Polymer.Element {
+	class RemoteApp extends ModelMixin(Polymer.Element) {
 
 		static get is() { return 'remote-app' }
 
