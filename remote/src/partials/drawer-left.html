@@ -53,9 +53,9 @@
 				<iron-icon icon="fullscreen" item-icon></iron-icon>
 				<span>Full Screen</span>
 			</paper-item>
-			<paper-item>
-				<iron-icon icon="av:play-arrow" item-icon></iron-icon>
-				<span>Play</span>
+			<paper-item on-tap="_togglePlayPause">
+				<iron-icon icon$="av:{{iconPlayPause}}" item-icon></iron-icon>
+				<span>[[textPlayPause]]</span>
 			</paper-item>
 			<paper-item>
 				<iron-icon icon="av:av-timer" item-icon></iron-icon>
@@ -90,7 +90,18 @@
 			// properties, observers meta data
 			return {
 				properties: {
-
+					playState: {
+						type: Boolean,
+						value: false
+					},
+					iconPlayPause: {
+						type: String,
+						value: 'play-arrow'
+					},
+					textPlayPause: {
+						type: String,
+						value: 'Play'
+					}
 				}
 			};
 		}
@@ -100,9 +111,21 @@
 			super.connectedCallback();
 
 		}
+		
 
 		toggleDrawer(event) {
 			this.$.drawerLeft.toggle();
+		}
+
+		_managePlayPauseState(){
+			this.iconPlayPause = this.playState ? 'play-arrow' : 'pause';
+			this.textPlayPause = this.playState ? 'Play' : 'Pause';
+		}
+
+		_togglePlayPause() {
+			this.playState = !this.playState;
+			this._managePlayPauseState();
+			this.dispatchEvent(new CustomEvent('start-stop-timer', {detail: {playState:this.playState}}));
 		}
 
 	}

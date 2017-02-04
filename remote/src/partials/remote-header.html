@@ -107,8 +107,8 @@
 		<div main-title id="ellapsedTime">
 			<div class="elapsed" ng-show="showTime">
 				<div class="timeEllapesd">
-					<span id="hours" ng-class="classHours" ng-show="showHours">[[hours]] : </span><span id="minutes" ng-class="classMinutes">[[minutes]]</span><span
-						id="seconds"> : [[seconds]]</span><span class="totalTime">&nbsp;/&nbsp;[[interval]]:00</span>
+					<span  id="hours" ng-class="classHours" hidden$="[[!showHours]]">[[hours]] : </span><span id="minutes" class="classMinutes">[[minutes]]</span><span
+						id="seconds"> : [[seconds]]</span><span class="totalTime">&nbsp;/&nbsp;[[defaultInterval]]:00</span>
 				</div>
 			</div>
 			<!--<div class="elapsed_bg">
@@ -131,10 +131,37 @@ class RemoteHeader extends ModelMixin(Polymer.Element) {
 		// properties, observers meta data
 		return {
 			properties: {
-				hours: Number,
-				minutes: Number,
-				seconds: Number,
-				interval: Number,
+				hours: {
+					type: String,
+					value: '00'
+				},
+				minutes: {
+					type: String,
+					value: '00'
+				},
+				seconds: {
+					type: String,
+					value: '00'
+				},
+				runningTimer: {
+					type: Boolean,
+					value: false,
+					observer: '_manageTimer'
+				},
+				now: Date,
+
+				showHours: {
+					type: Boolean,
+					value: false
+				},
+				muteMinutes: {
+					type: Boolean,
+					value: true
+				},
+				classMinutes: {
+					type: String,
+					value: 'mute'
+				}
 
 			}
 
@@ -144,20 +171,50 @@ class RemoteHeader extends ModelMixin(Polymer.Element) {
 	connectedCallback() {
 		super.connectedCallback();
 
-		this.interval = 60;
-		let now = moment();
+		this.now = moment();
 		setInterval( _ => {
-			let diff = moment().diff(now);
-			//console.info(diff);
-			//console.info(Math.floor(diff / 60), Math.floor(diff / 60 * 1000), Math.floor(diff % (60 * 1000) / 1000));
-			this.hours = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(Math.floor(diff / (60 * 60 * 1000)));
-			this.minutes = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(Math.floor(diff / (60 * 1000)));
-			this.seconds= new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(Math.floor(diff % (60 * 1000) / 1000));
+			if (this.runningTimer){
+				let diff = moment().diff(this.now) + this.totalTime;
+
+				const hoursDiff = Math.floor(diff / (60 * 60 * 1000));
+				const minutesDiff = Math.floor(diff / (60 * 1000));
+				const secondsDiff = Math.floor(diff % (60 * 1000) / 1000);
+
+				this.hours = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(hoursDiff);
+				this.minutes = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(minutesDiff);
+				this.seconds= new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(secondsDiff);
+
+				if (hoursDiff > 0 && !this.showHours){
+					this.showHours = true;
+				}else if (hoursDiff === 0 && this.showHours){
+					this.showHours = false;
+				}
+
+				if (minutesDiff > 0 && this.muteMinutes){
+					this.muteMinutes = false;
+					this.classMinutes = '';
+				}else if (minutesDiff === 0 && !this.muteMinutes){
+					this.muteMinutes = false;
+					this.classMinutes = 'mute';
+				}
+			}
 		}, 500);
 
 		/*this.querySelector('paper-icon-button').addEventListener('tap', function() {
 			this.dispatchEvent(new CustomEvent('menu-open'), {bubbles: true});
 		});*/
+	}
+
+	toggleTimer(event){
+		this.runningTimer = event.detail.playState;		
+	}
+
+	_manageTimer(playState){
+		if (!playState){
+			this.totalTime += moment().diff(this.now);
+		}else{
+			this.now = moment();
+		}
 	}
 
 	_drawerLeft(){
