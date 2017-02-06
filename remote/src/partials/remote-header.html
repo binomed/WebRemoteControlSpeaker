@@ -176,27 +176,7 @@ class RemoteHeader extends ModelMixin(Polymer.Element) {
 			if (this.runningTimer){
 				let diff = moment().diff(this.now) + this.totalTime;
 
-				const hoursDiff = Math.floor(diff / (60 * 60 * 1000));
-				const minutesDiff = Math.floor(diff / (60 * 1000));
-				const secondsDiff = Math.floor(diff % (60 * 1000) / 1000);
-
-				this.hours = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(hoursDiff);
-				this.minutes = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(minutesDiff);
-				this.seconds= new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(secondsDiff);
-
-				if (hoursDiff > 0 && !this.showHours){
-					this.showHours = true;
-				}else if (hoursDiff === 0 && this.showHours){
-					this.showHours = false;
-				}
-
-				if (minutesDiff > 0 && this.muteMinutes){
-					this.muteMinutes = false;
-					this.classMinutes = '';
-				}else if (minutesDiff === 0 && !this.muteMinutes){
-					this.muteMinutes = false;
-					this.classMinutes = 'mute';
-				}
+				this._manageTimerState(diff);
 			}
 		}, 500);
 
@@ -206,7 +186,37 @@ class RemoteHeader extends ModelMixin(Polymer.Element) {
 	}
 
 	toggleTimer(event){
-		this.runningTimer = event.detail.playState;		
+		this.runningTimer = !event.detail.playState;		
+	}
+
+	resetTimer(){
+		this.runningTimer = false;
+		this.totalTime = 0;
+		this._manageTimerState(0);
+	}
+
+	_manageTimerState(diff){
+		const hoursDiff = Math.floor(diff / (60 * 60 * 1000));
+		const minutesDiff = Math.floor(diff / (60 * 1000));
+		const secondsDiff = Math.floor(diff % (60 * 1000) / 1000);
+
+		this.hours = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(hoursDiff);
+		this.minutes = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(minutesDiff);
+		this.seconds= new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(secondsDiff);
+
+		if (hoursDiff > 0 && !this.showHours){
+			this.showHours = true;
+		}else if (hoursDiff === 0 && this.showHours){
+			this.showHours = false;
+		}
+
+		if (minutesDiff > 0 && this.muteMinutes){
+			this.muteMinutes = false;
+			this.classMinutes = '';
+		}else if (minutesDiff === 0 && !this.muteMinutes){
+			this.muteMinutes = false;
+			this.classMinutes = 'mute';
+		}
 	}
 
 	_manageTimer(playState){

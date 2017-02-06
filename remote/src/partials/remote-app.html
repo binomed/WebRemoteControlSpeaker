@@ -51,12 +51,16 @@
 
 
 <div class="content" id="contentRemote">
-	<remote-header id="header" on-toogle-drawer="_toggleDrawer"></remote-header>
+	<remote-header id="header" 
+				on-toogle-drawer="_toggleDrawer"></remote-header>
 	<speaker-notes on-expand-notes="_expandNotes"></speaker-notes>
 	<screen-preview></screen-preview>
 </div>
 
-<drawer-left id="drawerLeft" on-start-stop-timer="_toggleTimer"></drawer-left>
+<drawer-left id="drawerLeft" 
+	on-start-stop-timer="_toggleTimer"
+	on-reset-timer="_resetTimer"
+	on-toogle-drawer="_toggleDrawer"></drawer-left>
 <drawer-right id="drawerRight"></drawer-right>
 
 </template>
@@ -92,7 +96,6 @@
 		}
 
 		_toggleDrawer(event) {
-			console.log(event.detail);
 			switch (event.detail.direction) {
 				case 'left':
 					this._toggleLeftDrawer();
@@ -115,6 +118,9 @@
 			this.$.drawerRight.toggleDrawer();
 		}
 
+		_resetTimer(){
+			this.$.header.resetTimer(event);
+		}
 
 		/**
 		 * Socket Method Overides 
