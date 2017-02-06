@@ -80,7 +80,7 @@ function _loadPlugins(pluginUrls){
 function _keyPress(e){
 	const evtobj = window.event? event : e
 	//keyCode = 80 = q for QRCode
-	if (evtobj.keyCode === 81 && evtobj.ctrlKey) _showRemoteQrCode();
+	if (evtobj.keyCode === 81 && evtobj.ctrlKey) _showRemoteQrCode.bind(this)();
 }
 
 
