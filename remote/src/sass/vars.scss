@@ -1,39 +1,39 @@
 /***
- *     __      __     _____   _____ 
+ *     __      __     _____   _____
  *     \ \    / /\   |  __ \ / ____|
- *      \ \  / /  \  | |__) | (___  
- *       \ \/ / /\ \ |  _  / \___ \ 
+ *      \ \  / /  \  | |__) | (___
+ *       \ \/ / /\ \ |  _  / \___ \
  *        \  / ____ \| | \ \ ____) |
- *         \/_/    \_\_|  \_\_____/ 
- *                                  
- *                                  
+ *         \/_/    \_\_|  \_\_____/
+ *
+ *
  */
 
 :root{
-    --margin: 10px;
-    --margin-timer: 7px;
-    --height-tab-indicator: 5px;
-    --row-height : 45px;
-    --margin-nav : var(--margin);
+	--margin: 10px;
+	--margin-timer: 7px;
+	--height-tab-indicator: 5px;
+	--row-height : 45px;
+	--margin-nav : var(--margin);
 
 
-    --pluginHeight : 70px;
-    --abs-height: 40px;
-    --abs-notes-height: 45px; 
+	--pluginHeight : 70px;
+	--abs-height: 40px;
+	--abs-notes-height: 45px;
 
 
-    --font-size-abs : 20px;
-    --font-size-abs-notes : 20px;
-    --font-size-notes : 2em;
-    --font-size-menu : 18pt;
-    --font-size-submenu : 14pt;
+	--font-size-abs : 20px;
+	--font-size-abs-notes : 20px;
+	--font-size-notes : 2em;
+	--font-size-menu : 18pt;
+	--font-size-submenu : 14pt;
 
-    --font-size-timer : 27pt;
-    --font-size-current-slide : 19.5pt;
-    --font-size-slide-number : 12pt;
+	--font-size-timer : 27pt;
+	--font-size-current-slide : 19.5pt;
+	--font-size-slide-number : 12pt;
 
-    --menu-title-height : 50px;
-    --menu-width : 300px;
+	--menu-title-height : 50px;
+	--menu-width : 300px;
 
-    --icon-padding-left : 2.5em;
+	--icon-padding-left : 2.5em;
 }
