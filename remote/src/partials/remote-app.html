@@ -51,8 +51,10 @@
 
 
 <div class="content" id="contentRemote">
-	<remote-header id="header" 
-				on-toogle-drawer="_toggleDrawer"></remote-header>
+	<remote-header id="header"
+				on-toogle-drawer="_toggleDrawer"
+				on-update-time="_updateTime"
+				total-time="[[totalTime]]"></remote-header>
 	<speaker-notes on-expand-notes="_expandNotes"></speaker-notes>
 	<screen-preview></screen-preview>
 </div>
@@ -119,7 +121,15 @@
 		}
 
 		_resetTimer(){
-			this.$.header.resetTimer(event);
+			this.$.header.resetTimer();
+		}
+
+		_updateTime(event){
+			if (event.detail.totalTime){
+				this.totalTime = event.detail.totalTime;
+			}else{
+				this.totalTime = 0;
+			}
 		}
 
 		/**

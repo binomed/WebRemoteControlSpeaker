@@ -123,7 +123,7 @@
 <script>
 
 // Extend Polymer.Element base class
-class RemoteHeader extends ModelMixin(Polymer.Element) {
+class RemoteHeader extends Polymer.Element {
 
 	static get is() { return 'remote-header' }
 
@@ -161,6 +161,10 @@ class RemoteHeader extends ModelMixin(Polymer.Element) {
 				classMinutes: {
 					type: String,
 					value: 'mute'
+				},
+				totalTime : { // Total time ellapsed during the presentation
+					type: Number,
+					value: 0
 				}
 
 			}
@@ -191,7 +195,7 @@ class RemoteHeader extends ModelMixin(Polymer.Element) {
 
 	resetTimer(){
 		this.runningTimer = false;
-		this.totalTime = 0;
+		this._updateTotalTime(0);
 		this._manageTimerState(0);
 	}
 
@@ -221,10 +225,14 @@ class RemoteHeader extends ModelMixin(Polymer.Element) {
 
 	_manageTimer(playState){
 		if (!playState){
-			this.totalTime += moment().diff(this.now);
+			this._updateTotalTime(this.totalTime + moment().diff(this.now));
 		}else{
 			this.now = moment();
 		}
+	}
+
+	_updateTotalTime(time){
+		this.dispatchEvent(new CustomEvent('update-time', {detail: {totalTime: time}}));
 	}
 
 	_drawerLeft(){
