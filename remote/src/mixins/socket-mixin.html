@@ -52,6 +52,17 @@
 	                    this.currentSlideNumber = this.mapPosition[this.indicesDist.h+'-'+this.indicesDist.v];
 					}
 				break;
+				case 'notes':
+					console.log(json.data.notes);
+					//if( json.data.markdown ) {
+					//	this.contentNotes = marked( json.data.notes );
+					//}
+					//else {
+						this.contentNotes =  json.data.notes;
+					//}                         
+				break;
+				case 'plugin':
+				break;
 			}
 		}
 
