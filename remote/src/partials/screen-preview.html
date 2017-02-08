@@ -35,6 +35,8 @@
 
 	</style>
 
+	<iframe hidden$="[[!localUrl]]" width="100%" height="100%" id="next-slide" src$="[[localUrl]]"></iframe>
+
 	<div class="index-slides">	
 		<span class="current-slide">[[nextSlideNumber]]</span> / [[nbSlides]]
 	</div>
@@ -61,6 +63,7 @@
 						type: Number,
 						value: 0
 					},
+					localUrl : String, // var in order to see if the presentation has already be loaded    
 				}
 			};
 		}

@@ -60,7 +60,8 @@
 			nb-slides="[[nbSlides]]"></speaker-notes>
 	<screen-preview
 			next-slide-number="[[nextSlideNumber]]"
-			nb-slides="[[nbSlides]]"></screen-preview>
+			nb-slides="[[nbSlides]]"
+			local-url="[[localUrl]]"></screen-preview>
 </div>
 
 <drawer-left id="drawerLeft" 
@@ -144,6 +145,7 @@
 		 */
 		_presentationMessage(json){
 			// Broadcoast message
+			super._presentationMessage(json);
 		}
 
 		

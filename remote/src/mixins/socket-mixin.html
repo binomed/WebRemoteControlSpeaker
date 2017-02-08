@@ -41,6 +41,18 @@
 
 		_presentationMessage(json){
 			// To overide
+			switch (json.type){
+				case 'config':
+					if (json.url){
+						this.localUrl = "http://"+window.location.hostname+":"+this.conf.port+json.url;
+						this.nbSlides = json.nbSlides;
+						this.mapPosition = json.mapPosition;						
+					}else if(json.indices){
+						this.indicesDist = json.indices;
+	                    this.currentSlideNumber = this.mapPosition[this.indicesDist.h+'-'+this.indicesDist.v];
+					}
+				break;
+			}
 		}
 
 	};
