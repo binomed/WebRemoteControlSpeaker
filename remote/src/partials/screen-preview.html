@@ -1,6 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
-<link rel="import" href="../mixins/model-mixin.html">
 
 <dom-module id="screen-preview">
 	<template>
@@ -54,7 +53,14 @@
 			// properties, observers meta data
 			return {
 				properties: {
-					
+					nextSlideNumber : { // next slide number on preview 
+						type: Number,
+						value: 1
+					},
+					nbSlides : { // Total Number of slides        
+						type: Number,
+						value: 0
+					},
 				}
 			};
 		}

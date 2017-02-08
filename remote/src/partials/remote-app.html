@@ -52,17 +52,19 @@
 
 <div class="content" id="contentRemote">
 	<remote-header id="header"
-				on-toogle-drawer="_toggleDrawer"
-				on-update-time="_updateTime"
-				total-time="[[totalTime]]"></remote-header>
-	<speaker-notes on-expand-notes="_expandNotes"></speaker-notes>
-	<screen-preview></screen-preview>
+			on-dispatch-action="_dispatchActionCallback"
+			total-time="[[totalTime]]"></remote-header>
+	<speaker-notes 
+			on-dispatch-action="_dispatchActionCallback"
+			current-slide-number="[[currentSlideNumber]]"
+			nb-slides="[[nbSlides]]"></speaker-notes>
+	<screen-preview
+			next-slide-number="[[nextSlideNumber]]"
+			nb-slides="[[nbSlides]]"></screen-preview>
 </div>
 
 <drawer-left id="drawerLeft" 
-	on-start-stop-timer="_toggleTimer"
-	on-reset-timer="_resetTimer"
-	on-toogle-drawer="_toggleDrawer"></drawer-left>
+	on-dispatch-action="_dispatchActionCallback"></drawer-left>
 <drawer-right id="drawerRight"></drawer-right>
 
 </template>
@@ -89,44 +91,49 @@
 
 		}
 
-		_expandNotes(event){
-			if (event.detail.expand){
+		_dispatchActionCallback(event){
+			switch(event.detail.type){
+				case 'toggle-drawer':
+					this._toggleDrawer(event.detail.data);
+				break;
+				case 'update-time':
+					this._updateTime(event.detail.data);
+				break;
+				case 'start-stop-timer':
+					this.$.header.toggleTimer(event);
+				break;
+				case 'reset-timer':
+					this.$.header.resetTimer();
+				break;
+				case 'expand-notes':
+					this._expandNotes(event.detail.data);
+				break;
+			}
+		}
+
+		_expandNotes(eventData){
+			if (eventData.expand){
 				this.$.contentRemote.classList.add('expand');
 			}else {
 				this.$.contentRemote.classList.remove('expand');
 			}
 		}
 
-		_toggleDrawer(event) {
-			switch (event.detail.direction) {
+		_toggleDrawer(eventData) {
+			switch (eventData.direction) {
 				case 'left':
-					this._toggleLeftDrawer();
+					this.$.drawerLeft.toggleDrawer();
 					break;
 				case 'right':
+					this.$.drawerRight.toggleDrawer();
 					this._toggleRightDrawer();
 					break;
 			}
 		}
 
-		_toggleTimer(event){
-			this.$.header.toggleTimer(event);
-		}
-
-		_toggleLeftDrawer() {
-			this.$.drawerLeft.toggleDrawer();
-		}
-
-		_toggleRightDrawer() {
-			this.$.drawerRight.toggleDrawer();
-		}
-
-		_resetTimer(){
-			this.$.header.resetTimer();
-		}
-
-		_updateTime(event){
-			if (event.detail.totalTime){
-				this.totalTime = event.detail.totalTime;
+		_updateTime(eventData){
+			if (eventData.totalTime){
+				this.totalTime = eventData.totalTime;
 			}else{
 				this.totalTime = 0;
 			}

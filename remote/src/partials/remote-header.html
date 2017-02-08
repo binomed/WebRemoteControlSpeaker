@@ -3,7 +3,7 @@
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../mixins/model-mixin.html">
+<link rel="import" href="../mixins/dispatcher-mixin.html">
 
 
 <dom-module id="remote-header">
@@ -123,7 +123,7 @@
 <script>
 
 // Extend Polymer.Element base class
-class RemoteHeader extends Polymer.Element {
+class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 
 	static get is() { return 'remote-header' }
 
@@ -232,15 +232,15 @@ class RemoteHeader extends Polymer.Element {
 	}
 
 	_updateTotalTime(time){
-		this.dispatchEvent(new CustomEvent('update-time', {detail: {totalTime: time}}));
+		this.dispatchAction('update-time', {totalTime: time});
 	}
 
 	_drawerLeft(){
-		this.dispatchEvent(new CustomEvent('toogle-drawer', {detail: {direction:'left'}}));
+		this.dispatchAction('toggle-drawer', {direction: 'left'});
 	}
 
 	_drawerRight(){
-		this.dispatchEvent(new CustomEvent('toogle-drawer', {detail: {direction:'right'}}));
+		this.dispatchAction('toggle-drawer', {direction: 'right'});
 	}
 
 }

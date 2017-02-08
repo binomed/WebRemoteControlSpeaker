@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../mixins/dispatcher-mixin.html">
 
 <dom-module id="drawer-left">
 	<template>
@@ -82,7 +83,7 @@
 <script>
 
 	// Extend Polymer.Element base class
-	class DrawerLeft extends Polymer.Element {
+	class DrawerLeft extends DispatcherMixin(Polymer.Element) {
 
 		static get is() { return 'drawer-left' }
 
@@ -124,13 +125,13 @@
 		_togglePlayPause() {
 			this.playState = !this.playState;
 			this._managePlayPauseState();
-			this.dispatchEvent(new CustomEvent('start-stop-timer', {detail: {playState:this.playState}}));
-			this.dispatchEvent(new CustomEvent('toogle-drawer', {detail: {direction:'left'}}));
+			this.dispatcherAction('start-stop-timer', {playState:this.playState});
+			this.dispatcherAction('toogle-drawer', {direction:'left'});			
 		}
 
 		_resetTimer(){
-			this.dispatchEvent(new CustomEvent('reset-timer', {detail: {}}));
-			this.dispatchEvent(new CustomEvent('toogle-drawer', {detail: {direction:'left'}}));
+			this.dispatcherAction('reset-timer', {});
+			this.dispatcherAction('toogle-drawer', {direction: 'left'});
 			this.playState = true;
 			this._managePlayPauseState();
 		}

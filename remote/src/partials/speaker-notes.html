@@ -4,6 +4,7 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../mixins/model-mixin.html">
+<link rel="import" href="../mixins/dispatcher-mixin.html">
 
 <dom-module id="speaker-notes">
 	<template>
@@ -77,7 +78,7 @@
 <script>
 
 	// Extend Polymer.Element base class
-	class SpeakerNotes extends ModelMixin(Polymer.Element) {
+	class SpeakerNotes extends DispatcherMixin(Polymer.Element) {
 
 		static get is() { return 'speaker-notes' }
 
@@ -87,7 +88,15 @@
 				properties: {
 					expand:{
 						type: Object
-					}
+					},
+					currentSlideNumber : { // current slide number on client side
+						type: Number,
+						value: 1
+					},
+					nbSlides : { // Total Number of slides        
+						type: Number,
+						value: 0
+					},
 				}
 			};
 		}
@@ -104,7 +113,7 @@
 			}else{
 				this.$.contentNotes.classList.remove('expand');
 			}
-			this.dispatchEvent(new CustomEvent('expand-notes', {detail: {expand:this.expand}}));
+			this.dispatchAction('expand-notes', {expand:this.expand});
 		}
 	}
 
