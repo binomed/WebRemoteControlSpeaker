@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="controls-buttons.html">
 
 <dom-module id="screen-preview">
 	<template>
@@ -33,6 +34,14 @@
 			font-size: 18pt;
 		}
 
+		controls-buttons{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+
 	</style>
 
 	<iframe hidden$="[[!localUrl]]" width="100%" height="100%" id="next-slide" src$="[[localUrl]]"></iframe>
@@ -40,6 +49,8 @@
 	<div class="index-slides">	
 		<span class="current-slide">[[nextSlideNumber]]</span> / [[nbSlides]]
 	</div>
+	<controls-buttons
+		on-dispatch-action="_dispatchAction"></controls-buttons>
 
 
 </template>
@@ -73,6 +84,13 @@
 			super.connectedCallback();
 			this.index = 0;
 			this.slides = 24;
+		}
+
+		_dispatchAction(event){
+			switch(event.detail.type){
+				case 'control-press':
+				break;
+			}
 		}
 
 	}

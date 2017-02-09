@@ -1,0 +1,167 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/icon-icons.html">
+<link rel="import" href="../mixins/dispatcher-mixin.html">
+
+<dom-module id="controls-buttons">
+	<template>
+
+		<!-- Styles MUST be inside template -->
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+			overflow: hidden;
+		}
+
+        #mask {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        paper-icon-button{
+            position: absolute;
+            color: white;
+            height : 64px;
+            width: 64px;
+            margin: 10px;
+        }
+
+        paper-icon-button#show{
+            left:50%;
+            top:50%;
+            transform: translateX(-50%) translateY(-50%) rotateY(180deg);
+            color: rgba(0,0,0,1);
+            opacity: 0.7;
+            background: white;
+            border-radius:64px;
+            height : 64px;
+            width: 64px;
+        }
+
+        paper-icon-button#show[disabled]{
+            background: rgba(255,255,255,0.4);
+        }
+
+        paper-icon-button[disabled]{
+            color: rgba(255,255,255,0.4);
+        }
+
+        paper-icon-button#up{
+            top:0;
+            transform: translateX(-50%);
+        }
+        paper-icon-button#down{
+            bottom:0;
+            transform: translateX(-50%) rotateZ(180deg);
+        }
+        paper-icon-button#left{
+            left:0;
+            transform: translateY(-50%) rotateZ(-90deg);
+        }
+        paper-icon-button#right{
+            right:0;
+            transform: translateY(-50%) rotateZ(90deg);
+        }
+
+		paper-icon-button#up, paper-icon-button#down{
+            left:50%;            
+        }
+
+		paper-icon-button#left, paper-icon-button#right{
+            top:50%;            
+        }
+
+
+	</style>
+
+    <div id="mask">
+        <paper-icon-button 
+            icon="icons:arrow-drop-up" 
+            id="up" 
+            disabled$="[[upState]]"
+            on-tap="_tap"
+            ></paper-icon-button>
+        <paper-icon-button 
+            icon="icons:arrow-drop-up" 
+            id="left" 
+            disabled$="[[leftState]]"
+            on-tap="_tap"
+            ></paper-icon-button>
+        <paper-icon-button 
+            icon="icons:arrow-drop-up" 
+            id="down" 
+            disabled$="[[downState]]"
+            on-tap="_tap"            
+            ></paper-icon-button>
+        <paper-icon-button 
+            icon="icons:arrow-drop-up" 
+            id="right" 
+            disabled$="[[rightState]]"
+            on-tap="_tap"            
+            ></paper-icon-button>
+        <paper-icon-button 
+            icon="icons:reply" 
+            id="show" 
+            disabled$="[[showState]]"
+            on-tap="_tap"            
+            ></paper-icon-button>
+    </div>
+
+
+</template>
+
+<script>
+
+	// Extend Polymer.Element base class
+	class ControlsButtons extends DispatcherMixin(Polymer.Element) {
+
+		static get is() { return 'controls-buttons' }
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+                    upState:{
+                        type: Boolean,
+                        value: true
+                    },
+                    downState:{
+                        type: Boolean,
+                        value: true
+                    },
+                    leftState:{
+                        type: Boolean,
+                        value: true
+                    },
+                    rightState:{
+                        type: Boolean,
+                        value: false
+                    },
+                    showState:{
+                        type: Boolean,
+                        value: true
+                    }
+				}
+			};
+		}
+
+
+		connectedCallback() {
+			super.connectedCallback();
+
+		}
+
+        _tap(event){                            
+            this.dispatchAction('control-press', {control:event.target.id});            
+        }
+
+	}
+
+	// Register custom element definition using standard platform API
+	customElements.define(ControlsButtons.is, ControlsButtons);
+
+</script>
+</dom-module>
