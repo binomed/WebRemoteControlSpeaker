@@ -26,7 +26,6 @@ export default class RevealEngine extends GenericEngine{
 	constructor(){
 		super();
 		this.callBackEngine = null;
-
 	}
 
 	/*
@@ -34,6 +33,21 @@ export default class RevealEngine extends GenericEngine{
 	* --------EXPOSED METHODS----------------
 	* **************************************
 	*/
+
+	forwardMessageFromRemote(message){
+		switch(message.type){
+			case 'init':
+				Reveal.initialize(message.data);
+				break;
+			case 'instruction':
+				switch(message.data){
+					case 'next':
+						Reveal.next();
+						break;
+				};
+				break;
+		}
+	}
 
 	getPosition(){
 		return Reveal.getIndices();
