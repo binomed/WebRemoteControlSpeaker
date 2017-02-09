@@ -286,35 +286,37 @@ class WebRemoteControl {
 	 */
 	init(conf){
 		// We check if this script ins't in the iframe of the remote control
-		if(!window.parent || !window.parent.document.body.getAttribute('sws-remote-iframe-desactiv')){
-				console.log('Initialize Client side');
-				this.additionnalConfiguration = conf;
-				_checkAdditionnalConfiguration.bind(this)()
-				.then(_ => {
-					return _initConfig.bind(this)();
-				})
-				.then(_ => {
-					return _loadEngine.bind(this)(conf.engine);
-				})
-				.then(_ => {
-					return _initEngine.bind(this)(conf.engine);
-				})
-				.then(_ => {
-					return new Promise((resolve, reject) => {
-						_initWS.bind(this)();
-						resolve();
-					});
-				})
-				.then(_ => {
-					return _loadPlugins.bind(this)(conf.plugins);
-				})
-				.then(_ => {
-					console.info('All is load ! ');
-				})
-				.catch((err) => {
-					console.error('Error : %s \n %s', err.message, err.stack);
-				});
-		}
+		console.log('Initialize Client side');
+		this.additionnalConfiguration = conf;
+		_checkAdditionnalConfiguration.bind(this)()
+		.then(_ => {
+			return _initConfig.bind(this)();
+		})
+		.then(_ => {
+			return _loadEngine.bind(this)(conf.engine);
+		})
+		.then(_ => {
+			return _initEngine.bind(this)(conf.engine);
+		})
+		.then(_ => {
+			return new Promise((resolve, reject) => {
+				if (!window.parent){
+					_initWS.bind(this)();
+				}
+				resolve();
+			});
+		})
+		.then(_ => {
+			if (!window.parent){
+				return _loadPlugins.bind(this)(conf.plugins);
+			}
+		})
+		.then(_ => {
+			console.info('All is load ! ');
+		})
+		.catch((err) => {
+			console.error('Error : %s \n %s', err.message, err.stack);
+		});
 	}
 
 };
