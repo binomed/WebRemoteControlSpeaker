@@ -1,8 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
-<link rel="import" href="controls-buttons.html">
-<link rel="import" href="../engines/generic-engine.html">
 <link rel="import" href="../mixins/dispatcher-mixin.html">
+<link rel="import" href="../engines/generic-engine.html">
+<link rel="import" href="controls-buttons.html">
 
 <dom-module id="screen-preview">
 	<template>
@@ -87,16 +87,26 @@
 			};
 		}
 
+		constructor(){
+			super();
+			this.iFrameReady = false;
+		}
+
 
 		connectedCallback() {
 			super.connectedCallback();
-			this.index = 0;
-			this.engine = new GenericEngine(this);
-			this.slides = 24;
+			this.engine = new GenericEngine(this.$.iframePrez, this.dispatchAction.bind(this));
+			if (this.iFrameReady){
+				this.engine.initEngine();
+			}
 		}
 
 		_loadIFrame(){
-			this.engine.initEngine();
+			if (this.engine){
+				this.engine.initEngine();
+			}else{
+				this.iFrameReady = true;
+			}
 		}
 
 		_dispatchAction(event){

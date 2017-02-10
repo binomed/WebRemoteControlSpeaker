@@ -3,15 +3,26 @@
 	class GenericEngine {
 
 		
-        constructor(element){
-            this.element = element;
-            this.iframe = this.element.$.iframePrez;            
+        constructor(iframe, dispatchAction){
+            this.dispatchAction = dispatchAction;
+            this.iframe = iframe;            
          }
 
         initEngine(){
             this.iframe.contentWindow.postMessage(JSON.stringify({type: 'init'}), '*');
+            window.addEventListener("message", this._receiveMessageFromPresentation.bind(this), false);		
         }
 
+        _receiveMessageFromPresentation(message){
+            if( message.data.charAt( 0 ) === '{' && message.data.charAt( message.data.length - 1 ) === '}' ) {
+			    message = JSON.parse( message.data );
+                switch(message.type){
+                    case 'changeSlides':
+                        this.dispatchAction('change-slides',message);                        
+                    break;
+                }
+            }
+        }
 
         _genericInstruction(instruction){
             this.iframe.contentWindow.postMessage(JSON.stringify({

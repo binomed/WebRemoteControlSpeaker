@@ -83,7 +83,6 @@
 			// properties, observers meta data
 			return {
 				properties: {
-
 				}
 			};
 		}
@@ -91,7 +90,7 @@
 
 		connectedCallback() {
 			super.connectedCallback();
-
+			
 		}
 
 		_dispatchActionCallback(event){
@@ -112,7 +111,15 @@
 					this._expandNotes(event.detail.data);
 				break;
 				case 'control-press':
-					
+					this.sendMessage({
+						type : 'operation', 
+              			data : 'show', 
+              			index: this.indices
+					});
+				break;
+				case 'change-slides':
+					this.indices = event.detail.data.indices;
+                    this.nextSlideNumber = this.mapPosition[this.indices.h+'-'+this.indices.v];
 				break;
 			}
 		}

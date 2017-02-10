@@ -38,6 +38,10 @@
 			}
 		}
 
+		sendMessage(message){
+			  this.socketIO.emit('message', message);
+		}
+
 
 		_presentationMessage(json){
 			// To overide
