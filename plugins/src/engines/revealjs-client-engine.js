@@ -19,6 +19,13 @@ function _revealCallBack(event) {
 		notes : notes,
 		data : messageData
 	});
+
+	if (window.top != window.self){
+		window.parent.postMessage(JSON.stringify({
+			type:'changeSlides',
+			indices: Reveal.getIndices()
+		}),'*');
+	}
 }
 
 export default class RevealEngine extends GenericEngine{
