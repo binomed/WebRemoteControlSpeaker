@@ -67,7 +67,8 @@
 </div>
 
 <drawer-left id="drawerLeft" 
-	on-dispatch-action="_dispatchActionCallback"></drawer-left>
+	on-dispatch-action="_dispatchActionCallback"
+	default-interval="[[defaultInterval]]"></drawer-left>
 <drawer-right id="drawerRight"></drawer-right>
 
 </template>
@@ -109,6 +110,9 @@
 				break;
 				case 'expand-notes':
 					this._expandNotes(event.detail.data);
+				break;
+				case 'update-interval':
+					this.defaultInterval = event.detail.data.interval;
 				break;
 				case 'control-press':
 					this.sendMessage({
