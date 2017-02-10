@@ -287,6 +287,7 @@ class WebRemoteControl {
 	init(conf){
 		// We check if this script ins't in the iframe of the remote control
 		console.log('Initialize Client side');
+		const inIFrame = window.top != window.self;
 		this.additionnalConfiguration = conf;
 		_checkAdditionnalConfiguration.bind(this)()
 		.then(_ => {
@@ -300,14 +301,14 @@ class WebRemoteControl {
 		})
 		.then(_ => {
 			return new Promise((resolve, reject) => {
-				if (!window.parent){
+				if (!inIFrame){
 					_initWS.bind(this)();
 				}
 				resolve();
 			});
 		})
 		.then(_ => {
-			if (!window.parent){
+			if (!inIFrame){
 				return _loadPlugins.bind(this)(conf.plugins);
 			}
 		})
