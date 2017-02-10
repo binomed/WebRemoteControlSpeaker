@@ -21,11 +21,15 @@ function _revealCallBack(event) {
 	});
 
 	if (window.top != window.self){
-		window.parent.postMessage(JSON.stringify({
-			type:'changeSlides',
-			indices: Reveal.getIndices()
-		}),'*');
+		_updateIndicesForRemote.bind(this)();
 	}
+}
+
+function _updateIndicesForRemote(){
+	window.parent.postMessage(JSON.stringify({
+		type:'changeSlides',
+		indices: Reveal.getIndices()
+	}),'*');
 }
 
 export default class RevealEngine extends GenericEngine{
@@ -89,6 +93,11 @@ export default class RevealEngine extends GenericEngine{
 	initEngineListener(callBack){
 		this.callBackEngine = callBack;
 		Reveal.addEventListener( 'slidechanged', _revealCallBack.bind(this));
+		if (window.top != window.self){
+			Reveal.addEventListener( 'fragmentshown', _updateIndicesForRemote.bind(this));
+			Reveal.addEventListener( 'fragmenthidden', _updateIndicesForRemote.bind(this));
+
+		}
 	}
 
 	countNbSlides(){
