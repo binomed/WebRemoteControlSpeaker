@@ -2,7 +2,7 @@
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
 <link rel="import" href="controls-buttons.html">
 <link rel="import" href="../engines/generic-engine.html">
-<link rel="import" href="../engines/reveal-engine.html">
+<link rel="import" href="../mixins/dispatcher-mixin.html">
 
 <dom-module id="screen-preview">
 	<template>
@@ -46,7 +46,12 @@
 
 	</style>
 
-	<iframe id="iframePrez" hidden$="[[!localUrl]]" width="100%" height="100%" id="next-slide" src$="[[localUrl]]"></iframe>
+	<iframe id="iframePrez" 
+			hidden$="[[!localUrl]]" 
+			width="100%" 
+			height="100%" 
+			src$="[[localUrl]]"
+			on-load="_loadIFrame"></iframe>
 
 	<div class="index-slides">	
 		<span class="current-slide">[[nextSlideNumber]]</span> / [[nbSlides]]
@@ -60,7 +65,7 @@
 <script>
 
 	// Extend Polymer.Element base class
-	class ScreenPreview extends ModelMixin(Polymer.Element) {
+	class ScreenPreview extends DispatcherMixin(Polymer.Element) {
 
 		static get is() { return 'screen-preview' }
 
@@ -86,8 +91,12 @@
 		connectedCallback() {
 			super.connectedCallback();
 			this.index = 0;
-			this.engine = new RevealEngine(this);
+			this.engine = new GenericEngine(this);
 			this.slides = 24;
+		}
+
+		_loadIFrame(){
+			this.engine.initEngine();
 		}
 
 		_dispatchAction(event){
@@ -95,15 +104,20 @@
 				case 'control-press':
 					switch(event.detail.data.control){
 						case 'up':
+							this.engine.up();
 						break;
 						case 'left':
+							this.engine.left();
 						break;
 						case 'down':
+							this.engine.down();
 						break;
 						case 'right':
+							this.engine.right();
 						break;
-						case 'show':
+						case 'show':							
 							this.engine.next();
+							this.dispatchAction(event.detail.type, event.detail.data);
 						break;
 					}
 				break;

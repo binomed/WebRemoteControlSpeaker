@@ -5,11 +5,43 @@
 		
         constructor(element){
             this.element = element;
+            this.iframe = this.element.$.iframePrez;            
+         }
+
+        initEngine(){
+            this.iframe.contentWindow.postMessage(JSON.stringify({type: 'init'}), '*');
         }
+
+
+        _genericInstruction(instruction){
+            this.iframe.contentWindow.postMessage(JSON.stringify({
+                type: 'instruction',
+                data: instruction
+            }), '*');
+            
+        }        
 
         next(){
-
+            this._genericInstruction('next');
         }
+
+        up(){
+            this._genericInstruction('up');
+        }
+
+        left(){
+            this._genericInstruction('left');
+        }
+
+        down(){
+            this._genericInstruction('down');            
+        }
+
+        right(){
+            this._genericInstruction('right');                        
+        }
+
+
 
 		
 

@@ -37,12 +37,33 @@ export default class RevealEngine extends GenericEngine{
 	forwardMessageFromRemote(message){
 		switch(message.type){
 			case 'init':
-				Reveal.initialize(message.data);
+				Reveal.configure({
+                        controls: false,
+                        transition : 'default',
+                        transitionSpeed : 'fast',
+                        history : false,
+                        slideNumber: false,
+                        keyboard: false,
+                        touch: false,
+                        embedded : true
+                    });
 				break;
 			case 'instruction':
 				switch(message.data){
 					case 'next':
 						Reveal.next();
+						break;
+					case 'up':
+						Reveal.up();
+						break;
+					case 'left':
+						Reveal.left();
+						break;
+					case 'down':
+						Reveal.down();
+						break;
+					case 'right':
+						Reveal.right();
 						break;
 				};
 				break;

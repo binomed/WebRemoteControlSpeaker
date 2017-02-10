@@ -60,6 +60,7 @@
 			nb-slides="[[nbSlides]]"
 			content-notes="[[contentNotes]]"></speaker-notes>
 	<screen-preview
+			on-dispatch-action="_dispatchActionCallback"
 			next-slide-number="[[nextSlideNumber]]"
 			nb-slides="[[nbSlides]]"
 			local-url="[[localUrl]]"></screen-preview>
@@ -109,6 +110,9 @@
 				break;
 				case 'expand-notes':
 					this._expandNotes(event.detail.data);
+				break;
+				case 'control-press':
+					
 				break;
 			}
 		}
