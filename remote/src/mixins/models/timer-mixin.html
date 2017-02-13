@@ -1,0 +1,86 @@
+<link rel="import" href="../helpers/event-bus-mixin.html">
+
+<script>
+
+	const TimerModelMixin = subclass => class extends EventBusMixin(subclass) {
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+					runningTimer : { // True if the timer is running
+						type: Boolean,
+						value: false
+					},
+					defaultInterval : { // Time in minute of the conference
+						type: Number, 
+						value: 60
+					},
+					limitAlert : { // time before the end where we have to alert the speaker (if defaultInterval is upper limitAlert)
+						type: Number,
+						value: 1
+					},
+					totalTime : { // Total time ellapsed during the presentation
+						type: Number, 
+						value: 0
+					},
+					now: { // The 
+						type: Date,
+						value: null
+					}
+
+				}
+			};
+		}
+
+		connectedCallback() {
+			super.connectedCallback();
+			this.now = moment();
+			
+		}
+		
+		toggleTimer(){
+			this.runningTimer = !this.runningTimer;		
+			this.broadcastAction('update-model',{
+						key: 'runningTimer',
+						value :  this.runningTimer,
+						readOnly: true 
+					});				
+			if (!this.runningTimer){
+				this.totalTime += moment().diff(this.now);
+				this.broadcastAction('update-model',{
+							key: 'totalTime',
+							value :  this.totalTime,
+							readOnly: true 
+						});				
+			}else{
+				this.now = moment();
+				this.broadcastAction('update-model',{
+							key: 'now',
+							value :  this.now,
+							readOnly: true 
+						});				
+			}
+		}
+
+		resetTimer(){
+			this.runningTimer = false;
+			this.totalTime = 0;
+			this.broadcastAction('update-model',[
+					{
+						key: 'runningTimer',
+						value :  this.runningTimer,
+						readOnly: true 
+					},
+					{
+						key: 'totalTime',
+						value :  this.totalTime,
+						readOnly: true 
+					}
+					]);		
+		}
+		
+
+	};
+
+</script>

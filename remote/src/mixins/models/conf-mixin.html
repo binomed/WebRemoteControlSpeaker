@@ -1,61 +1,17 @@
+<link rel="import" href="../helpers/event-bus-mixin.html">
+
 <script>
 
-	const ModelMixin = subclass => class extends subclass {
+	const ConfModelMixin = subclass => class extends EventBusMixin(subclass) {
 
 		static get config() {
 			// properties, observers meta data
 			return {
 				properties: {
-					defaultInterval : { // Time in minute of the conference
-						type: Number, 
-						value: 60
-					},
-					limitAlert : { // time before the end where we have to alert the speaker (if defaultInterval is upper limitAlert)
-						type: Number,
-						value: 1
-					},
-					totalTime : { // Total time ellapsed during the presentation
-						type: Number, 
-						value: 0 
-					},
-					socket : Object, // The webSocket
 					localUrl : String, // var in order to see if the presentation has already be loaded    
-					currentPluginActiv : String, // The id of the currentPlugin
-					indicesDist : { // Basic initialization for presentation on client side
-						type: Object,
-						value: () => {return {h:0, v:0};}						
-					}, 
-					indices : { // Basic initialization of indices of engine presentation
-						type: Object,
-						value: () => {return {h:0, v:0};}						
-					}, 
-					currentSlideNumber : { // current slide number on client side
-						type: Number,
-						value: 1
-					},
-					nextSlideNumber : { // next slide number on preview 
-						type: Number,
-						value: 1
-					},
-					nbSlides : { // Total Number of slides        
-						type: Number,
-						value: 0
-					},
-					mapPosition : { // The position of slide according to indexs
-						type: Object,
-						value: () => {return {};}
-					},
 					conf : { // Configuration corresponding to server
 						type: Object,
 						value: () => {return {};}
-					},
-					pluginList : { // List of plugin of application
-						type: Array,
-						value: () => {return [];}
-					},
-					contentNotes : { // The speaker notes of the current slide
-						type: String,
-						value: ''
 					}
 				}
 			};
@@ -70,8 +26,18 @@
 			}else{
 				// Todo
 			}
+			this.broadcastAction('update-model',{
+							key: 'conf',
+							value :  this.conf,
+							readOnly: true 
+			});
 			
 		}
+
+		updateLocalUrl(url){
+			this.localUrl = url;
+		}
+		
 
 		_getAllUrlParams(url) {
 

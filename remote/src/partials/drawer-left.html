@@ -7,7 +7,7 @@
 <link rel="import" href="../bower_components/iron-icons/image-icons.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../mixins/dispatcher-mixin.html">
+<link rel="import" href="../mixins/helpers/dispatcher-mixin.html">
 
 <dom-module id="drawer-left">
 	<template>
@@ -92,7 +92,8 @@
 				properties: {
 					playState: {
 						type: Boolean,
-						value: true
+						value: true, 
+						observer: '_updatePlayState'
 					},
 					iconPlayPause: {
 						type: String,
@@ -119,6 +120,10 @@
 
 		toggleDrawer(event) {
 			this.$.drawerLeft.toggle();
+		}
+
+		_updatePlayState(newState, oldState){
+
 		}
 
 		_managePlayPauseState(){

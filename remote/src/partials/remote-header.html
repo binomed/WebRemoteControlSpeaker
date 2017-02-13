@@ -3,7 +3,7 @@
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../mixins/dispatcher-mixin.html">
+<link rel="import" href="../mixins/helpers/dispatcher-mixin.html">
 
 
 <dom-module id="remote-header">
@@ -191,6 +191,13 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 		/*this.querySelector('paper-icon-button').addEventListener('tap', function() {
 			this.dispatchEvent(new CustomEvent('menu-open'), {bubbles: true});
 		});*/
+	}
+
+	attributeChangedCallback(){
+		console.log('attributeChangedCallback');
+	}
+	attributeChanged(){
+		console.log('attributeChanged');
 	}
 
 	toggleTimer(event){

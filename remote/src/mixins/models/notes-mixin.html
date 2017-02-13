@@ -1,0 +1,24 @@
+<script>
+
+	const NotesModelMixin = subclass => class extends subclass {
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+					contentNotes : { // The speaker notes of the current slide
+						type: String,
+						value: ''
+					}
+				}
+			};
+		}
+
+		connectedCallback() {
+			super.connectedCallback();
+						
+		}
+
+	};
+
+</script>

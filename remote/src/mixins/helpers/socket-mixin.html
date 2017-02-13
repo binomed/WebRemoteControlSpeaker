@@ -1,0 +1,112 @@
+<link rel="import" href="event-bus-mixin.html">
+
+<script>
+
+	const SocketMixin = subclass => class extends EventBusMixin(subclass) {
+
+		constructor(){
+			super();
+			this.socketIO = null;
+			this.conf = {};
+		}
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+				}
+			};
+		}
+
+		connectedCallback() {
+			super.connectedCallback();
+			this.subscribeForKey('update-model',this._confUpdate.bind(this));
+		}
+
+		sendMessage(message){
+			try{
+			  this.socketIO.emit('message', message);
+			}catch(e){
+				console.warn(e);
+			}
+		}
+
+		_confUpdate(type, data){
+			if (data.key === 'conf') {
+				this.conf = data.value;
+				console.debug(this.conf);
+				this._initWebSocket();
+			}
+		}
+
+		_initWebSocket(){
+			if (typeof io != 'undefined'){
+				this.socketIO = io.connect('http://'+window.location.hostname+':'+this.conf.port);
+
+				// Socket IO connect
+				this.socketIO.on('connect',_ => {
+					// Send a ping message for getting config
+					this.socketIO.emit('message', {
+						type:'ping'
+					});
+
+
+					// Ask for plugins
+					this.socketIO.emit('message', {
+						type:'ping-plugin'
+					});
+
+				});
+
+
+				// Message from presentation
+				this.socketIO.on("message", this._presentationMessage.bind(this));
+			}
+		}
+
+
+		_presentationMessage(json){
+			// To overide
+			switch (json.type){
+				case 'config':
+					if (json.url){
+						this.broadcastAction('update-model', [
+							{
+								key: 'localUrl',
+								value :  `http://${window.location.hostname}:${this.conf.port}${json.url}` 
+							},
+							{
+								key: 'nbSlides',
+								value :  json.nbSlides 
+							},
+							{
+								key: 'mapPosition',
+								value :  json.mapPosition 
+							}							
+						]);						
+					}else if(json.indices){
+						this.broadcastAction('update-model', [
+							{
+								key: 'indicesDist',
+								value :  json.indices 
+							}							
+						]);						
+						// TODO
+	                    // this.currentSlideNumber = this.mapPosition[this.indicesDist.h+'-'+this.indicesDist.v];
+					}
+				break;
+				case 'notes':
+					console.log(json.data.notes);
+					this.broadcastAction('update-model', {
+							key: 'contentNotes',
+							value :  json.data.notes 
+						});											
+				break;
+				case 'plugin':
+				break;
+			}
+		}
+
+	};
+
+</script>

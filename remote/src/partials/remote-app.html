@@ -3,8 +3,7 @@
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../mixins/model-mixin.html">
-<link rel="import" href="../mixins/socket-mixin.html">
+<link rel="import" href="../mixins/app/app-aggregate-mixin.html">
 <link rel="import" href="remote-header.html">
 <link rel="import" href="speaker-notes.html">
 <link rel="import" href="screen-preview.html">
@@ -52,22 +51,23 @@
 
 <div class="content" id="contentRemote">
 	<remote-header id="header"
-			on-dispatch-action="_dispatchActionCallback"
+			on-dispatch-action="reduceAction"
+			running-timer="[[runningTimer]]"
 			total-time="[[totalTime]]"></remote-header>
 	<speaker-notes 
-			on-dispatch-action="_dispatchActionCallback"
+			on-dispatch-action="reduceAction"
 			current-slide-number="[[currentSlideNumber]]"
 			nb-slides="[[nbSlides]]"
 			content-notes="[[contentNotes]]"></speaker-notes>
 	<screen-preview
-			on-dispatch-action="_dispatchActionCallback"
+			on-dispatch-action="reduceAction"
 			next-slide-number="[[nextSlideNumber]]"
 			nb-slides="[[nbSlides]]"
 			local-url="[[localUrl]]"></screen-preview>
 </div>
 
 <drawer-left id="drawerLeft" 
-	on-dispatch-action="_dispatchActionCallback"
+	on-dispatch-action="reduceAction"
 	default-interval="[[defaultInterval]]"></drawer-left>
 <drawer-right id="drawerRight"></drawer-right>
 
@@ -76,7 +76,7 @@
 <script>
 
 	// Extend Polymer.Element base class
-	class RemoteApp extends SocketMixin(Polymer.Element) {
+	class RemoteApp extends AppAgregateMixin(Polymer.Element) {
 
 		static get is() { return 'remote-app' }
 
@@ -94,37 +94,15 @@
 			
 		}
 
-		_dispatchActionCallback(event){
-			switch(event.detail.type){
+
+		_dispatchUiAction(type,data){
+			switch(type){
 				case 'toggle-drawer':
-					this._toggleDrawer(event.detail.data);
-				break;
-				case 'update-time':
-					this._updateTime(event.detail.data);
-				break;
-				case 'start-stop-timer':
-					this.$.header.toggleTimer(event);
-				break;
-				case 'reset-timer':
-					this.$.header.resetTimer();
+					this._toggleDrawer(data);
 				break;
 				case 'expand-notes':
-					this._expandNotes(event.detail.data);
-				break;
-				case 'update-interval':
-					this.defaultInterval = event.detail.data.interval;
-				break;
-				case 'control-press':
-					this.sendMessage({
-						type : 'operation', 
-              			data : 'show', 
-              			index: this.indices
-					});
-				break;
-				case 'change-slides':
-					this.indices = event.detail.data.indices;
-                    this.nextSlideNumber = this.mapPosition[this.indices.h+'-'+this.indices.v];
-				break;
+					this._expandNotes(data);
+				break;				
 			}
 		}
 
@@ -145,14 +123,6 @@
 					this.$.drawerRight.toggleDrawer();
 					this._toggleRightDrawer();
 					break;
-			}
-		}
-
-		_updateTime(eventData){
-			if (eventData.totalTime){
-				this.totalTime = eventData.totalTime;
-			}else{
-				this.totalTime = 0;
 			}
 		}
 

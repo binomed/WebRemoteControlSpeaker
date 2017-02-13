@@ -1,0 +1,92 @@
+<link rel="import" href="../helpers/mixin-builder.html">
+<link rel="import" href="../helpers/dispatcher-mixin.html">
+<link rel="import" href="../helpers/socket-mixin.html">
+<link rel="import" href="../helpers/event-bus-mixin.html">
+<link rel="import" href="../models/conf-mixin.html">
+<link rel="import" href="../models/conf-mixin.html">
+<link rel="import" href="../models/index-mixin.html">
+<link rel="import" href="../models/notes-mixin.html">
+<link rel="import" href="../models/plugins-mixin.html">
+<link rel="import" href="../models/timer-mixin.html">
+
+<script>
+
+	const AppAgregateMixin = subclass => class extends mix(subclass)
+                                    .with(DispatcherMixin, 
+                                        EventBusMixin, 
+                                        SocketMixin,
+                                        ConfModelMixin,
+                                        IndexModelMixin,
+                                        NotesModelMixin,
+                                        PluginsModelMixin,
+                                        TimerModelMixin)
+         {
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {					
+				}
+			};
+		}
+
+        connectedCallback() {
+			super.connectedCallback();
+            this.subscribeForKey('update-model',this._modelUpdate.bind(this));
+            this.subscribeForKey([
+                'toggle-drawer',
+                'expand-notes'
+                ]
+                ,this._dispatchUiAction.bind(this));
+            this.subscribeForKey([
+                'update-time',
+                'start-stop-timer',
+                'reset-timer',
+                'control-press',
+                'change-slides'
+                ]
+                ,this._computeActions.bind(this));
+        }
+
+        _computeActions(type, data){
+            switch(type){
+                case 'update-time':
+                    this.totalTime = data.totalTime;
+                break;
+                case 'start-stop-timer':
+					this.toggleTimer();
+				break;
+				case 'reset-timer':
+					this.resetTimer();
+				break;
+				case 'update-interval':
+					this.defaultInterval = data.interval;
+				break;
+				case 'control-press':
+					this.sendMessage({
+						type : 'operation', 
+              			data : 'show', 
+              			index: this.indices
+					});
+				break;
+				case 'change-slides':
+					this.indices = data.indices;
+                    this.nextSlideNumber = this.mapPosition[this.indices.h+'-'+this.indices.v];
+				break;
+            }
+        }
+
+        _modelUpdate(type, data){
+            if (!data.readOnly){
+                this[data.key] = data.value;
+            }
+        }
+
+        _dispatchUiAction(type, data){
+        
+        }
+
+		
+	};
+
+</script>
