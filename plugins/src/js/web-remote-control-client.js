@@ -161,7 +161,8 @@ function _initWS(){
 					// If we are on the slides of speaker, we specify the controls values
 					this.socket.emit('message', {
 							type :"config",
-							indices : this.engine.getPosition()
+							indices : this.engine.getPosition(),
+							currentSlideNumber : this.engine.getSlideNumber()
 					});
 			});
 			// On message recieve
@@ -184,13 +185,14 @@ function _initWS(){
 							});
 							this.socket.emit('message', {
 									type :"config",
-									indices : this.engine.getPosition()
+									indices : this.engine.getPosition(),
+									currentSlideNumber : this.engine.getSlideNumber()
 
 							});
 					}else if( data.type === "ping-plugin"){
 							// We have to check the controls in order to show the correct directions
 
-							const pluginIds = Object.keys(pluginList);
+							const pluginIds = Object.keys(this.pluginList);
 							for (let i =0; i < pluginIds.length; i++){
 								this.socket.emit('message', {
 									type :"plugin",
@@ -202,7 +204,7 @@ function _initWS(){
 
 					}else if( data.type === "communicate-plugin"){
 							// We have to check the controls in order to show the correct directions
-							if (data.id && pluginList[data.id] ){
+							if (data.id && this.pluginList[data.id] ){
 								this.pluginList[data.id](data.data);
 							}
 
@@ -220,7 +222,8 @@ function _engineCallBack(event){
 	if (this.socket){
 			this.socket.emit("message", {
 					type:'config',
-					indices : this.engine.getPosition()
+					indices : this.engine.getPosition(),
+					currentSlideNumber: this.engine.getSlideNumber()
 			});
 	}
 }

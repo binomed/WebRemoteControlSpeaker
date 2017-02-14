@@ -3,9 +3,9 @@
 export class GenericEngine{
 
 	constructor(){
-		
+
 		// Listen from instruction comming from remote
-		window.addEventListener("message", this.receiveMessageFromRemote.bind(this), false);		
+		window.addEventListener("message", this.receiveMessageFromRemote.bind(this), false);
 	}
 
 	receiveMessageFromRemote(message){
@@ -30,6 +30,10 @@ export class GenericEngine{
 	}
 
 	getPosition(){
+
+	}
+
+	getSlideNumber(){
 
 	}
 
