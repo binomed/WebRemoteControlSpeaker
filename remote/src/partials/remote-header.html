@@ -135,8 +135,10 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 					type: Boolean,
 					value: false
 				},
-				now: Date,
-
+				now: { // The current time
+					type: Number,
+					value: 0
+				},
 				totalTime : { // Total time ellapsed during the presentation
 					type: Number,
 					value: 0
@@ -160,15 +162,18 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 		this.muteMinutes = true;
 		this.classMinutes = 'mute';
 	}
-
+		
 	connectedCallback() {
 		super.connectedCallback();
 
-		this.now = moment();
 		setInterval( _ => {
-			if (this.runningTimer){
-				let diff = moment().diff(this.now) + this.totalTime;
-
+			if (this.runningTimer 
+			|| (this.totalTime === 0  
+				&& (this.seconds != 0 
+					|| this.minutes != 0 
+					|| this.hours != 0 
+				))){
+				let diff = (Date.now() - this.now) + this.totalTime;
 				this._manageTimerState(diff);
 			}
 		}, 500);
@@ -177,14 +182,6 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 			this.dispatchEvent(new CustomEvent('menu-open'), {bubbles: true});
 		});*/
 	}
-
-	attributeChangedCallback(){
-		console.log('attributeChangedCallback');
-	}
-	attributeChanged(){
-		console.log('attributeChanged');
-	}
-
 
 	_manageTimerState(diff){
 		const hoursDiff = Math.floor(diff / (60 * 60 * 1000));

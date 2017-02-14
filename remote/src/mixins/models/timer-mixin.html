@@ -24,8 +24,8 @@
 						type: Number,
 						value: 0
 					},
-					now: { // The
-						type: Date,
+					now: { // The current time
+						type: Number,
 						value: null
 					}
 
@@ -35,7 +35,7 @@
 
 		connectedCallback() {
 			super.connectedCallback();
-			this.now = moment();
+			this.now = Date.now();
 
 		}
 
@@ -47,14 +47,14 @@
 						readOnly: true
 					});
 			if (!this.runningTimer){
-				this.totalTime += moment().diff(this.now);
+				this.totalTime += (Date.now() - this.now); 
 				this.broadcastAction('update-model',{
 							key: 'totalTime',
 							value :  this.totalTime,
 							readOnly: true
 						});
 			}else{
-				this.now = moment();
+				this.now = Date.now();
 				this.broadcastAction('update-model',{
 							key: 'now',
 							value :  this.now,
@@ -66,6 +66,7 @@
 		resetTimer(){
 			this.runningTimer = false;
 			this.totalTime = 0;
+			this.now = Date.now();
 			this.broadcastAction('update-model',[
 					{
 						key: 'runningTimer',
@@ -75,6 +76,11 @@
 					{
 						key: 'totalTime',
 						value :  this.totalTime,
+						readOnly: true
+					},
+					{
+						key: 'now',
+						value :  this.now,
 						readOnly: true
 					}
 					]);
