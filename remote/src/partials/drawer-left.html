@@ -86,25 +86,20 @@
 
 		static get is() { return 'drawer-left' }
 
+		constructor(){
+			super();
+			this.playState = true;
+			this.iconPlayPause = 'play-arrow';
+			this.textPlayPause = 'play';
+
+		}
+
 		static get config() {
 			// properties, observers meta data
 			return {
 				properties: {
-					playState: {
-						type: Boolean,
-						value: true, 
-						observer: '_updatePlayState'
-					},
-					iconPlayPause: {
-						type: String,
-						value: 'play-arrow'
-					},
-					textPlayPause: {
-						type: String,
-						value: 'Play'
-					},
 					defaultInterval : { // Time in minute of the conference
-						type: Number, 
+						type: Number,
 						value: 60,
 						observer: '_updateInterval'
 					},
@@ -116,15 +111,12 @@
 		connectedCallback() {
 			super.connectedCallback();
 		}
-		
+
 
 		toggleDrawer(event) {
 			this.$.drawerLeft.toggle();
 		}
 
-		_updatePlayState(newState, oldState){
-
-		}
 
 		_managePlayPauseState(){
 			this.iconPlayPause = this.playState ? 'play-arrow' : 'pause';
@@ -134,8 +126,8 @@
 		_togglePlayPause() {
 			this.playState = !this.playState;
 			this._managePlayPauseState();
-			this.dispatchAction('start-stop-timer', {playState:this.playState});
-			this.dispatchAction('toogle-drawer', {direction:'left'});			
+			this.dispatchAction('start-stop-timer', {});
+			this.dispatchAction('toogle-drawer', {direction:'left'});
 		}
 
 		_resetTimer(){

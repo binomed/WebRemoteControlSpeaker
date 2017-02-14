@@ -30,14 +30,14 @@
 			text-align: center;
 			color: var(--font-color-timer);
 			vertical-align:middle;
-			
+
 		}
 
 
 
 		.elapsed_time, .elapsed_bg{
-			background: linear-gradient(top, var(--color-normal-stop-1), var(--color-normal-stop-2) no-repeat;    
-			position: absolute;    
+			background: linear-gradient(top, var(--color-normal-stop-1), var(--color-normal-stop-2) no-repeat;
+			position: absolute;
 			border-top: thin solid var(--color-actions);
 			height:var(--margin-timer);
 			width:100%;
@@ -63,7 +63,7 @@
 			position: absolute;
 			width: 100%;
 			height: 100%;
-			top: 0;    
+			top: 0;
 			text-align: center;
 		}
 
@@ -71,7 +71,7 @@
 			font-weight: 400;
 			font-size: var(--font-size-slide-number);
 			color:var(--font-color-mute);
-			
+
 		}
 
 		.elapsed .mute {
@@ -93,10 +93,10 @@
 			border-right : thin solid var(--color-actions);
 			top: 0;
 			width:var(--abs-height);
-			height:var(--abs-height);    
+			height:var(--abs-height);
 			text-align:center;
 			color:var(--color-actions);
-			
+
 		}
 
 
@@ -131,49 +131,34 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 		// properties, observers meta data
 		return {
 			properties: {
-				hours: {
-					type: String,
-					value: '00'
-				},
-				minutes: {
-					type: String,
-					value: '00'
-				},
-				seconds: {
-					type: String,
-					value: '00'
-				},
 				runningTimer: {
-					type: Boolean,
-					value: false,
-					observer: '_manageTimer'
-				},
-				now: Date,
-
-				showHours: {
 					type: Boolean,
 					value: false
 				},
-				muteMinutes: {
-					type: Boolean,
-					value: true
-				},
-				classMinutes: {
-					type: String,
-					value: 'mute'
-				},
+				now: Date,
+
 				totalTime : { // Total time ellapsed during the presentation
 					type: Number,
 					value: 0
 				},
 				defaultInterval : { // Time in minute of the conference
-					type: Number, 
+					type: Number,
 					value: 60
 				}
 
 			}
 
 		};
+	}
+
+	constructor(){
+		super();
+		this.hours = '00';
+		this.minutes = '00';
+		this.seconds = '00';
+		this.showHours = false;
+		this.muteMinutes = true;
+		this.classMinutes = 'mute';
 	}
 
 	connectedCallback() {
@@ -200,15 +185,6 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 		console.log('attributeChanged');
 	}
 
-	toggleTimer(event){
-		this.runningTimer = !event.detail.playState;		
-	}
-
-	resetTimer(){
-		this.runningTimer = false;
-		this._updateTotalTime(0);
-		this._manageTimerState(0);
-	}
 
 	_manageTimerState(diff){
 		const hoursDiff = Math.floor(diff / (60 * 60 * 1000));
@@ -232,18 +208,6 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 			this.muteMinutes = false;
 			this.classMinutes = 'mute';
 		}
-	}
-
-	_manageTimer(playState){
-		if (!playState){
-			this._updateTotalTime(this.totalTime + moment().diff(this.now));
-		}else{
-			this.now = moment();
-		}
-	}
-
-	_updateTotalTime(time){
-		this.dispatchAction('update-time', {totalTime: time});
 	}
 
 	_drawerLeft(){
