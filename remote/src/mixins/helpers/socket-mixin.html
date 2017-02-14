@@ -73,34 +73,34 @@
 						this.broadcastAction('update-model', [
 							{
 								key: 'localUrl',
-								value :  `http://${window.location.hostname}:${this.conf.port}${json.url}` 
+								value :  `http://${window.location.hostname}:${this.conf.port}${json.url}`
 							},
 							{
 								key: 'nbSlides',
-								value :  json.nbSlides 
+								value :  json.nbSlides
 							},
 							{
 								key: 'mapPosition',
-								value :  json.mapPosition 
-							}							
-						]);						
+								value :  json.mapPosition
+							}
+						]);
 					}else if(json.indices){
 						this.broadcastAction('update-model', [
 							{
 								key: 'indicesDist',
-								value :  json.indices 
-							}							
-						]);						
+								value :  json.indices
+							}
+						]);
 						// TODO
-	                    // this.currentSlideNumber = this.mapPosition[this.indicesDist.h+'-'+this.indicesDist.v];
+						// this.currentSlideNumber = this.mapPosition[this.indicesDist.h+'-'+this.indicesDist.v];
 					}
 				break;
 				case 'notes':
 					console.log(json.data.notes);
 					this.broadcastAction('update-model', {
 							key: 'contentNotes',
-							value :  json.data.notes 
-						});											
+							value :  json.data.notes
+						});
 				break;
 				case 'plugin':
 				break;

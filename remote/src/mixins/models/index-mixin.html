@@ -8,21 +8,21 @@
 				properties: {
 					indicesDist : { // Basic initialization for presentation on client side
 						type: Object,
-						value: () => {return {h:0, v:0};}						
-					}, 
+						value: () => {return {h:0, v:0};}
+					},
 					indices : { // Basic initialization of indices of engine presentation
 						type: Object,
-						value: () => {return {h:0, v:0};}						
-					}, 
+						value: () => {return {h:0, v:0};}
+					},
 					currentSlideNumber : { // current slide number on client side
 						type: Number,
 						value: 1
 					},
-					nextSlideNumber : { // next slide number on preview 
+					nextSlideNumber : { // next slide number on preview
 						type: Number,
 						value: 1
 					},
-					nbSlides : { // Total Number of slides        
+					nbSlides : { // Total Number of slides
 						type: Number,
 						value: 0
 					},
@@ -36,7 +36,7 @@
 
 		connectedCallback() {
 			super.connectedCallback();
-						
+
 		}
 
 	};

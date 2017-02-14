@@ -5,21 +5,21 @@
 		static get config() {
 			// properties, observers meta data
 			return {
-				properties: {					
+				properties: {
 				}
 			};
 		}
 
 		dispatchAction(type, data) {
 			this.dispatchEvent(new CustomEvent('dispatch-action', {
-                detail: {
-                    type: type,
-                    data: data
-                    }
-                }));			
+				detail: {
+					type: type,
+					data: data
+					}
+				}));
 		}
 
-		
+
 	};
 
 </script>

@@ -2,61 +2,61 @@
 
 	class GenericEngine {
 
-		
-        constructor(iframe, dispatchAction){
-            this.dispatchAction = dispatchAction;
-            this.iframe = iframe;            
-         }
 
-        initEngine(){
-            this.iframe.contentWindow.postMessage(JSON.stringify({type: 'init'}), '*');
-            window.addEventListener("message", this._receiveMessageFromPresentation.bind(this), false);		
-        }
+		constructor(iframe, dispatchAction){
+			this.dispatchAction = dispatchAction;
+			this.iframe = iframe;
+		 }
 
-        _receiveMessageFromPresentation(message){
-            if( message.data.charAt( 0 ) === '{' && message.data.charAt( message.data.length - 1 ) === '}' ) {
-			    message = JSON.parse( message.data );
-                switch(message.type){
-                    case 'changeSlides':
-                        this.dispatchAction('change-slides',message);                        
-                    break;
-                }
-            }
-        }
+		initEngine(){
+			this.iframe.contentWindow.postMessage(JSON.stringify({type: 'init'}), '*');
+			window.addEventListener("message", this._receiveMessageFromPresentation.bind(this), false);
+		}
 
-        _genericInstruction(instruction){
-            this.iframe.contentWindow.postMessage(JSON.stringify({
-                type: 'instruction',
-                data: instruction
-            }), '*');
-            
-        }        
+		_receiveMessageFromPresentation(message){
+			if( message.data.charAt( 0 ) === '{' && message.data.charAt( message.data.length - 1 ) === '}' ) {
+				message = JSON.parse( message.data );
+				switch(message.type){
+					case 'changeSlides':
+						this.dispatchAction('change-slides',message);
+					break;
+				}
+			}
+		}
 
-        next(){
-            this._genericInstruction('next');
-        }
+		_genericInstruction(instruction){
+			this.iframe.contentWindow.postMessage(JSON.stringify({
+				type: 'instruction',
+				data: instruction
+			}), '*');
 
-        up(){
-            this._genericInstruction('up');
-        }
+		}
 
-        left(){
-            this._genericInstruction('left');
-        }
+		next(){
+			this._genericInstruction('next');
+		}
 
-        down(){
-            this._genericInstruction('down');            
-        }
+		up(){
+			this._genericInstruction('up');
+		}
 
-        right(){
-            this._genericInstruction('right');                        
-        }
+		left(){
+			this._genericInstruction('left');
+		}
+
+		down(){
+			this._genericInstruction('down');
+		}
+
+		right(){
+			this._genericInstruction('right');
+		}
 
 
 
-		
 
-		
+
+
 	};
 
 </script>

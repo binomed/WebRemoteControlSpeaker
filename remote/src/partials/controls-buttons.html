@@ -15,100 +15,100 @@
 			overflow: hidden;
 		}
 
-        #mask {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
+		#mask {
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
 
-        paper-icon-button{
-            position: absolute;
-            color: white;
-            height : 64px;
-            width: 64px;
-            margin: 10px;
-        }
+		paper-icon-button{
+			position: absolute;
+			color: white;
+			height : 64px;
+			width: 64px;
+			margin: 10px;
+		}
 
-        paper-icon-button#show{
-            left:50%;
-            top:50%;
-            transform: translateX(-50%) translateY(-50%) rotateY(180deg);
-            color: rgba(0,0,0,1);
-            opacity: 0.7;
-            background: white;
-            border-radius:64px;
-            height : 64px;
-            width: 64px;
-        }
+		paper-icon-button#show{
+			left:50%;
+			top:50%;
+			transform: translateX(-50%) translateY(-50%) rotateY(180deg);
+			color: rgba(0,0,0,1);
+			opacity: 0.7;
+			background: white;
+			border-radius:64px;
+			height : 64px;
+			width: 64px;
+		}
 
-        paper-icon-button#show[disabled]{
-            background: rgba(255,255,255,0.4);
-        }
+		paper-icon-button#show[disabled]{
+			background: rgba(255,255,255,0.4);
+		}
 
-        paper-icon-button[disabled]{
-            color: rgba(255,255,255,0.4);
-        }
+		paper-icon-button[disabled]{
+			color: rgba(255,255,255,0.4);
+		}
 
-        paper-icon-button#up{
-            top:0;
-            transform: translateX(-50%);
-        }
-        paper-icon-button#down{
-            bottom:0;
-            transform: translateX(-50%) rotateZ(180deg);
-        }
-        paper-icon-button#left{
-            left:0;
-            transform: translateY(-50%) rotateZ(-90deg);
-        }
-        paper-icon-button#right{
-            right:0;
-            transform: translateY(-50%) rotateZ(90deg);
-        }
+		paper-icon-button#up{
+			top:0;
+			transform: translateX(-50%);
+		}
+		paper-icon-button#down{
+			bottom:0;
+			transform: translateX(-50%) rotateZ(180deg);
+		}
+		paper-icon-button#left{
+			left:0;
+			transform: translateY(-50%) rotateZ(-90deg);
+		}
+		paper-icon-button#right{
+			right:0;
+			transform: translateY(-50%) rotateZ(90deg);
+		}
 
 		paper-icon-button#up, paper-icon-button#down{
-            left:50%;            
-        }
+			left:50%;
+		}
 
 		paper-icon-button#left, paper-icon-button#right{
-            top:50%;            
-        }
+			top:50%;
+		}
 
 
 	</style>
 
-    <div id="mask">
-        <paper-icon-button 
-            icon="icons:arrow-drop-up" 
-            id="up" 
-            disabled$="[[upState]]"
-            on-tap="_tap"
-            ></paper-icon-button>
-        <paper-icon-button 
-            icon="icons:arrow-drop-up" 
-            id="left" 
-            disabled$="[[leftState]]"
-            on-tap="_tap"
-            ></paper-icon-button>
-        <paper-icon-button 
-            icon="icons:arrow-drop-up" 
-            id="down" 
-            disabled$="[[downState]]"
-            on-tap="_tap"            
-            ></paper-icon-button>
-        <paper-icon-button 
-            icon="icons:arrow-drop-up" 
-            id="right" 
-            disabled$="[[rightState]]"
-            on-tap="_tap"            
-            ></paper-icon-button>
-        <paper-icon-button 
-            icon="icons:reply" 
-            id="show" 
-            disabled$="[[showState]]"
-            on-tap="_tap"            
-            ></paper-icon-button>
-    </div>
+	<div id="mask">
+		<paper-icon-button
+			icon="icons:arrow-drop-up"
+			id="up"
+			disabled$="[[upState]]"
+			on-tap="_tap"
+			></paper-icon-button>
+		<paper-icon-button
+			icon="icons:arrow-drop-up"
+			id="left"
+			disabled$="[[leftState]]"
+			on-tap="_tap"
+			></paper-icon-button>
+		<paper-icon-button
+			icon="icons:arrow-drop-up"
+			id="down"
+			disabled$="[[downState]]"
+			on-tap="_tap"
+			></paper-icon-button>
+		<paper-icon-button
+			icon="icons:arrow-drop-up"
+			id="right"
+			disabled$="[[rightState]]"
+			on-tap="_tap"
+			></paper-icon-button>
+		<paper-icon-button
+			icon="icons:reply"
+			id="show"
+			disabled$="[[showState]]"
+			on-tap="_tap"
+			></paper-icon-button>
+	</div>
 
 
 </template>
@@ -124,26 +124,26 @@
 			// properties, observers meta data
 			return {
 				properties: {
-                    upState:{
-                        type: Boolean,
-                        value: false
-                    },
-                    downState:{
-                        type: Boolean,
-                        value: false
-                    },
-                    leftState:{
-                        type: Boolean,
-                        value: false
-                    },
-                    rightState:{
-                        type: Boolean,
-                        value: false
-                    },
-                    showState:{
-                        type: Boolean,
-                        value: false
-                    }
+					upState:{
+						type: Boolean,
+						value: false
+					},
+					downState:{
+						type: Boolean,
+						value: false
+					},
+					leftState:{
+						type: Boolean,
+						value: false
+					},
+					rightState:{
+						type: Boolean,
+						value: false
+					},
+					showState:{
+						type: Boolean,
+						value: false
+					}
 				}
 			};
 		}
@@ -154,9 +154,9 @@
 
 		}
 
-        _tap(event){                            
-            this.dispatchAction('control-press', {control:event.target.id});            
-        }
+		_tap(event){
+			this.dispatchAction('control-press', {control:event.target.id});
+		}
 
 	}
 

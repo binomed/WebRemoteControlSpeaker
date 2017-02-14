@@ -13,7 +13,7 @@
 						value: false
 					},
 					defaultInterval : { // Time in minute of the conference
-						type: Number, 
+						type: Number,
 						value: 60
 					},
 					limitAlert : { // time before the end where we have to alert the speaker (if defaultInterval is upper limitAlert)
@@ -21,10 +21,10 @@
 						value: 1
 					},
 					totalTime : { // Total time ellapsed during the presentation
-						type: Number, 
+						type: Number,
 						value: 0
 					},
-					now: { // The 
+					now: { // The
 						type: Date,
 						value: null
 					}
@@ -36,30 +36,30 @@
 		connectedCallback() {
 			super.connectedCallback();
 			this.now = moment();
-			
+
 		}
-		
+
 		toggleTimer(){
-			this.runningTimer = !this.runningTimer;		
+			this.runningTimer = !this.runningTimer;
 			this.broadcastAction('update-model',{
 						key: 'runningTimer',
 						value :  this.runningTimer,
-						readOnly: true 
-					});				
+						readOnly: true
+					});
 			if (!this.runningTimer){
 				this.totalTime += moment().diff(this.now);
 				this.broadcastAction('update-model',{
 							key: 'totalTime',
 							value :  this.totalTime,
-							readOnly: true 
-						});				
+							readOnly: true
+						});
 			}else{
 				this.now = moment();
 				this.broadcastAction('update-model',{
 							key: 'now',
 							value :  this.now,
-							readOnly: true 
-						});				
+							readOnly: true
+						});
 			}
 		}
 
@@ -70,16 +70,16 @@
 					{
 						key: 'runningTimer',
 						value :  this.runningTimer,
-						readOnly: true 
+						readOnly: true
 					},
 					{
 						key: 'totalTime',
 						value :  this.totalTime,
-						readOnly: true 
+						readOnly: true
 					}
-					]);		
+					]);
 		}
-		
+
 
 	};
 
