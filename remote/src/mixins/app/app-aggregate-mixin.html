@@ -4,6 +4,7 @@
 <link rel="import" href="../helpers/event-bus-mixin.html">
 <link rel="import" href="../models/conf-mixin.html">
 <link rel="import" href="../models/conf-mixin.html">
+<link rel="import" href="../models/engine-mixin.html">
 <link rel="import" href="../models/index-mixin.html">
 <link rel="import" href="../models/notes-mixin.html">
 <link rel="import" href="../models/plugins-mixin.html">
@@ -15,6 +16,7 @@
 									.with(DispatcherMixin,
 										EventBusMixin,
 										SocketMixin,
+										EngineMixin,
 										ConfModelMixin,
 										IndexModelMixin,
 										NotesModelMixin,
@@ -25,7 +27,7 @@
 		static get config() {
 			// properties, observers meta data
 			return {
-				properties: {
+				properties: {					
 				}
 			};
 		}
@@ -43,6 +45,7 @@
 				'start-stop-timer',
 				'update-interval',
 				'reset-timer',
+				'reset-index',
 				'control-press',
 				'change-slides'
 				]
@@ -59,6 +62,9 @@
 				break;
 				case 'reset-timer':
 					this.resetTimer();
+				break;
+				case 'reset-index':
+					this.engine.first();
 				break;
 				case 'update-interval':
 					this.defaultInterval = data.interval;

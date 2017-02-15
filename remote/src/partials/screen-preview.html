@@ -90,21 +90,19 @@
 		constructor(){
 			super();
 			this.iFrameReady = false;
-			this.engine = null;
 		}
 
 
 		connectedCallback() {
-			super.connectedCallback();
-			this.engine = new GenericEngine(this.$.iframePrez, this.dispatchAction.bind(this));
+			super.connectedCallback();			
 			if (this.iFrameReady){
-				this.engine.initEngine();
+				this.engine.initEngine(this.$.iframePrez, this.dispatchAction.bind(this));
 			}
 		}
 
 		_loadIFrame(){
 			if (this.engine){
-				this.engine.initEngine();
+				this.engine.initEngine(this.$.iframePrez, this.dispatchAction.bind(this));
 			}else{
 				this.iFrameReady = true;
 			}

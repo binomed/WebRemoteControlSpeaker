@@ -3,12 +3,18 @@
 	class GenericEngine {
 
 
-		constructor(iframe, dispatchAction){
-			this.dispatchAction = dispatchAction;
-			this.iframe = iframe;
+		constructor(){
+			this.dispatchAction = null;
+			this.iframe = null;
 		 }
 
-		initEngine(){
+		isInit(){
+			return this.iframe;
+		}
+
+		initEngine(iframe, dispatchAction){
+			this.dispatchAction = dispatchAction;
+			this.iframe = iframe;
 			this.iframe.contentWindow.postMessage(JSON.stringify({type: 'init'}), '*');
 			window.addEventListener("message", this._receiveMessageFromPresentation.bind(this), false);
 		}
@@ -50,6 +56,10 @@
 
 		right(){
 			this._genericInstruction('right');
+		}
+		
+		first(){
+			this._genericInstruction('first');
 		}
 
 

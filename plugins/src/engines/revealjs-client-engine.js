@@ -79,6 +79,9 @@ export default class RevealEngine extends GenericEngine{
 					case 'right':
 						Reveal.right();
 						break;
+					case 'first':
+						Reveal.slide( 0, 0, 0);
+						break;
 				};
 				break;
 		}

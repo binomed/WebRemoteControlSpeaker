@@ -68,7 +68,7 @@
 					<span>mn.</span>
 
 			</paper-item>
-			<paper-item>
+			<paper-item on-tap="_resetSlideIndex">
 				<iron-icon icon="av:replay" item-icon></iron-icon>
 				<span>Go to first slide</span>
 			</paper-item>
@@ -117,6 +117,10 @@
 			this.$.drawerLeft.toggle();
 		}
 
+		_resetSlideIndex(){
+			this.dispatchAction('reset-index', {});
+			this.dispatchAction('toggle-drawer', {direction:'left'});
+		}
 
 		_managePlayPauseState(){
 			this.iconPlayPause = this.playState ? 'play-arrow' : 'pause';
