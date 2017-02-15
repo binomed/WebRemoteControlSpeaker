@@ -36,12 +36,18 @@
 
 
 		.elapsed_time, .elapsed_bg{
-			background: linear-gradient(top, var(--color-normal-stop-1), var(--color-normal-stop-2) no-repeat;
+			background: linear-gradient(var(--color-normal-stop-1), var(--color-normal-stop-2)) no-repeat;
 			position: absolute;
 			border-top: thin solid var(--color-actions);
 			height:var(--margin-timer);
 			width:100%;
 			left:0;
+			bottom: 0;
+		}
+
+		.elapsed_time{
+			--width_progress: 0%;
+			width: var(--width_progress);
 		}
 
 		.elapsed_bg{
@@ -50,21 +56,16 @@
 		}
 
 		.elapsed_time.alert{
-			background: linear-gradient(top, var(--color-alert-stop-1), var(--color-alert-stop-2) no-repeat;
+			background: linear-gradient(var(--color-alert-stop-1), var(--color-alert-stop-2)) no-repeat;
 		}
 		.elapsed_time.advanced{
-			background: linear-gradient(top, var(--color-advanced-stop-1), var(--color-advanced-stop-2) no-repeat;
+			background: linear-gradient(var(--color-advanced-stop-1), var(--color-advanced-stop-2)) no-repeat;
 		}
 
 		.timeEllapesd{
 			font-weight: 400;
 			font-size: var(--font-size-timer);
 			color:var(--font-color-timer);
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			top: 0;
-			text-align: center;
 		}
 
 		.totalTime{
@@ -111,12 +112,12 @@
 						id="seconds"> : [[seconds]]</span><span class="totalTime">&nbsp;/&nbsp;[[defaultInterval]]:00</span>
 				</div>
 			</div>
-			<!--<div class="elapsed_bg">
-			</div>
-			<div id="progress_elapsed_time" class="elapsed_time">
-			</div>-->
 		</div>
 		<paper-icon-button icon="extension" on-tap="_drawerRight"></paper-icon-button>
+		<div class="elapsed_bg">
+		</div>
+		<div id="progressTime" class="elapsed_time">
+		</div>
 	</app-toolbar>
 </template>
 
@@ -161,6 +162,7 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 		this.showHours = false;
 		this.muteMinutes = true;
 		this.classMinutes = 'mute';
+		//this.fullTime = false;
 	}
 		
 	connectedCallback() {
@@ -205,6 +207,9 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 			this.muteMinutes = false;
 			this.classMinutes = 'mute';
 		}
+
+		const diffPercent = (diff / (this.defaultInterval * 60 * 1000)) * 100;                
+		this._renderProgress(diffPercent);
 	}
 
 	_drawerLeft(){
@@ -214,6 +219,35 @@ class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 	_drawerRight(){
 		this.dispatchAction('toggle-drawer', {direction: 'right'});
 	}
+
+	_renderProgress(progress){
+        progress = Math.floor(progress);
+        this.$.progressTime.style.setProperty("--width_progress", progress+"%");
+        const alertClass = this.$.progressTime.classList.contains("alert");
+        const advancedClass = this.$.progressTime.classList.contains("advanced");
+        if (progress < 75 && (alertClass || advancedClass)){
+          this.fullTime = false;
+          this.$.progressTime.classList.remove("alert");
+          this.$.progressTime.classList.remove("advanced");
+        }else if(progress >= 75 && progress < 90 && !advancedClass){
+          this.fullTime = false;
+          if (navigator.vibrate){
+            navigator.vibrate(100);
+          }
+          this.$.progressTime.classList.add("advanced");
+          this.$.progressTime.classList.remove("alert");
+        }else if(progress >= 90 && !alertClass){
+          this.fullTime = false;
+          if (navigator.vibrate){
+            navigator.vibrate(500);
+          }
+          this.$.progressTime.classList.add("alert");
+          this.$.progressTime.classList.remove("advanced");
+        }else if (progress === 100 && !this.fullTime && navigator.vibrate){
+          this.fullTime = true;
+          navigator.vibrate(1000);
+        }
+      }
 
 }
 
