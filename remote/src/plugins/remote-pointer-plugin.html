@@ -1,0 +1,107 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../mixins/helpers/dispatcher-mixin.html">
+
+<dom-module id="remote-pointer-plugin">
+	<template>
+
+		<!-- Styles MUST be inside template -->
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+			overflow: hidden;
+			--size-button:40px;
+		}
+
+		.sws-plugin-rp-desc {
+			padding : 10px;
+			overflow : auto;
+			font-size : 1.2em;
+			height : calc(100% - var(--size-button) - 15px);
+		}
+
+		.sws-plugin-rp-box.color {
+			box-shadow : 0px 0px 10px 0 black;
+			border-radius : var(--size-button);
+			border : solid 1px white;
+			bottom : 20px;
+			top : initial;
+		}
+
+		.sws-plugin-rp-box.color.activ::after {
+			content : '\\';
+			position : absolute;
+			top : calc(var(--size-button) + 5px);
+			left : 5px;
+			width : calc(var(--size-button) - 10px);
+			height : 5px;
+			box-shadow : 0px 0px 10px 0 black;
+		}
+
+		.sws-plugin-rp-box.color.red::after, .sws-plugin-rp-box.color.red {
+			background-color : #FF0000;
+		}
+
+		.sws-plugin-rp-box.color.white::after, .sws-plugin-rp-box.color.white {
+			background-color : #FFFFFF;
+		}
+
+		.sws-plugin-rp-box.color.black::after, .sws-plugin-rp-box.color.black {
+			background-color : #000000;
+		}
+
+		.sws-plugin-rp-box.color.blue::after, .sws-plugin-rp-box.color.blue {
+			background-color : #005FFF;
+		}
+
+
+	</style>
+
+
+
+
+</template>
+
+<script>
+
+	// Extend Polymer.Element base class
+	class RemotePointerPlugin extends DispatcherMixin(Polymer.Element) {
+
+		static get is() { return 'remote-pointer-plugin' }
+
+		constructor(){
+			super();
+
+
+		}
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+
+				}
+			};
+		}
+
+
+		connectedCallback() {
+			super.connectedCallback();
+			this.registerPlugin({
+				name : 'remote pointer',
+				icon : 'icons:create',
+				id : 'rp'
+			})
+		}
+
+
+
+	}
+
+	// Register custom element definition using standard platform API
+	customElements.define(RemotePointerPlugin.is, RemotePointerPlugin);
+
+</script>
+</dom-module>
