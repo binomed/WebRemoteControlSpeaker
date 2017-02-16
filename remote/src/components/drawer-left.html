@@ -119,7 +119,7 @@
 
 		_resetSlideIndex(){
 			this.dispatchAction('reset-index', {});
-			this.dispatchAction('toggle-drawer', {direction:'left'});
+			this.$.drawerLeft.toggle();
 		}
 
 		_managePlayPauseState(){
@@ -131,12 +131,12 @@
 			this.playState = !this.playState;
 			this._managePlayPauseState();
 			this.dispatchAction('start-stop-timer', {});
-			this.dispatchAction('toggle-drawer', {direction:'left'});
+			this.$.drawerLeft.toggle();
 		}
 
 		_resetTimer(){
 			this.dispatchAction('reset-timer', {});
-			this.dispatchAction('toggle-drawer', {direction: 'left'});
+			this.$.drawerLeft.toggle();
 			this.playState = true;
 			this._managePlayPauseState();
 		}
