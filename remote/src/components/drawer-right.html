@@ -2,6 +2,20 @@
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-icons/device-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../bower_components/iron-icons/notification-icons.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../bower_components/iron-icons/places-icons.html">
+<link rel="import" href="../mixins/helpers/dispatcher-mixin.html">
 
 <dom-module id="drawer-right">
 	<template>
@@ -27,6 +41,19 @@
 
 <app-drawer id="drawerRight" swipe-open align="right">
 	<div class="drawer-contents">
+		<paper-listbox>
+			<template is="dom-repeat" items="[[filterPluginList]]" as="plugin">
+			<paper-item on-tap="_puglinClicked" id="[[plugin.id]]">
+				<iron-icon icon$="[[plugin.icon]]" item-icon></iron-icon>
+				<span>[[plugin.name]]</span>
+			</paper-item>
+          	</template>
+            
+			<paper-item hidden$="[[!noPlugins]]">
+				<iron-icon icon="social:mood-bad" item-icon></iron-icon>
+				<span>No plugin add</span>
+			</paper-item>
+		</paper-listbox>
 
 	</div>
 </app-drawer>
@@ -37,7 +64,7 @@
 <script>
 
 	// Extend Polymer.Element base class
-	class DrawerRight extends Polymer.Element {
+	class DrawerRight extends DispatcherMixin(Polymer.Element) {
 
 		static get is() { return 'drawer-right' }
 
@@ -45,9 +72,19 @@
 			// properties, observers meta data
 			return {
 				properties: {
-
+					pluginList : { // List of plugin of application
+						type: Array,
+						value: () => {return [];},
+						observer: '_updatePluginList'
+					}
 				}
 			};
+		}
+
+		constructor(){
+			super();
+			this.filterPluginList = [];
+			this.noPlugins = true;
 		}
 
 
@@ -57,6 +94,16 @@
 		}
 
 		toggleDrawer(event) {
+			this.$.drawerRight.toggle();
+		}
+
+		_updatePluginList(event){
+			this.filterPluginList = this.pluginList.filter((plugin) => plugin.activ);
+			this.noPlugins = this.filterPluginList.length === 0;
+		}
+
+		_puglinClicked(event){			
+			this.dispatchAction('activ-plugin',this.filterPluginList.find((plugin)=>plugin.id === event.target.id));
 			this.$.drawerRight.toggle();
 		}
 

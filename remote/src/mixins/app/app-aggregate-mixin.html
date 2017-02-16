@@ -32,8 +32,8 @@
 			};
 		}
 
-		connectedCallback() {
-			super.connectedCallback();
+		constructor(){
+			super();
 			this.subscribeForKey('update-model',this._modelUpdate.bind(this));
 			this.subscribeForKey([
 				'toggle-drawer',
@@ -47,9 +47,15 @@
 				'reset-timer',
 				'reset-index',
 				'control-press',
-				'change-slides'
+				'change-slides',
+				'register-plugin',
+				'activ-plugin'
 				]
 				,this._computeActions.bind(this));
+		}
+
+		connectedCallback() {
+			super.connectedCallback();
 		}
 
 		_computeActions(type, data){
@@ -67,6 +73,7 @@
 					this.engine.first();
 				break;
 				case 'update-interval':
+					this.set('test.defaultInterval', data.interval);
 					this.defaultInterval = data.interval;
 				break;
 				case 'control-press':
@@ -79,6 +86,13 @@
 				case 'change-slides':
 					this.indices = data.indices;
 					this.nextSlideNumber = this.mapPosition[this.indices.h+'-'+this.indices.v];
+				break;
+				case 'register-plugin':
+					this.registerPlugin(data);
+				break;
+				case 'activ-plugin':
+					this.activPlugin = data;
+					this._dispatchUiAction(type, data);
 				break;
 			}
 		}

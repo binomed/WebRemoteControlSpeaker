@@ -9,6 +9,7 @@
 <link rel="import" href="screen-preview.html">
 <link rel="import" href="drawer-left.html">
 <link rel="import" href="drawer-right.html">
+<link rel="import" href="../plugins/remote-pointer-plugin.html">
 
 <dom-module id="remote-app">
 	<template>
@@ -44,6 +45,14 @@
 			display: none;
 		}
 
+		.plugin{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+
 
 	</style>
 
@@ -57,11 +66,13 @@
 			default-interval="[[defaultInterval]]"
 			now="[[now]]"></remote-header>
 	<speaker-notes
+			id="speakerNotes"
 			on-dispatch-action="reduceAction"
 			current-slide-number="[[currentSlideNumber]]"
 			nb-slides="[[nbSlides]]"
 			content-notes="[[contentNotes]]"></speaker-notes>
 	<screen-preview
+			id="screenPreview"
 			on-dispatch-action="reduceAction"
 			next-slide-number="[[nextSlideNumber]]"
 			nb-slides="[[nbSlides]]"
@@ -72,7 +83,19 @@
 <drawer-left id="drawerLeft"
 	on-dispatch-action="reduceAction"
 	default-interval="[[defaultInterval]]"></drawer-left>
-<drawer-right id="drawerRight"></drawer-right>
+<drawer-right id="drawerRight"
+	on-dispatch-action="reduceAction"
+	plugin-list="[[pluginList]]"></drawer-right>
+
+<div class="plugin-list">
+	<remote-pointer-plugin class="plugin"
+		style="display:none"
+		id="rp"
+		activ-plugin="[[activPlugin]]"
+		desc-area="[[descPluginArea]]"
+		interaction-area="[[interactionPluginArea]]"
+		on-dispatch-action="reduceAction"></remote-pointer-plugin>
+</div>
 
 </template>
 
@@ -91,12 +114,22 @@
 			};
 		}
 
+		constructor(){
+			super();
+			this.descPluginArea = null;
+			this.interactionPluginArea = null;
+		}
+
 
 		connectedCallback() {
 			super.connectedCallback();
-
+			this.descPluginArea = this.$.speakerNotes;
+			this.interactionPluginArea = this.$.screenPreview;
 		}
 
+		_hidePlugin(activPlugin, pluginId){
+			return !activPlugin || activPlugin.id != name;
+		}
 
 		_dispatchUiAction(type,data){
 			switch(type){
@@ -105,6 +138,12 @@
 				break;
 				case 'expand-notes':
 					this._expandNotes(data);
+				break;
+				case 'activ-plugin':
+					if (data){
+						this.$[data.id].style.display = '';
+						console.log(this.$[data.id]);
+					}
 				break;
 			}
 		}
@@ -124,7 +163,6 @@
 					break;
 				case 'right':
 					this.$.drawerRight.toggleDrawer();
-					this._toggleRightDrawer();
 					break;
 			}
 		}

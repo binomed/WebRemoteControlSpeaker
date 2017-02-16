@@ -1,6 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
-<link rel="import" href="../mixins/helpers/dispatcher-mixin.html">
+<link rel="import" href="../mixins/helpers/plugin-mixin.html">
 
 <dom-module id="remote-pointer-plugin">
 	<template>
@@ -56,10 +56,33 @@
 			background-color : #005FFF;
 		}
 
+		#parent{
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		#descArea{
+			position:absolute;
+			background: white;
+		}
+
+		#interactionArea{
+			position:absolute;
+			--border-color: red;
+			border-color: var(--border-color);
+			border-style: solid;
+			border-width: 5px;
+		}
 
 	</style>
 
-
+<div id="parent">	
+	<div id="descArea">
+	</div>
+	<div id="interactionArea">
+	</div>
+</div>
 
 
 </template>
@@ -67,14 +90,12 @@
 <script>
 
 	// Extend Polymer.Element base class
-	class RemotePointerPlugin extends DispatcherMixin(Polymer.Element) {
+	class RemotePointerPlugin extends PluginMixin(Polymer.Element) {
 
 		static get is() { return 'remote-pointer-plugin' }
 
 		constructor(){
 			super();
-
-
 		}
 
 		static get config() {
@@ -85,17 +106,19 @@
 				}
 			};
 		}
-
-
+		
 		connectedCallback() {
-			super.connectedCallback();
-			this.registerPlugin({
-				name : 'remote pointer',
-				icon : 'icons:create',
-				id : 'rp'
-			})
+			super.connectedCallback();			
 		}
 
+		getPlugin(){
+			return {
+				name : 'remote pointer',
+				icon : 'icons:create',
+				id : 'rp',
+				activ : true
+			}
+		}
 
 
 	}
