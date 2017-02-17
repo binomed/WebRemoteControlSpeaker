@@ -8,7 +8,7 @@
 			// properties, observers meta data
 			return {
 				properties: {
-					localUrl : String, // var in order to see if the presentation has already be loaded    
+					localUrl : String, // var in order to see if the presentation has already be loaded
 					conf : { // Configuration corresponding to server
 						type: Object,
 						value: () => {return {};}
@@ -29,15 +29,19 @@
 			this.broadcastAction('update-model',{
 							key: 'conf',
 							value :  this.conf,
-							readOnly: true 
+							readOnly: true
 			});
-			
+
+		}
+
+		isConfReady(){
+			return this.conf && this.conf.port;
 		}
 
 		updateLocalUrl(url){
 			this.localUrl = url;
 		}
-		
+
 
 		_getAllUrlParams(url) {
 
