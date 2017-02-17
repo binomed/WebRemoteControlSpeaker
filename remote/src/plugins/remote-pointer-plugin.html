@@ -107,6 +107,10 @@
 			<paper-icon-button icon="close" on-tap="desactivPlugin"></paper-icon-button>
 		</app-toolbar>
 		<div class="sws-plugin-rp-desc">
+			<ol>
+				<li>Choose the color pointer</li>
+				<li>Drag your finger on the preview area to show the pointer</li>
+			</ol>
 		</div>
 		<div class="button-parent">
 			<div id="red" class="sws-plugin-rp-box color red" on-tap="_chooseColor" on-click="_chooseColor"></div>
@@ -117,7 +121,8 @@
 	</div>
 	<div id="interactionArea"
 			on-touchstart="_touchMove"
-			on-touchmove="_touchMove">
+			on-touchmove="_touchMove"
+			on-touchend="_touchEnd">
 	</div>
 </div>
 
@@ -154,8 +159,7 @@
 			return {
 				name : 'remote pointer',
 				icon : 'icons:create',
-				id : 'rp',
-				activ : true
+				id : 'rp'
 			}
 		}
 
@@ -192,8 +196,17 @@
 						y : Math.round(percentY),
 						color : this.currentColor
 					}
-				})
+				});
 			}
+		}
+
+		_touchEnd(event){
+			this.dispatchAction('plugin-communication',{
+					plugin: 'rp',
+					data:{
+						hide : true
+					}
+				});
 		}
 
 	}

@@ -9,7 +9,7 @@
 <link rel="import" href="screen-preview.html">
 <link rel="import" href="drawer-left.html">
 <link rel="import" href="drawer-right.html">
-<link rel="import" href="../plugins/remote-pointer-plugin.html">
+<link rel="import" href="../plugins/plugin-list.html">
 
 <dom-module id="remote-app">
 	<template>
@@ -45,7 +45,7 @@
 			display: none;
 		}
 
-		.plugin{
+		plugin-list{
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -87,15 +87,14 @@
 	on-dispatch-action="reduceAction"
 	plugin-list="[[pluginList]]"></drawer-right>
 
-<div class="plugin-list">
-	<remote-pointer-plugin class="plugin"
+<plugin-list
+		id="pluginListComponent"
 		style="display:none"
-		id="rp"
 		activ-plugin="[[activPlugin]]"
 		desc-area="[[descPluginArea]]"
 		interaction-area="[[interactionPluginArea]]"
-		on-dispatch-action="reduceAction"></remote-pointer-plugin>
-</div>
+		on-dispatch-action="reduceAction">
+</plugin-list>
 
 </template>
 
@@ -141,12 +140,14 @@
 				break;
 				case 'activ-plugin':
 					if (data){
-						this.$[data.id].style.display = '';
+						this.$.pluginListComponent.style.display = '';
+						this.$.pluginListComponent.activatePlugin(data);
 					}
 				break;
 				case 'desactiv-plugin':
 					if (data){
-						this.$[data.id].style.display = 'none';
+						this.$.pluginListComponent.style.display = 'none';
+						this.$.pluginListComponent.desactivatePlugin(data);
 					}
 				break;
 			}
@@ -177,6 +178,12 @@
 		_presentationMessage(json){
 			// Broadcoast message
 			super._presentationMessage(json);
+			switch(json.type){
+				case 'plugin':
+					this.$.pluginListComponent.pluginMessage(json);
+				break;
+			}
+			console.log('presentationMessage', json);
 		}
 
 

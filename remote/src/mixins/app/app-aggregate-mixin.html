@@ -75,7 +75,6 @@
 					this.engine.first();
 				break;
 				case 'update-interval':
-					this.set('test.defaultInterval', data.interval);
 					this.defaultInterval = data.interval;
 				break;
 				case 'control-press':
@@ -104,7 +103,7 @@
 				case 'plugin-communication':
 					this.sendMessage({
 						type : 'communicate-plugin',
-						id: data.id,
+						id: data.plugin,
 						data : data.data,
 					});
 				break;

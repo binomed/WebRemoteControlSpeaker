@@ -1,0 +1,96 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../mixins/helpers/dispatcher-mixin.html">
+<link rel="import" href="remote-pointer-plugin.html">
+
+<dom-module id="plugin-list">
+	<template>
+
+		<!-- Styles MUST be inside template -->
+		<style >
+
+		:host {
+			display: block;
+			position: relative;
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+		}
+
+		.plugin{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+
+
+	</style>
+
+
+<div class="plugin-list">
+	<remote-pointer-plugin class="plugin"
+		style="display:none"
+		id="rp"
+		activ-plugin="[[activPlugin]]"
+		desc-area="[[descArea]]"
+		interaction-area="[[interactionArea]]"
+		on-dispatch-action="_dispatchAction"></remote-pointer-plugin>
+</div>
+
+</template>
+
+<script>
+
+	// Extend Polymer.Element base class
+	class PluginList extends DispatcherMixin(Polymer.Element) {
+
+		static get is() { return 'plugin-list' }
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+					activPlugin: Object,
+					descArea: Object,
+					interactionArea: Object
+				}
+			};
+		}
+
+		constructor(){
+			super();
+		}
+
+
+		connectedCallback() {
+			super.connectedCallback();
+		}
+
+		activatePlugin(plugin){
+			this.$[plugin.id].style.display = '';
+		}
+
+		desactivPlugin(plugin){
+			this.$[plugin.id].style.display = 'none';
+		}
+
+		pluginMessage(message){
+			switch(message.action){
+				case 'activate':
+					this.$[message.id].registerPlugin();
+				break;
+			}
+		}
+
+		_dispatchAction(event){
+			this.dispatchAction(event.detail.type, event.detail.data);
+		}
+
+	}
+
+	// Register custom element definition using standard platform API
+	customElements.define(PluginList.is, PluginList);
+
+</script>
+</dom-module>
