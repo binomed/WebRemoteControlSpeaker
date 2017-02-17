@@ -27,7 +27,7 @@
 		static get config() {
 			// properties, observers meta data
 			return {
-				properties: {					
+				properties: {
 				}
 			};
 		}
@@ -49,7 +49,9 @@
 				'control-press',
 				'change-slides',
 				'register-plugin',
-				'activ-plugin'
+				'activ-plugin',
+				'desactiv-plugin',
+				'plugin-communication'
 				]
 				,this._computeActions.bind(this));
 		}
@@ -93,6 +95,18 @@
 				case 'activ-plugin':
 					this.activPlugin = data;
 					this._dispatchUiAction(type, data);
+				break;
+				case 'desactiv-plugin':
+					const oldActivPlugin = Object.assign({}, this.activPlugin);
+					this.activPlugin = null;
+					this._dispatchUiAction(type, oldActivPlugin);
+				break;
+				case 'plugin-communication':
+					this.sendMessage({
+						type : 'communicate-plugin',
+						id: data.id,
+						data : data.data,
+					});
 				break;
 			}
 		}

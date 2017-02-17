@@ -7,6 +7,7 @@
 		constructor(){
 			super();
             this.currentPlugin = null;
+            this.interactionAreaRect = null;
 		}
 
 		static get config() {
@@ -44,9 +45,9 @@
             if (this.descArea && this.$.descArea){
                 this._applyStyle(this.$.descArea, this.descArea);
             }
-			
+
             if (this.interactionArea && this.$.interactionArea){
-                this._applyStyle(this.$.interactionArea, this.interactionArea);                
+                this.interactionAreaRect = this._applyStyle(this.$.interactionArea, this.interactionArea);
             }
         }
 
@@ -59,6 +60,7 @@
             element.style.height = `calc(${srcElementRect.bottom}px - ${srcElementRect.top}px)`;
             element.style.top = `calc(${srcElementRect.top}px - ${srcElementStyle.marginTop})`;
             element.style.left = srcElementRect.left+'px';
+            return srcElementRect;
         }
 
         _changeActivPlugin(plugin){
@@ -73,10 +75,14 @@
             }
         }
 
+        desactivPlugin(){
+            this.dispatchAction('desactiv-plugin' ,{});
+        }
+
         getPlugin(){
             return null;
         }
-		
+
 	};
 
 </script>

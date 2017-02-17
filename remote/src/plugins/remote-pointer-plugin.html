@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../mixins/helpers/plugin-mixin.html">
 
 <dom-module id="remote-pointer-plugin">
@@ -24,14 +25,17 @@
 
 		.sws-plugin-rp-box.color {
 			box-shadow : 0px 0px 10px 0 black;
+			width: var(--size-button);
+			height: var(--size-button);
 			border-radius : var(--size-button);
 			border : solid 1px white;
 			bottom : 20px;
 			top : initial;
+			position: relative;
 		}
 
 		.sws-plugin-rp-box.color.activ::after {
-			content : '\\';
+			content : '';
 			position : absolute;
 			top : calc(var(--size-button) + 5px);
 			left : 5px;
@@ -75,12 +79,45 @@
 			border-width: 5px;
 		}
 
+		app-toolbar {
+			background-color: var(--bg-color);
+		}
+
+		app-toolbar > paper-icon-button{
+			background-color: var(--bg-color-abs);
+			color: #fff;
+		}
+
+		.button-parent{
+			display: inline-flex;
+			height: calc(2* var(--size-button));
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			justify-content: space-around;
+		}
+
 	</style>
 
-<div id="parent">	
+<div id="parent">
 	<div id="descArea">
+		<app-toolbar>
+			<div main-title>Pointer Sensor</div>
+			<paper-icon-button icon="close" on-tap="desactivPlugin"></paper-icon-button>
+		</app-toolbar>
+		<div class="sws-plugin-rp-desc">
+		</div>
+		<div class="button-parent">
+			<div id="red" class="sws-plugin-rp-box color red" on-tap="_chooseColor" on-click="_chooseColor"></div>
+			<div id="white" class="sws-plugin-rp-box color white" on-tap="_chooseColor" on-click="_chooseColor"></div>
+			<div id="black" class="sws-plugin-rp-box color black" on-tap="_chooseColor" on-click="_chooseColor"></div>
+			<div id="blue" class="sws-plugin-rp-box color blue" on-tap="_chooseColor" on-click="_chooseColor"></div>
+		</div>
 	</div>
-	<div id="interactionArea">
+	<div id="interactionArea"
+			on-touchstart="_touchMove"
+			on-touchmove="_touchMove">
 	</div>
 </div>
 
@@ -96,6 +133,7 @@
 
 		constructor(){
 			super();
+			this.currentColor = 'red';
 		}
 
 		static get config() {
@@ -106,9 +144,10 @@
 				}
 			};
 		}
-		
+
 		connectedCallback() {
-			super.connectedCallback();			
+			super.connectedCallback();
+			this._processColor('red');
 		}
 
 		getPlugin(){
@@ -120,6 +159,42 @@
 			}
 		}
 
+
+		_chooseColor(event){
+			this._processColor(event.currentTarget.id);
+		}
+
+		_processColor(color) {
+			this.currentColor = color;
+
+			this.$.red.classList.remove('activ');
+			this.$.white.classList.remove('activ');
+			this.$.black.classList.remove('activ');
+			this.$.blue.classList.remove('activ');
+			this.$[color].classList.add('activ');
+			this.$.interactionArea.style.setProperty('border-color', color);
+
+		}
+
+		_touchMove(event){
+			if (event.touches && event.touches.length > 0){
+				const touch = event.touches[0];
+				const x = touch.clientX,
+					y = touch.clientY;
+
+				const percentX = ((x-this.interactionAreaRect.left) / this.interactionAreaRect.width) * 100;
+				const percentY = ((y-this.interactionAreaRect.top) / this.interactionAreaRect.height) * 100;
+				this.dispatchAction('plugin-communication',{
+					plugin: 'rp',
+					data:{
+						hide : false,
+						x : Math.round(percentX),
+						y : Math.round(percentY),
+						color : this.currentColor
+					}
+				})
+			}
+		}
 
 	}
 

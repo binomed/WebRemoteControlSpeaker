@@ -142,7 +142,11 @@
 				case 'activ-plugin':
 					if (data){
 						this.$[data.id].style.display = '';
-						console.log(this.$[data.id]);
+					}
+				break;
+				case 'desactiv-plugin':
+					if (data){
+						this.$[data.id].style.display = 'none';
 					}
 				break;
 			}
