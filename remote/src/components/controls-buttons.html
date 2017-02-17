@@ -155,7 +155,7 @@
 		}
 
 		_tap(event){
-			this.dispatchAction('control-press', {control:event.target.id});
+			this.dispatchAction('control-press', {control:event.currentTarget.id});
 		}
 
 	}
