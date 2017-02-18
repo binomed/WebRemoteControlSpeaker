@@ -8,6 +8,7 @@
 			this.canvas = null;
 			this.ctx = null;
 			this.decoder = null;
+			this.constraints = null;
 		}
 
 		setCanvas(){
@@ -15,12 +16,15 @@
 			this.ctx = this.canvas.getContext("2d");
 		}
 
-		init() {
-			const baseurl = "";
-			const streaming = false;
+		init(webcam) {
+			var template = document.currentScript.ownerDocument.querySelector("template");
+			console.log(template.baseURI);
+			const baseurl = "/src/components/qr-code/";
+			let streaming = false;
 
 			// Init Webcam + Canvas
-			this.webcam = document.querySelector("video");
+			this.webcam = webcam;
+			//this.webcam = document.querySelector("video");
 
 
 			this.setCanvas();
@@ -36,8 +40,8 @@
 
 
 			navigator.mediaDevices.enumerateDevices()
-				.then(function (devices) {
-					const device = devices.filter(function(device) {
+				.then((devices) => {
+					const device = devices.filter((device) => {
 						const deviceLabel = device.label.split(',')[1];
 						if (device.kind == "videoinput") {
 							return device;
@@ -45,7 +49,7 @@
 					});
 
 					if (device.length > 1) {
-						const constraints = {
+						this.constraints = {
 							video: {
 								mandatory: {
 									sourceId: device[1].deviceId ? device[1].deviceId : null
@@ -54,10 +58,9 @@
 							audio: false
 						};
 
-						this.startCapture(constraints);
 					}
 					else if (device.length) {
-						const constraints = {
+						this.constraints = {
 							video: {
 								mandatory: {
 									sourceId: device[0].deviceId ? device[0].deviceId : null
@@ -66,13 +69,12 @@
 							audio: false
 						};
 
-						this.startCapture(constraints);
 					}
 					else {
-						this.startCapture({video:true});
+						this.constraints = {video:true};
 					}
 				})
-				.catch(function (error) {
+				.catch((error) => {
 					this.showErrorMsg();
 					console.error("Error occurred : ", error);
 				});
@@ -84,12 +86,12 @@
 			// snackbar.show('Unable to open the camera, provide permission to access the camera', 5000);
 		}
 
-		startCapture(constraints) {
-			navigator.mediaDevices.getUserMedia(constraints)
-				.then(function (stream) {
+		startCapture() {
+			navigator.mediaDevices.getUserMedia(this.constraints)
+				.then((stream) => {
 					this.webcam.srcObject = stream;
 				})
-				.catch(function(err) {
+				.catch((err) => {
 					console.error("Error occurred ", err);
 					showErrorMsg();
 				});
