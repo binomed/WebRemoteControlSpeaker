@@ -98,7 +98,7 @@ function _showRemoteQrCode(){
 				<div id="listIp"></div>
 			</div>
 			<div id="sws-show-qr-bottom">
-				<a id="qrCodeLink"><div id="qrCode"></div></a>
+				<a id="qrCodeLink" target="_blank"><div id="qrCode"></div></a>
 				<h1>Scan with your phone</h1>
 				<div id="sws-show-qr-url"></div>
 			</div>`;
@@ -123,10 +123,9 @@ function _showRemoteQrCode(){
 		document.querySelector('#sws-show-qr-code-generate').addEventListener('click', (event) => {
 			const get_id = document.getElementById('sws-show-qr-code-select');
 			const result = get_id.options[get_id.selectedIndex].value;
-			const urlRemote = "http://"+this.ips[result].ip // HOST
-				+":"+this.conf.port // PORT
-				+pathPlugin.substr(pathPlugin.indexOf(this.conf.port)+(''+this.conf.port).length, pathPlugin.length) // PATHNAME
-				+(this.conf.devMode ?"remote/src/" : "remote/")+"notes-speaker.html";
+			const pathName = pathPlugin.substr(pathPlugin.indexOf(this.conf.port)+(''+this.conf.port).length, pathPlugin.length);
+			// const pathToIndex = (this.conf.devMode ? "remote/src/" : "remote/")+"index.html";
+			const urlRemote = `http://${this.ips[result].ip}:${this.conf.port}${pathName}/remote/index.html?port=${this.conf.port}`;
 			this.qrCode.clear();
 			this.qrCode.makeCode(urlRemote);
 			document.querySelector("#qrCodeLink").setAttribute("href",urlRemote);
