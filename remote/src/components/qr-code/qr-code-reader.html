@@ -1,0 +1,59 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../mixins/helpers/dispatcher-mixin.html">
+
+
+<!--
+	Code based on : https://github.com/code-kotis/barcode-scanner under MIT Licensed
+-->
+
+<dom-module id="qr-code-reader">
+	<template>
+
+		<!-- Styles MUST be inside template -->
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+			overflow: hidden;
+		}
+
+
+
+	</style>
+
+
+
+</template>
+
+<script>
+
+	// Extend Polymer.Element base class
+	class QrCodeReader extends DispatcherMixin(Polymer.Element) {
+
+		static get is() { return 'qr-code-reader' }
+
+		static get config() {
+			// properties, observers meta data
+			return {
+				properties: {
+
+				}
+			};
+		}
+
+
+		connectedCallback() {
+			super.connectedCallback();
+
+		}
+
+
+
+	}
+
+	// Register custom element definition using standard platform API
+	customElements.define(QrCodeReader.is, QrCodeReader);
+
+</script>
+</dom-module>
