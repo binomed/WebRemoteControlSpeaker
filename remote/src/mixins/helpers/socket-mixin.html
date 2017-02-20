@@ -32,7 +32,7 @@
 		}
 
 		_confUpdate(type, data){
-			if (data.key === 'conf') {
+			if (data.key === 'conf' && data.value.port) {
 				this.conf = data.value;
 				console.debug(this.conf);
 				this._initWebSocket();
