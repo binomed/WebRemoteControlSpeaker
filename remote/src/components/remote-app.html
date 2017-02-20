@@ -213,6 +213,7 @@
 				case 'scan-qr-code-finish':
 					this.$.qrReader.desactivQrScan();
 					this.$.qrReader.style.display = 'none';
+					this._manageConfVisibility();
 					break;
 			}
 		}
