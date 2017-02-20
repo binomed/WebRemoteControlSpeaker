@@ -86,9 +86,20 @@
 			// snackbar.show('Unable to open the camera, provide permission to access the camera', 5000);
 		}
 
+		stopCapture() {
+			if (this.webcam && this.webcam.srcObject){
+				// TODO clean reset
+				//this.webcam.pause();
+				//this.webcam.srcObject.stop();
+				this.webcam.srcObject = null;
+
+			}
+		}
+
 		startCapture() {
 			navigator.mediaDevices.getUserMedia(this.constraints)
 				.then((stream) => {
+					//this.webcam.play();
 					this.webcam.srcObject = stream;
 				})
 				.catch((err) => {

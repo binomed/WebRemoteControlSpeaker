@@ -28,12 +28,17 @@
 			height: 100%;
 			top: 0;
 			left: 0;
+			background: rgba(0,0,0,0.7);
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 
 		paper-button{
 			position:absolute;
 			bottom: 0;
 			right: 0;
+			color:white;
 
 		}
 
@@ -82,11 +87,24 @@
 		}
 
 		desactivQrScan(){
-
+			this.reader.stopCapture();
 		}
 
 		_requestScan(){
+			this.reader.scan(this._manageScanResult.bind(this));
+		}
 
+		_manageScanResult(message){
+			if( message.charAt( 0 ) === '{' && message.charAt( message.length - 1 ) === '}' ) {
+				message = JSON.parse( message );
+				if (message.port){
+					this.dispatchAction('update-model',{
+							key: 'conf',
+							value :  message
+					});
+				}
+			}
+			this.dispatchAction('scan-qr-code-finish',{});
 		}
 
 

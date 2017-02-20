@@ -76,6 +76,14 @@
 			height: 300px;
 		}
 
+		qr-code-reader{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+
 	</style>
 
 
@@ -129,15 +137,16 @@
 				<iron-icon icon="device:bluetooth" item-icon></iron-icon>
 				<span>Scan over bluetooth</span>
 			</paper-button>
-			<paper-button>
+			<paper-button on-tap="_requestScanQrCode">
 				<iron-icon icon="image:camera-alt" item-icon></iron-icon>
 				<span>Scan QrCode</span>
 			</paper-button>
 		</div>
 	</paper-card>
 	<qr-code-reader
+		style="display:none"
 		id="qrReader"
-		on-dispatch="reduceAction"
+		on-dispatch-action="reduceAction"
 	></qr-code-reader>
 </div>
 
@@ -201,6 +210,10 @@
 						this._manageConfVisibility();
 					}
 					break;
+				case 'scan-qr-code-finish':
+					this.$.qrReader.desactivQrScan();
+					this.$.qrReader.style.display = 'none';
+					break;
 			}
 		}
 
@@ -225,6 +238,11 @@
 					this.$.drawerRight.toggleDrawer();
 					break;
 			}
+		}
+
+		_requestScanQrCode(){
+			this.$.qrReader.style.display = '';
+			this.$.qrReader.activeQrScan();
 		}
 
 		/**

@@ -37,7 +37,8 @@
 			this.subscribeForKey('update-model',this._modelUpdate.bind(this));
 			this.subscribeForKey([
 				'toggle-drawer',
-				'expand-notes'
+				'expand-notes',
+				'scan-qr-code-finish'
 				]
 				,this._dispatchUiAction.bind(this));
 			this.subscribeForKey([
