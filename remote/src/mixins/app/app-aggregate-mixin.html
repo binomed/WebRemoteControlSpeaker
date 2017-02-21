@@ -60,6 +60,7 @@
 				switch (type) {
 					case 'update-time':
 						this.totalTime = data.totalTime;
+						this.set('modelTimer.totalTime', this.totalTime);
 						break;
 					case 'start-stop-timer':
 						this.toggleTimer();
@@ -72,6 +73,7 @@
 						break;
 					case 'update-interval':
 						this.defaultInterval = data.interval;
+						this.set('modelTimer.defaultInterval', this.defaultInterval);
 						break;
 					case 'control-press':
 						this.sendMessage({
@@ -108,7 +110,7 @@
 
 			_modelUpdate(type, data) {
 				if (!data.readOnly) {
-					this[data.key] = data.value;
+					this.set(data.key, data.value);
 				}
 			}
 

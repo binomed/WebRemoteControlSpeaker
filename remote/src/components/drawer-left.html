@@ -103,7 +103,9 @@
 							value: 60,
 							observer: '_updateInterval'
 						},
-					}
+						modelTimer: Object
+					},
+					observers: ['_updateInterval(modelTimer.defaultInterval)']
 				};
 			}
 
@@ -140,6 +142,7 @@
 			}
 
 			_updateInterval(newInterval, oldInterval) {
+				console.log('_updateInteval', newInterval);
 				this.dispatchAction('update-interval', { interval: newInterval });
 			}
 

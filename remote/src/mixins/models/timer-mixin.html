@@ -1,6 +1,17 @@
 <link rel="import" href="../helpers/event-bus-mixin.html">
 
 <script>
+	class ModelTimer {
+		constructor() {
+			this.runningTimer = false;
+			this.defaultInterval = 60;
+			this.limitAlert = 1;
+			this.totalTime = 0;
+			this.now = null;
+
+		}
+	}
+
 	const TimerModelMixin = subclass => class extends EventBusMixin(subclass) {
 
 		static get config() {
@@ -26,6 +37,12 @@
 					now: { // The current time
 						type: Number,
 						value: null
+					},
+					modelTimer: {
+						type: Object,
+						value: () => {
+							return new ModelTimer();
+						}
 					}
 
 				}
@@ -35,11 +52,13 @@
 		connectedCallback() {
 			super.connectedCallback();
 			this.now = Date.now();
+			this.set('modelTimer.now', this.now);
 
 		}
 
 		toggleTimer() {
 			this.runningTimer = !this.runningTimer;
+			this.set('modelTimer.runningTimer', this.runningTimer);
 			this.broadcastAction('update-model', {
 				key: 'runningTimer',
 				value: this.runningTimer,
@@ -47,6 +66,7 @@
 			});
 			if (!this.runningTimer) {
 				this.totalTime += (Date.now() - this.now);
+				this.set('modelTimer.totalTime', this.totalTime);
 				this.broadcastAction('update-model', {
 					key: 'totalTime',
 					value: this.totalTime,
@@ -54,6 +74,7 @@
 				});
 			} else {
 				this.now = Date.now();
+				this.set('modelTimer.now', this.now);
 				this.broadcastAction('update-model', {
 					key: 'now',
 					value: this.now,
@@ -64,8 +85,11 @@
 
 		resetTimer() {
 			this.runningTimer = false;
+			this.set('modelTimer.runningTimer', this.runningTimer);
 			this.totalTime = 0;
+			this.set('modelTimer.totalTime', this.totalTime);
 			this.now = Date.now();
+			this.set('modelTimer.now', this.now);
 			this.broadcastAction('update-model', [
 				{
 					key: 'runningTimer',

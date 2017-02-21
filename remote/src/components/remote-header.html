@@ -110,7 +110,7 @@
 			<div class="elapsed" ng-show="showTime">
 				<div class="timeEllapesd">
 					<span  id="hours" ng-class="classHours" hidden$="[[!showHours]]">[[hours]] : </span><span id="minutes" class="classMinutes">[[minutes]]</span><span
-						id="seconds"> : [[seconds]]</span><span class="totalTime">&nbsp;/&nbsp;[[defaultInterval]]:00</span>
+						id="seconds"> : [[seconds]]</span><span class="totalTime">&nbsp;/&nbsp;[[defaultInterval]]:00 /[[modelTimer.defaultInterval]] / [[modelTimer.totalTime]]</span>
 				</div>
 			</div>
 		</div>
@@ -147,11 +147,23 @@
 						defaultInterval: { // Time in minute of the conference
 							type: Number,
 							value: 60
+						},
+						modelTimer: {
+							type: Object
 						}
 
-					}
+					},
+					observers: ['updateChange(modelTimer.defaultInterval)']
 
 				};
+			}
+
+			_update(test) {
+				console.log('_update', test);
+			}
+
+			updateChange(test) {
+				console.log('updateChange', test);
 			}
 
 			constructor() {

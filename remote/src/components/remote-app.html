@@ -95,7 +95,8 @@
 			running-timer="[[runningTimer]]"
 			total-time="[[totalTime]]"
 			default-interval="[[defaultInterval]]"
-			now="[[now]]"></remote-header>
+			now="[[now]]"
+			model-timer="[[modelTimer]]"></remote-header>
 	<speaker-notes
 			id="speakerNotes"
 			on-dispatch-action="reduceAction"
@@ -112,6 +113,7 @@
 </div>
 
 <drawer-left id="drawerLeft"
+	model-timer="[[modelTimer]]"
 	on-dispatch-action="reduceAction"
 	default-interval="[[defaultInterval]]"></drawer-left>
 <drawer-right id="drawerRight"
