@@ -1,39 +1,39 @@
 'use strict';
 
-export class GenericEngine{
+export class GenericEngine {
 
-	constructor(){
+	constructor() {
 
 		// Listen from instruction comming from remote
 		window.addEventListener("message", this.receiveMessageFromRemote.bind(this), false);
 	}
 
-	receiveMessageFromRemote(message){
-		if( message.data.charAt( 0 ) === '{' && message.data.charAt( message.data.length - 1 ) === '}' ) {
-			message = JSON.parse( message.data );
+	receiveMessageFromRemote(message) {
+		if (message.data.charAt(0) === '{' && message.data.charAt(message.data.length - 1) === '}') {
+			message = JSON.parse(message.data);
 			this.forwardMessageFromRemote(message);
 		}
 	}
 
-	forwardMessageFromRemote(message){}
+	forwardMessageFromRemote(message) {}
 
-	goToSlide(params){
-
-	}
-
-	initEngineListener(callBack){
+	goToSlide(params) {
 
 	}
 
-	countNbSlides(){
+	initEngineListener(callBack) {
 
 	}
 
-	getPosition(){
+	countNbSlides() {
 
 	}
 
-	getSlideNumber(){
+	getPosition() {
+
+	}
+
+	getSlideNumber() {
 
 	}
 

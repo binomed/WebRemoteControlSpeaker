@@ -62,81 +62,79 @@
 
 </template>
 
-<script>
+	<script>
+		// Extend Polymer.Element base class
+		class ScreenPreview extends DispatcherMixin(Polymer.Element) {
 
-	// Extend Polymer.Element base class
-	class ScreenPreview extends DispatcherMixin(Polymer.Element) {
+			static get is() { return 'screen-preview' }
 
-		static get is() { return 'screen-preview' }
-
-		static get config() {
-			// properties, observers meta data
-			return {
-				properties: {
-					nextSlideNumber : { // next slide number on preview
-						type: Number,
-						value: 1
-					},
-					nbSlides : { // Total Number of slides
-						type: Number,
-						value: 0
-					},
-					localUrl : String, // var in order to see if the presentation has already be loaded
-					engine: Object
-				}
-			};
-		}
-
-		constructor(){
-			super();
-			this.iFrameReady = false;
-		}
-
-
-		connectedCallback() {
-			super.connectedCallback();			
-			if (this.iFrameReady){
-				this.engine.initEngine(this.$.iframePrez, this.dispatchAction.bind(this));
-			}
-		}
-
-		_loadIFrame(){
-			if (this.engine){
-				this.engine.initEngine(this.$.iframePrez, this.dispatchAction.bind(this));
-			}else{
-				this.iFrameReady = true;
-			}
-		}
-
-		_dispatchAction(event){
-			switch(event.detail.type){
-				case 'control-press':
-					switch(event.detail.data.control){
-						case 'up':
-							this.engine.up();
-						break;
-						case 'left':
-							this.engine.left();
-						break;
-						case 'down':
-							this.engine.down();
-						break;
-						case 'right':
-							this.engine.right();
-						break;
-						case 'show':
-							this.engine.next();
-							this.dispatchAction(event.detail.type, event.detail.data);
-						break;
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {
+						nextSlideNumber: { // next slide number on preview
+							type: Number,
+							value: 1
+						},
+						nbSlides: { // Total Number of slides
+							type: Number,
+							value: 0
+						},
+						localUrl: String, // var in order to see if the presentation has already be loaded
+						engine: Object
 					}
-				break;
+				};
 			}
+
+			constructor() {
+				super();
+				this.iFrameReady = false;
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
+				if (this.iFrameReady) {
+					this.engine.initEngine(this.$.iframePrez, this.dispatchAction.bind(this));
+				}
+			}
+
+			_loadIFrame() {
+				if (this.engine) {
+					this.engine.initEngine(this.$.iframePrez, this.dispatchAction.bind(this));
+				} else {
+					this.iFrameReady = true;
+				}
+			}
+
+			_dispatchAction(event) {
+				switch (event.detail.type) {
+					case 'control-press':
+						switch (event.detail.data.control) {
+							case 'up':
+								this.engine.up();
+								break;
+							case 'left':
+								this.engine.left();
+								break;
+							case 'down':
+								this.engine.down();
+								break;
+							case 'right':
+								this.engine.right();
+								break;
+							case 'show':
+								this.engine.next();
+								this.dispatchAction(event.detail.type, event.detail.data);
+								break;
+						}
+						break;
+				}
+			}
+
 		}
 
-	}
+		// Register custom element definition using standard platform API
+		customElements.define(ScreenPreview.is, ScreenPreview);
 
-	// Register custom element definition using standard platform API
-	customElements.define(ScreenPreview.is, ScreenPreview);
-
-</script>
+	</script>
 </dom-module>

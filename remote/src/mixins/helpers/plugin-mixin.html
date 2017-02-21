@@ -1,10 +1,9 @@
 <link rel="import" href="dispatcher-mixin.html">
 
 <script>
-
 	const PluginMixin = subclass => class extends DispatcherMixin(subclass) {
 
-		constructor(){
+		constructor() {
 			super();
 			this.currentPlugin = null;
 			this.interactionAreaRect = null;
@@ -14,19 +13,19 @@
 			// properties, observers meta data
 			return {
 				properties: {
-					activPlugin:{
+					activPlugin: {
 						type: Object,
-						value: ()=>{return null;},
+						value: () => { return null; },
 						observer: '_changeActivPlugin'
 					},
-					descArea:{
-						type:Object,
-						value: ()=>{return null;},
+					descArea: {
+						type: Object,
+						value: () => { return null; },
 						observer: '_updateAreas'
 					},
-					interactionArea:{
-						type:Object,
-						value: ()=>{return null;},
+					interactionArea: {
+						type: Object,
+						value: () => { return null; },
 						observer: '_updateAreas'
 					}
 				}
@@ -38,40 +37,40 @@
 			this.currentPlugin = this.getPlugin();
 		}
 
-		registerPlugin(){
-			if (this.currentPlugin){
+		registerPlugin() {
+			if (this.currentPlugin) {
 				this.currentPlugin.activ = true;
-				this.dispatchAction('register-plugin' ,this.currentPlugin);
+				this.dispatchAction('register-plugin', this.currentPlugin);
 			}
 		}
 
-		_updateAreas(area){
-			if (this.descArea && this.$.descArea){
+		_updateAreas(area) {
+			if (this.descArea && this.$.descArea) {
 				this._applyStyle(this.$.descArea, this.descArea);
 			}
 
-			if (this.interactionArea && this.$.interactionArea){
+			if (this.interactionArea && this.$.interactionArea) {
 				this.interactionAreaRect = this._applyStyle(this.$.interactionArea, this.interactionArea);
 			}
 		}
 
-		_applyStyle(element, srcElement){
+		_applyStyle(element, srcElement) {
 			const srcElementRect = srcElement.getBoundingClientRect();
 			const srcElementStyle = window.getComputedStyle(srcElement);
 			element.style['margin-top'] = srcElementStyle.marginTop;
 			element.style['margin-bottom'] = srcElementStyle.marginBottom;
-			element.style.width = (srcElementRect.right - srcElementRect.left)+'px';
+			element.style.width = (srcElementRect.right - srcElementRect.left) + 'px';
 			element.style.height = `calc(${srcElementRect.bottom}px - ${srcElementRect.top}px)`;
 			element.style.top = `calc(${srcElementRect.top}px - ${srcElementStyle.marginTop})`;
-			element.style.left = srcElementRect.left+'px';
+			element.style.left = srcElementRect.left + 'px';
 			return srcElementRect;
 		}
 
-		_changeActivPlugin(plugin){
-			if (this.$.parent){
+		_changeActivPlugin(plugin) {
+			if (this.$.parent) {
 				this.$.parent.style.display = 'none';
-				if (plugin){
-					if (this.currentPlugin && this.currentPlugin.id === plugin.id){
+				if (plugin) {
+					if (this.currentPlugin && this.currentPlugin.id === plugin.id) {
 						this.$.parent.style.display = '';
 						this._updateAreas();
 					}
@@ -79,11 +78,11 @@
 			}
 		}
 
-		desactivPlugin(){
-			this.dispatchAction('desactiv-plugin' ,{});
+		desactivPlugin() {
+			this.dispatchAction('desactiv-plugin', {});
 		}
 
-		getPlugin(){
+		getPlugin() {
 			return null;
 		}
 

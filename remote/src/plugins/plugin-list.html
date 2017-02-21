@@ -40,57 +40,55 @@
 
 </template>
 
-<script>
+	<script>
+		// Extend Polymer.Element base class
+		class PluginList extends DispatcherMixin(Polymer.Element) {
 
-	// Extend Polymer.Element base class
-	class PluginList extends DispatcherMixin(Polymer.Element) {
+			static get is() { return 'plugin-list' }
 
-		static get is() { return 'plugin-list' }
-
-		static get config() {
-			// properties, observers meta data
-			return {
-				properties: {
-					activPlugin: Object,
-					descArea: Object,
-					interactionArea: Object
-				}
-			};
-		}
-
-		constructor(){
-			super();
-		}
-
-
-		connectedCallback() {
-			super.connectedCallback();
-		}
-
-		activatePlugin(plugin){
-			this.$[plugin.id].style.display = '';
-		}
-
-		desactivPlugin(plugin){
-			this.$[plugin.id].style.display = 'none';
-		}
-
-		pluginMessage(message){
-			switch(message.action){
-				case 'activate':
-					this.$[message.id].registerPlugin();
-				break;
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {
+						activPlugin: Object,
+						descArea: Object,
+						interactionArea: Object
+					}
+				};
 			}
+
+			constructor() {
+				super();
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
+			}
+
+			activatePlugin(plugin) {
+				this.$[plugin.id].style.display = '';
+			}
+
+			desactivPlugin(plugin) {
+				this.$[plugin.id].style.display = 'none';
+			}
+
+			pluginMessage(message) {
+				switch (message.action) {
+					case 'activate':
+						this.$[message.id].registerPlugin();
+						break;
+				}
+			}
+
+			_dispatchAction(event) {
+				this.dispatchAction(event.detail.type, event.detail.data);
+			}
+
 		}
 
-		_dispatchAction(event){
-			this.dispatchAction(event.detail.type, event.detail.data);
-		}
+		// Register custom element definition using standard platform API
+		customElements.define(PluginList.is, PluginList);
 
-	}
-
-	// Register custom element definition using standard platform API
-	customElements.define(PluginList.is, PluginList);
-
-</script>
+	</script>
 </dom-module>

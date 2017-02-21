@@ -1,14 +1,14 @@
 /*
-* Remote Pointer plugin
-*
-* Will show a pointer on the presentation corresponding to move of finger on mobile
-*/
-(function(){
+ * Remote Pointer plugin
+ *
+ * Will show a pointer on the presentation corresponding to move of finger on mobile
+ */
+(function() {
 
 	var pointerDiv = null;
 
-	function callBack(positionObject){
-		if (!pointerDiv){
+	function callBack(positionObject) {
+		if (!pointerDiv) {
 			pointerDiv = document.createElement('DIV');
 			pointerDiv.style.position = 'absolute';
 			pointerDiv.style.width = '10px';
@@ -19,12 +19,12 @@
 			document.body.appendChild(pointerDiv);
 		}
 
-		if (positionObject.hide){
+		if (positionObject.hide) {
 			pointerDiv.style.display = 'none';
-		}else{
+		} else {
 			pointerDiv.style.display = '';
-			pointerDiv.style.top = positionObject.y+'%';
-			pointerDiv.style.left = positionObject.x+'%';
+			pointerDiv.style.top = positionObject.y + '%';
+			pointerDiv.style.left = positionObject.x + '%';
 			pointerDiv.style['background-color'] = positionObject.color;
 		}
 
@@ -32,7 +32,6 @@
 
 	WebRemoteControl.registerPlugin('rp', callBack);
 
-	return{};
+	return {};
 
 })();
-

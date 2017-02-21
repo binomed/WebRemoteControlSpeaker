@@ -1,17 +1,16 @@
 <link rel="import" href="../helpers/plugin-mixin.html">
 
 <script>
-
 	const PluginsModelMixin = subclass => class extends PluginMixin(subclass) {
 
 		static get config() {
 			// properties, observers meta data
 			return {
 				properties: {
-					currentPluginActiv : String, // The id of the currentPlugin
-					pluginList : { // List of plugin of application
+					currentPluginActiv: String, // The id of the currentPlugin
+					pluginList: { // List of plugin of application
 						type: Array,
-						value: () => {return [];}
+						value: () => { return []; }
 					}
 				}
 			};
@@ -23,7 +22,7 @@
 		}
 
 		registerPlugin(plugin) {
-			this.push('pluginList',plugin);
+			this.push('pluginList', plugin);
 		}
 
 	};

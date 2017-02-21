@@ -129,90 +129,88 @@
 
 </template>
 
-<script>
+	<script>
+		// Extend Polymer.Element base class
+		class RemotePointerPlugin extends PluginMixin(Polymer.Element) {
 
-	// Extend Polymer.Element base class
-	class RemotePointerPlugin extends PluginMixin(Polymer.Element) {
+			static get is() { return 'remote-pointer-plugin' }
 
-		static get is() { return 'remote-pointer-plugin' }
+			constructor() {
+				super();
+				this.currentColor = 'red';
+			}
 
-		constructor(){
-			super();
-			this.currentColor = 'red';
-		}
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {
 
-		static get config() {
-			// properties, observers meta data
-			return {
-				properties: {
+					}
+				};
+			}
 
+			connectedCallback() {
+				super.connectedCallback();
+				this._processColor('red');
+			}
+
+			getPlugin() {
+				return {
+					name: 'remote pointer',
+					icon: 'icons:create',
+					id: 'rp'
 				}
-			};
-		}
-
-		connectedCallback() {
-			super.connectedCallback();
-			this._processColor('red');
-		}
-
-		getPlugin(){
-			return {
-				name : 'remote pointer',
-				icon : 'icons:create',
-				id : 'rp'
 			}
-		}
 
+			_chooseColor(event) {
+				this._processColor(event.currentTarget.id);
+			}
 
-		_chooseColor(event){
-			this._processColor(event.currentTarget.id);
-		}
+			_processColor(color) {
+				this.currentColor = color;
 
-		_processColor(color) {
-			this.currentColor = color;
+				this.$.red.classList.remove('activ');
+				this.$.white.classList.remove('activ');
+				this.$.black.classList.remove('activ');
+				this.$.blue.classList.remove('activ');
+				this.$[color].classList.add('activ');
+				this.$.interactionArea.style.setProperty('border-color', color);
 
-			this.$.red.classList.remove('activ');
-			this.$.white.classList.remove('activ');
-			this.$.black.classList.remove('activ');
-			this.$.blue.classList.remove('activ');
-			this.$[color].classList.add('activ');
-			this.$.interactionArea.style.setProperty('border-color', color);
+			}
 
-		}
+			_touchMove(event) {
+				if (event.touches && event.touches.length > 0) {
+					const touch = event.touches[0];
+					const x = touch.clientX,
+						y = touch.clientY;
 
-		_touchMove(event){
-			if (event.touches && event.touches.length > 0){
-				const touch = event.touches[0];
-				const x = touch.clientX,
-					y = touch.clientY;
+					const percentX = ((x - this.interactionAreaRect.left) / this.interactionAreaRect.width) * 100;
+					const percentY = ((y - this.interactionAreaRect.top) / this.interactionAreaRect.height) * 100;
+					this.dispatchAction('plugin-communication', {
+						plugin: 'rp',
+						data: {
+							hide: false,
+							x: Math.round(percentX),
+							y: Math.round(percentY),
+							color: this.currentColor
+						}
+					});
+				}
+			}
 
-				const percentX = ((x-this.interactionAreaRect.left) / this.interactionAreaRect.width) * 100;
-				const percentY = ((y-this.interactionAreaRect.top) / this.interactionAreaRect.height) * 100;
-				this.dispatchAction('plugin-communication',{
+			_touchEnd(event) {
+				this.dispatchAction('plugin-communication', {
 					plugin: 'rp',
-					data:{
-						hide : false,
-						x : Math.round(percentX),
-						y : Math.round(percentY),
-						color : this.currentColor
+					data: {
+						hide: true
 					}
 				});
 			}
+
 		}
 
-		_touchEnd(event){
-			this.dispatchAction('plugin-communication',{
-					plugin: 'rp',
-					data:{
-						hide : true
-					}
-				});
-		}
+		// Register custom element definition using standard platform API
+		customElements.define(RemotePointerPlugin.is, RemotePointerPlugin);
 
-	}
-
-	// Register custom element definition using standard platform API
-	customElements.define(RemotePointerPlugin.is, RemotePointerPlugin);
-
-</script>
+	</script>
 </dom-module>

@@ -76,54 +76,52 @@
 
 </template>
 
-<script>
+	<script>
+		// Extend Polymer.Element base class
+		class SpeakerNotes extends DispatcherMixin(Polymer.Element) {
 
-	// Extend Polymer.Element base class
-	class SpeakerNotes extends DispatcherMixin(Polymer.Element) {
+			static get is() { return 'speaker-notes' }
 
-		static get is() { return 'speaker-notes' }
-
-		static get config() {
-			// properties, observers meta data
-			return {
-				properties: {
-					expand:{
-						type: Object
-					},
-					currentSlideNumber : { // current slide number on client side
-						type: Number,
-						value: 1
-					},
-					nbSlides : { // Total Number of slides
-						type: Number,
-						value: 0
-					},
-					contentNotes : { // The speaker notes of the current slide
-						type: String,
-						value: ''
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {
+						expand: {
+							type: Object
+						},
+						currentSlideNumber: { // current slide number on client side
+							type: Number,
+							value: 1
+						},
+						nbSlides: { // Total Number of slides
+							type: Number,
+							value: 0
+						},
+						contentNotes: { // The speaker notes of the current slide
+							type: String,
+							value: ''
+						}
 					}
-				}
-			};
-		}
-
-
-		connectedCallback() {
-			super.connectedCallback();
-		}
-
-		_expandNotes(){
-			this.expand = !this.expand;
-			if (this.expand){
-				this.$.contentNotes.classList.add('expand');
-			}else{
-				this.$.contentNotes.classList.remove('expand');
+				};
 			}
-			this.dispatchAction('expand-notes', {expand:this.expand});
+
+			connectedCallback() {
+				super.connectedCallback();
+			}
+
+			_expandNotes() {
+				this.expand = !this.expand;
+				if (this.expand) {
+					this.$.contentNotes.classList.add('expand');
+				} else {
+					this.$.contentNotes.classList.remove('expand');
+				}
+				this.dispatchAction('expand-notes', { expand: this.expand });
+			}
 		}
-	}
 
-	// Register custom element definition using standard platform API
-	customElements.define(SpeakerNotes.is, SpeakerNotes);
+		// Register custom element definition using standard platform API
+		customElements.define(SpeakerNotes.is, SpeakerNotes);
 
-</script>
+	</script>
 </dom-module>

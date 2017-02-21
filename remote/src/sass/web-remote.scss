@@ -2,7 +2,6 @@
 @import "vars";
 @import "fonts";
 
-
 /***
  *       _____ ____  __  __ __  __  ____  _   _        _____  _____   ____  _____  ______ _____ _______ _____ ______  _____
  *      / ____/ __ \|  \/  |  \/  |/ __ \| \ | |      |  __ \|  __ \ / __ \|  __ \|  ____|  __ \__   __|_   _|  ____|/ ____|
@@ -13,32 +12,37 @@
  *
  *
  */
-body, html {
-	height:100%;
-	background-color:var(--bg-color);
-	color : var(--font-color);
+
+body,
+html {
+	height: 100%;
+	background-color: var(--bg-color);
+	color: var(--font-color);
 	margin: 0;
 	font-family: 'Roboto', 'Noto', sans-serif;
 }
 
-@mixin fullScreenConf{
+@mixin fullScreenConf {
 	background-color: var(--bg-color);
 	height: 100%;
 	width: 100%;
 }
 
-#main-content:-webkit-full-screen{
+
+#main-content:-webkit-full-screen {
 	@include fullScreenConf;
 }
-#main-content:fullscreen{
+
+#main-content:fullscreen {
 	@include fullScreenConf;
 }
+
 #main-content:-moz-full-screen {
 	@include fullScreenConf;
 }
 
-remote-app{
-	width:100%;
-	height: 100%;
 
+remote-app {
+	width: 100%;
+	height: 100%;
 }

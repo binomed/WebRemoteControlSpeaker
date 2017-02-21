@@ -49,67 +49,65 @@
 			</paper-item>
           	</template>
 
-			<paper-item hidden$="[[!noPlugins]]">
-				<iron-icon icon="social:mood-bad" item-icon></iron-icon>
-				<span>No plugin add</span>
-			</paper-item>
-		</paper-listbox>
+	<paper-item hidden$="[[!noPlugins]]">
+		<iron-icon icon="social:mood-bad" item-icon></iron-icon>
+		<span>No plugin add</span>
+	</paper-item>
+	</paper-listbox>
 
 	</div>
-</app-drawer>
+	</app-drawer>
 
 
-</template>
+	</template>
 
-<script>
+	<script>
+		// Extend Polymer.Element base class
+		class DrawerRight extends DispatcherMixin(Polymer.Element) {
 
-	// Extend Polymer.Element base class
-	class DrawerRight extends DispatcherMixin(Polymer.Element) {
+			static get is() { return 'drawer-right' }
 
-		static get is() { return 'drawer-right' }
-
-		static get config() {
-			// properties, observers meta data
-			return {
-				properties: {
-					pluginList : { // List of plugin of application
-						type: Array,
-						observer: '_updatePluginList'
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {
+						pluginList: { // List of plugin of application
+							type: Array,
+							observer: '_updatePluginList'
+						}
 					}
-				}
-			};
+				};
+			}
+
+			constructor() {
+				super();
+				this.filterPluginList = [];
+				this.noPlugins = true;
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
+
+			}
+
+			toggleDrawer(event) {
+				this.$.drawerRight.toggle();
+			}
+
+			_updatePluginList(event) {
+				this.filterPluginList = this.pluginList.filter((plugin) => plugin.activ);
+				this.noPlugins = this.filterPluginList.length === 0;
+			}
+
+			_puglinClicked(event) {
+				this.dispatchAction('activ-plugin', this.filterPluginList.find((plugin) => plugin.id === event.currentTarget.id));
+				this.$.drawerRight.toggle();
+			}
+
 		}
 
-		constructor(){
-			super();
-			this.filterPluginList = [];
-			this.noPlugins = true;
-		}
+		// Register custom element definition using standard platform API
+		customElements.define(DrawerRight.is, DrawerRight);
 
-
-		connectedCallback() {
-			super.connectedCallback();
-
-		}
-
-		toggleDrawer(event) {
-			this.$.drawerRight.toggle();
-		}
-
-		_updatePluginList(event){
-			this.filterPluginList = this.pluginList.filter((plugin) => plugin.activ);
-			this.noPlugins = this.filterPluginList.length === 0;
-		}
-
-		_puglinClicked(event){
-			this.dispatchAction('activ-plugin',this.filterPluginList.find((plugin)=>plugin.id === event.currentTarget.id));
-			this.$.drawerRight.toggle();
-		}
-
-	}
-
-	// Register custom element definition using standard platform API
-	customElements.define(DrawerRight.is, DrawerRight);
-
-</script>
+	</script>
 </dom-module>

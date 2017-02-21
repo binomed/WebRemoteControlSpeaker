@@ -3,16 +3,15 @@
 <link rel="import" href="../helpers/dispatcher-mixin.html">
 
 <script>
-
 	const EngineMixin = subclass => class extends EventBusMixin(subclass) {
 
 		static get config() {
 			// properties, observers meta data
 			return {
 				properties: {
-					engine : { // Configuration corresponding to server
+					engine: { // Configuration corresponding to server
 						type: Object,
-						value: () => {return new GenericEngine();}
+						value: () => { return new GenericEngine(); }
 					}
 				}
 			};
@@ -20,14 +19,13 @@
 
 		connectedCallback() {
 			super.connectedCallback();
-						
+
 		}
 
-        initEngine(iframe, callback){
-            this.engine.initEngine(iframe, callback);
-        }
+		initEngine(iframe, callback) {
+			this.engine.initEngine(iframe, callback);
+		}
 
-		
 	};
 
 </script>

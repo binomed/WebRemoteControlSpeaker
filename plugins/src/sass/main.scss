@@ -1,16 +1,21 @@
 @import "fonts";
 
-$width : 600px;
-$height : 600px;
+$width: 600px;
+$height: 600px;
 
-$bg-color : #E0DAC7;
-$bg-color-header : rgb(87,87,87);/*#878787;*/
-$color : #939183;
+$bg-color: #E0DAC7;
+$bg-color-header: rgb(87, 87, 87);
+
+/*#878787;*/
+
+$color: #939183;
+
 /*$color : #939183;*/
-$percent-top : 200px;
-$percent-bottom : $height - $percent-top;
 
-#sws-show-qr-code{
+$percent-top: 200px;
+$percent-bottom: $height - $percent-top;
+
+#sws-show-qr-code {
 	font-family: 'open_sansregular';
 	position: absolute;
 	z-index: 200;
@@ -20,49 +25,53 @@ $percent-bottom : $height - $percent-top;
 	height: $height;
 	margin-top: -($height / 2);
 	margin-left: -($width / 2);
-	color : $color;
+	color: $color;
 	background-color: $bg-color;
 	box-shadow: 5px 5px 10px rgba(black, 0.75);
 	text-align: center;
 
 
-	#listIp{
+	#listIp {
 		text-align: center;
 	}
 }
 
-#sws-show-qr-header, #sws-show-qr-bottom{
+
+#sws-show-qr-header,
+#sws-show-qr-bottom {
 	position: absolute;
 	padding: 25px 20px;
 	width: calc(100% - 40px);
 	width: -webkit-calc(100% - 40px);
 }
 
-#sws-show-qr-header{
+
+#sws-show-qr-header {
 	top: 0;
 	height: calc(#{$percent-top} - 40px);
 	height: -webkit-calc(#{$percent-top} - 40px);
 	background-color: $bg-color-header;
 	color: white;
 
-	select, button{
+	select,
+	button {
 		font-size: 20px;
 	}
 
-	p{
+	p {
 		font-size: 17px;
 		color: $color;
 		margin-bottom: 30px;
 	}
 
-	.title{
+	.title {
 		font-family: 'open_sanssemibold';
 		font-size: 30px;
 		width: 100%;
-		text-transform: uppercase;	
+		text-transform: uppercase;
 	}
 
-	.close{
+	.close {
 		position: absolute;
 		font-size: 12px;
 		text-transform: uppercase;
@@ -71,27 +80,29 @@ $percent-bottom : $height - $percent-top;
 	}
 }
 
-#sws-show-qr-bottom{
+
+#sws-show-qr-bottom {
 	top: $percent-top;
 	height: calc(#{$percent-bottom} - 40px);
 	height: -webkit-calc(#{$percent-bottom} - 40px);
 	text-align: center;
 
-	h1{
+	h1 {
 		font-size: 1.6em;
 		text-transform: uppercase;
 	}
 
-	canvas{
+	canvas {
 		border: thin dashed $color;
 	}
 }
 
 
-#qrCode{
+
+#qrCode {
 	margin: 0px 50px 10px;
 
-	img{
+	img {
 		margin: auto;
 	}
-} 
+}

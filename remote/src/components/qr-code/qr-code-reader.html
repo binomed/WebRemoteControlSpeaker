@@ -55,64 +55,60 @@
 
 </template>
 
-<script>
+	<script>
+		// Extend Polymer.Element base class
+		class QrCodeReader extends DispatcherMixin(Polymer.Element) {
 
-	// Extend Polymer.Element base class
-	class QrCodeReader extends DispatcherMixin(Polymer.Element) {
+			static get is() { return 'qr-code-reader' }
 
-		static get is() { return 'qr-code-reader' }
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {
 
-		static get config() {
-			// properties, observers meta data
-			return {
-				properties: {
-
-				}
-			};
-		}
-
-		constructor(){
-			super();
-			this.reader = new QRReader();
-		}
-
-
-		connectedCallback() {
-			super.connectedCallback();
-			this.reader.init(this.$.video);
-		}
-
-		activeQrScan(){
-			this.reader.startCapture();
-		}
-
-		desactivQrScan(){
-			this.reader.stopCapture();
-		}
-
-		_requestScan(){
-			this.reader.scan(this._manageScanResult.bind(this));
-		}
-
-		_manageScanResult(message){
-			if( message.charAt( 0 ) === '{' && message.charAt( message.length - 1 ) === '}' ) {
-				message = JSON.parse( message );
-				if (message.port){
-					this.dispatchAction('update-model',{
-							key: 'conf',
-							value :  message
-					});
-				}
+					}
+				};
 			}
-			this.dispatchAction('scan-qr-code-finish',{});
+
+			constructor() {
+				super();
+				this.reader = new QRReader();
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
+				this.reader.init(this.$.video);
+			}
+
+			activeQrScan() {
+				this.reader.startCapture();
+			}
+
+			desactivQrScan() {
+				this.reader.stopCapture();
+			}
+
+			_requestScan() {
+				this.reader.scan(this._manageScanResult.bind(this));
+			}
+
+			_manageScanResult(message) {
+				if (message.charAt(0) === '{' && message.charAt(message.length - 1) === '}') {
+					message = JSON.parse(message);
+					if (message.port) {
+						this.dispatchAction('update-model', {
+							key: 'conf',
+							value: message
+						});
+					}
+				}
+				this.dispatchAction('scan-qr-code-finish', {});
+			}
+
 		}
 
+		// Register custom element definition using standard platform API
+		customElements.define(QrCodeReader.is, QrCodeReader);
 
-
-	}
-
-	// Register custom element definition using standard platform API
-	customElements.define(QrCodeReader.is, QrCodeReader);
-
-</script>
+	</script>
 </dom-module>

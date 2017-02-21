@@ -152,119 +152,115 @@
 
 </template>
 
-<script>
+	<script>
+		// Extend Polymer.Element base class
+		class RemoteApp extends AppAgregateMixin(Polymer.Element) {
 
-	// Extend Polymer.Element base class
-	class RemoteApp extends AppAgregateMixin(Polymer.Element) {
+			static get is() { return 'remote-app' }
 
-		static get is() { return 'remote-app' }
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {}
+				};
+			}
 
-		static get config() {
-			// properties, observers meta data
-			return {
-				properties: {
-				}
-			};
-		}
+			constructor() {
+				super();
+				this.descPluginArea = null;
+				this.interactionPluginArea = null;
+			}
 
-		constructor(){
-			super();
-			this.descPluginArea = null;
-			this.interactionPluginArea = null;
-		}
+			connectedCallback() {
+				super.connectedCallback();
+				this._manageConfVisibility();
+				this.descPluginArea = this.$.speakerNotes;
+				this.interactionPluginArea = this.$.screenPreview;
+			}
 
+			_hidePlugin(activPlugin, pluginId) {
+				return !activPlugin || activPlugin.id != name;
+			}
 
-		connectedCallback() {
-			super.connectedCallback();
-			this._manageConfVisibility();
-			this.descPluginArea = this.$.speakerNotes;
-			this.interactionPluginArea = this.$.screenPreview;
-		}
-
-		_hidePlugin(activPlugin, pluginId){
-			return !activPlugin || activPlugin.id != name;
-		}
-
-		_dispatchUiAction(type,data){
-			switch(type){
-				case 'toggle-drawer':
-					this._toggleDrawer(data);
-				break;
-				case 'expand-notes':
-					this._expandNotes(data);
-				break;
-				case 'activ-plugin':
-					if (data){
-						this.$.pluginListComponent.style.display = '';
-						this.$.pluginListComponent.activatePlugin(data);
-					}
-				break;
-				case 'desactiv-plugin':
-					if (data){
-						this.$.pluginListComponent.style.display = 'none';
-						this.$.pluginListComponent.desactivatePlugin(data);
-					}
-				break;
-				case 'update-model':
-					if (data.key === 'conf'){
+			_dispatchUiAction(type, data) {
+				switch (type) {
+					case 'toggle-drawer':
+						this._toggleDrawer(data);
+						break;
+					case 'expand-notes':
+						this._expandNotes(data);
+						break;
+					case 'activ-plugin':
+						if (data) {
+							this.$.pluginListComponent.style.display = '';
+							this.$.pluginListComponent.activatePlugin(data);
+						}
+						break;
+					case 'desactiv-plugin':
+						if (data) {
+							this.$.pluginListComponent.style.display = 'none';
+							this.$.pluginListComponent.desactivatePlugin(data);
+						}
+						break;
+					case 'update-model':
+						if (data.key === 'conf') {
+							this._manageConfVisibility();
+						}
+						break;
+					case 'scan-qr-code-finish':
+						this.$.qrReader.desactivQrScan();
+						this.$.qrReader.style.display = 'none';
 						this._manageConfVisibility();
-					}
-					break;
-				case 'scan-qr-code-finish':
-					this.$.qrReader.desactivQrScan();
-					this.$.qrReader.style.display = 'none';
-					this._manageConfVisibility();
-					break;
+						break;
+				}
 			}
-		}
 
-		_manageConfVisibility(){
-			this.$.mask.style.display = this.isConfReady() ? 'none' : '';
-		}
-
-		_expandNotes(eventData){
-			if (eventData.expand){
-				this.$.contentRemote.classList.add('expand');
-			}else {
-				this.$.contentRemote.classList.remove('expand');
+			_manageConfVisibility() {
+				this.$.mask.style.display = this.isConfReady() ? 'none' : '';
 			}
-		}
 
-		_toggleDrawer(eventData) {
-			switch (eventData.direction) {
-				case 'left':
-					this.$.drawerLeft.toggleDrawer();
-					break;
-				case 'right':
-					this.$.drawerRight.toggleDrawer();
-					break;
+			_expandNotes(eventData) {
+				if (eventData.expand) {
+					this.$.contentRemote.classList.add('expand');
+				} else {
+					this.$.contentRemote.classList.remove('expand');
+				}
 			}
-		}
 
-		_requestScanQrCode(){
-			this.$.qrReader.style.display = '';
-			this.$.qrReader.activeQrScan();
-		}
-
-		/**
-		 * Socket Method Overides
-		 */
-		_presentationMessage(json){
-			// Broadcoast message
-			super._presentationMessage(json);
-			switch(json.type){
-				case 'plugin':
-					this.$.pluginListComponent.pluginMessage(json);
-				break;
+			_toggleDrawer(eventData) {
+				switch (eventData.direction) {
+					case 'left':
+						this.$.drawerLeft.toggleDrawer();
+						break;
+					case 'right':
+						this.$.drawerRight.toggleDrawer();
+						break;
+				}
 			}
-			console.log('presentationMessage', json);
+
+			_requestScanQrCode() {
+				this.$.qrReader.style.display = '';
+				this.$.qrReader.activeQrScan();
+			}
+
+			/**
+			 * Socket Method Overides
+			 */
+			_presentationMessage(json) {
+				// Broadcoast message
+				super._presentationMessage(json);
+				switch (json.type) {
+					case 'plugin':
+						this.$.pluginListComponent.pluginMessage(json);
+						break;
+				}
+				console.log('presentationMessage', json);
+			}
+
 		}
 
+		// Register custom element definition using standard platform API
+		customElements.define(RemoteApp.is, RemoteApp);
 
-	}
-
-	// Register custom element definition using standard platform API
-	customElements.define(RemoteApp.is, RemoteApp);
-
-</script>
+	</script>
 </dom-module>

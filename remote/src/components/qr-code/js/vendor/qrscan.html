@@ -1,5 +1,4 @@
 <script>
-
 	class QRReader {
 
 		constructor() {
@@ -11,7 +10,7 @@
 			this.constraints = null;
 		}
 
-		setCanvas(){
+		setCanvas() {
 			this.canvas = document.createElement("canvas");
 			this.ctx = this.canvas.getContext("2d");
 		}
@@ -26,7 +25,6 @@
 			this.webcam = webcam;
 			//this.webcam = document.querySelector("video");
 
-
 			this.setCanvas();
 			this.decoder = new Worker(baseurl + "decoder.min.js");
 
@@ -37,7 +35,6 @@
 					streaming = true;
 				}
 			}, false);
-
 
 			navigator.mediaDevices.enumerateDevices()
 				.then((devices) => {
@@ -58,8 +55,7 @@
 							audio: false
 						};
 
-					}
-					else if (device.length) {
+					} else if (device.length) {
 						this.constraints = {
 							video: {
 								mandatory: {
@@ -69,9 +65,8 @@
 							audio: false
 						};
 
-					}
-					else {
-						this.constraints = {video:true};
+					} else {
+						this.constraints = { video: true };
 					}
 				})
 				.catch((error) => {
@@ -82,12 +77,13 @@
 		}
 
 		showErrorMsg() {
-			document.querySelector('.custom-btn').style.display = "none"; //Hide scan button, if error
+			document.querySelector('.custom-btn')
+				.style.display = "none"; //Hide scan button, if error
 			// snackbar.show('Unable to open the camera, provide permission to access the camera', 5000);
 		}
 
 		stopCapture() {
-			if (this.webcam && this.webcam.srcObject){
+			if (this.webcam && this.webcam.srcObject) {
 				// TODO clean reset
 				//this.webcam.pause();
 				//this.webcam.srcObject.stop();
@@ -113,11 +109,10 @@
 			this.canvas.height = window.innerHeight;
 		}
 
-
 		scan(callback) {
 			this.active = true;
 			this.setCanvas();
-			this.decoder.onmessage = (event) => {this.onDecoderMessage(event,callback)};
+			this.decoder.onmessage = (event) => { this.onDecoderMessage(event, callback) };
 
 			// Start QR-decoder
 			this.newDecoderFrame();
@@ -133,7 +128,7 @@
 		}
 
 		newDecoderFrame() {
-			if (!this.active){
+			if (!this.active) {
 				return;
 			}
 			try {
@@ -145,9 +140,9 @@
 				if (imgData.data) {
 					this.decoder.postMessage(imgData);
 				}
-			} catch(e) {
+			} catch (e) {
 				// Try-Catch to circumvent Firefox Bug #879717
-				if (e.name == "NS_ERROR_NOT_AVAILABLE"){
+				if (e.name == "NS_ERROR_NOT_AVAILABLE") {
 					setTimeout(this.newDecoderFrame.bind(this), 0)
 				};
 			}

@@ -1,26 +1,25 @@
 <link rel="import" href="../helpers/event-bus-mixin.html">
 
 <script>
-
 	const TimerModelMixin = subclass => class extends EventBusMixin(subclass) {
 
 		static get config() {
 			// properties, observers meta data
 			return {
 				properties: {
-					runningTimer : { // True if the timer is running
+					runningTimer: { // True if the timer is running
 						type: Boolean,
 						value: false
 					},
-					defaultInterval : { // Time in minute of the conference
+					defaultInterval: { // Time in minute of the conference
 						type: Number,
 						value: 60
 					},
-					limitAlert : { // time before the end where we have to alert the speaker (if defaultInterval is upper limitAlert)
+					limitAlert: { // time before the end where we have to alert the speaker (if defaultInterval is upper limitAlert)
 						type: Number,
 						value: 1
 					},
-					totalTime : { // Total time ellapsed during the presentation
+					totalTime: { // Total time ellapsed during the presentation
 						type: Number,
 						value: 0
 					},
@@ -39,53 +38,52 @@
 
 		}
 
-		toggleTimer(){
+		toggleTimer() {
 			this.runningTimer = !this.runningTimer;
-			this.broadcastAction('update-model',{
-						key: 'runningTimer',
-						value :  this.runningTimer,
-						readOnly: true
-					});
-			if (!this.runningTimer){
-				this.totalTime += (Date.now() - this.now); 
-				this.broadcastAction('update-model',{
-							key: 'totalTime',
-							value :  this.totalTime,
-							readOnly: true
-						});
-			}else{
+			this.broadcastAction('update-model', {
+				key: 'runningTimer',
+				value: this.runningTimer,
+				readOnly: true
+			});
+			if (!this.runningTimer) {
+				this.totalTime += (Date.now() - this.now);
+				this.broadcastAction('update-model', {
+					key: 'totalTime',
+					value: this.totalTime,
+					readOnly: true
+				});
+			} else {
 				this.now = Date.now();
-				this.broadcastAction('update-model',{
-							key: 'now',
-							value :  this.now,
-							readOnly: true
-						});
+				this.broadcastAction('update-model', {
+					key: 'now',
+					value: this.now,
+					readOnly: true
+				});
 			}
 		}
 
-		resetTimer(){
+		resetTimer() {
 			this.runningTimer = false;
 			this.totalTime = 0;
 			this.now = Date.now();
-			this.broadcastAction('update-model',[
-					{
-						key: 'runningTimer',
-						value :  this.runningTimer,
-						readOnly: true
+			this.broadcastAction('update-model', [
+				{
+					key: 'runningTimer',
+					value: this.runningTimer,
+					readOnly: true
 					},
-					{
-						key: 'totalTime',
-						value :  this.totalTime,
-						readOnly: true
+				{
+					key: 'totalTime',
+					value: this.totalTime,
+					readOnly: true
 					},
-					{
-						key: 'now',
-						value :  this.now,
-						readOnly: true
+				{
+					key: 'now',
+					value: this.now,
+					readOnly: true
 					}
 					]);
 		}
-
 
 	};
 

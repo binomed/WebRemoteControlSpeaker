@@ -7,7 +7,7 @@
 
 
 <dom-module id="remote-header">
-  <template>
+	<template>
 
 	<!-- Styles MUST be inside template -->
 	<style>
@@ -121,138 +121,140 @@
 	</app-toolbar>
 </template>
 
-<script>
+	<script>
+		// Extend Polymer.Element base class
+		class RemoteHeader extends DispatcherMixin(Polymer.Element) {
 
-// Extend Polymer.Element base class
-class RemoteHeader extends DispatcherMixin(Polymer.Element) {
+			static get is() { return 'remote-header' }
 
-	static get is() { return 'remote-header' }
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {
+						runningTimer: {
+							type: Boolean,
+							value: false
+						},
+						now: { // The current time
+							type: Number,
+							value: 0
+						},
+						totalTime: { // Total time ellapsed during the presentation
+							type: Number,
+							value: 0
+						},
+						defaultInterval: { // Time in minute of the conference
+							type: Number,
+							value: 60
+						}
 
-	static get config() {
-		// properties, observers meta data
-		return {
-			properties: {
-				runningTimer: {
-					type: Boolean,
-					value: false
-				},
-				now: { // The current time
-					type: Number,
-					value: 0
-				},
-				totalTime : { // Total time ellapsed during the presentation
-					type: Number,
-					value: 0
-				},
-				defaultInterval : { // Time in minute of the conference
-					type: Number,
-					value: 60
+					}
+
+				};
+			}
+
+			constructor() {
+				super();
+				this.hours = '00';
+				this.minutes = '00';
+				this.seconds = '00';
+				this.showHours = false;
+				this.muteMinutes = true;
+				this.classMinutes = 'mute';
+				//this.fullTime = false;
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
+
+				setInterval(_ => {
+					if (this.runningTimer ||
+						(this.totalTime === 0 &&
+							(this.seconds != 0 ||
+								this.minutes != 0 ||
+								this.hours != 0
+							))) {
+						let diff = (Date.now() - this.now) + this.totalTime;
+						this._manageTimerState(diff);
+					}
+				}, 500);
+
+				/*this.querySelector('paper-icon-button').addEventListener('tap', function() {
+					this.dispatchEvent(new CustomEvent('menu-open'), {bubbles: true});
+				});*/
+			}
+
+			_manageTimerState(diff) {
+				const hoursDiff = Math.floor(diff / (60 * 60 * 1000));
+				const minutesDiff = Math.floor(diff / (60 * 1000));
+				const secondsDiff = Math.floor(diff % (60 * 1000) / 1000);
+
+				this.hours = new Intl.NumberFormat('fr', { minimumIntegerDigits: 2, useGrouping: false })
+					.format(hoursDiff);
+				this.minutes = new Intl.NumberFormat('fr', { minimumIntegerDigits: 2, useGrouping: false })
+					.format(minutesDiff);
+				this.seconds = new Intl.NumberFormat('fr', { minimumIntegerDigits: 2, useGrouping: false })
+					.format(secondsDiff);
+
+				if (hoursDiff > 0 && !this.showHours) {
+					this.showHours = true;
+				} else if (hoursDiff === 0 && this.showHours) {
+					this.showHours = false;
 				}
 
+				if (minutesDiff > 0 && this.muteMinutes) {
+					this.muteMinutes = false;
+					this.classMinutes = '';
+				} else if (minutesDiff === 0 && !this.muteMinutes) {
+					this.muteMinutes = false;
+					this.classMinutes = 'mute';
+				}
+
+				const diffPercent = (diff / (this.defaultInterval * 60 * 1000)) * 100;
+				this._renderProgress(diffPercent);
 			}
 
-		};
-	}
-
-	constructor(){
-		super();
-		this.hours = '00';
-		this.minutes = '00';
-		this.seconds = '00';
-		this.showHours = false;
-		this.muteMinutes = true;
-		this.classMinutes = 'mute';
-		//this.fullTime = false;
-	}
-		
-	connectedCallback() {
-		super.connectedCallback();
-
-		setInterval( _ => {
-			if (this.runningTimer 
-			|| (this.totalTime === 0  
-				&& (this.seconds != 0 
-					|| this.minutes != 0 
-					|| this.hours != 0 
-				))){
-				let diff = (Date.now() - this.now) + this.totalTime;
-				this._manageTimerState(diff);
+			_drawerLeft() {
+				this.dispatchAction('toggle-drawer', { direction: 'left' });
 			}
-		}, 500);
 
-		/*this.querySelector('paper-icon-button').addEventListener('tap', function() {
-			this.dispatchEvent(new CustomEvent('menu-open'), {bubbles: true});
-		});*/
-	}
+			_drawerRight() {
+				this.dispatchAction('toggle-drawer', { direction: 'right' });
+			}
 
-	_manageTimerState(diff){
-		const hoursDiff = Math.floor(diff / (60 * 60 * 1000));
-		const minutesDiff = Math.floor(diff / (60 * 1000));
-		const secondsDiff = Math.floor(diff % (60 * 1000) / 1000);
+			_renderProgress(progress) {
+				progress = Math.floor(progress);
+				this.$.progressTime.style.setProperty("--width_progress", progress + "%");
+				const alertClass = this.$.progressTime.classList.contains("alert");
+				const advancedClass = this.$.progressTime.classList.contains("advanced");
+				if (progress < 75 && (alertClass || advancedClass)) {
+					this.fullTime = false;
+					this.$.progressTime.classList.remove("alert");
+					this.$.progressTime.classList.remove("advanced");
+				} else if (progress >= 75 && progress < 90 && !advancedClass) {
+					this.fullTime = false;
+					if (navigator.vibrate) {
+						navigator.vibrate(100);
+					}
+					this.$.progressTime.classList.add("advanced");
+					this.$.progressTime.classList.remove("alert");
+				} else if (progress >= 90 && !alertClass) {
+					this.fullTime = false;
+					if (navigator.vibrate) {
+						navigator.vibrate(500);
+					}
+					this.$.progressTime.classList.add("alert");
+					this.$.progressTime.classList.remove("advanced");
+				} else if (progress === 100 && !this.fullTime && navigator.vibrate) {
+					this.fullTime = true;
+					navigator.vibrate(1000);
+				}
+			}
 
-		this.hours = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(hoursDiff);
-		this.minutes = new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(minutesDiff);
-		this.seconds= new Intl.NumberFormat('fr', {minimumIntegerDigits:2, useGrouping: false}).format(secondsDiff);
-
-		if (hoursDiff > 0 && !this.showHours){
-			this.showHours = true;
-		}else if (hoursDiff === 0 && this.showHours){
-			this.showHours = false;
 		}
 
-		if (minutesDiff > 0 && this.muteMinutes){
-			this.muteMinutes = false;
-			this.classMinutes = '';
-		}else if (minutesDiff === 0 && !this.muteMinutes){
-			this.muteMinutes = false;
-			this.classMinutes = 'mute';
-		}
+		// Register custom element definition using standard platform API
+		customElements.define(RemoteHeader.is, RemoteHeader);
 
-		const diffPercent = (diff / (this.defaultInterval * 60 * 1000)) * 100;                
-		this._renderProgress(diffPercent);
-	}
-
-	_drawerLeft(){
-		this.dispatchAction('toggle-drawer', {direction: 'left'});
-	}
-
-	_drawerRight(){
-		this.dispatchAction('toggle-drawer', {direction: 'right'});
-	}
-
-	_renderProgress(progress){
-        progress = Math.floor(progress);
-        this.$.progressTime.style.setProperty("--width_progress", progress+"%");
-        const alertClass = this.$.progressTime.classList.contains("alert");
-        const advancedClass = this.$.progressTime.classList.contains("advanced");
-        if (progress < 75 && (alertClass || advancedClass)){
-          this.fullTime = false;
-          this.$.progressTime.classList.remove("alert");
-          this.$.progressTime.classList.remove("advanced");
-        }else if(progress >= 75 && progress < 90 && !advancedClass){
-          this.fullTime = false;
-          if (navigator.vibrate){
-            navigator.vibrate(100);
-          }
-          this.$.progressTime.classList.add("advanced");
-          this.$.progressTime.classList.remove("alert");
-        }else if(progress >= 90 && !alertClass){
-          this.fullTime = false;
-          if (navigator.vibrate){
-            navigator.vibrate(500);
-          }
-          this.$.progressTime.classList.add("alert");
-          this.$.progressTime.classList.remove("advanced");
-        }else if (progress === 100 && !this.fullTime && navigator.vibrate){
-          this.fullTime = true;
-          navigator.vibrate(1000);
-        }
-      }
-
-}
-
-// Register custom element definition using standard platform API
-customElements.define(RemoteHeader.is, RemoteHeader);
-
-</script>
+	</script>
 </dom-module>

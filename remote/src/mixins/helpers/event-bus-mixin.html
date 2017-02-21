@@ -1,8 +1,7 @@
 <script>
-
 	const EventBusMixin = subclass => class extends subclass {
 
-		constructor(){
+		constructor() {
 			super();
 			this.mapSubscription = {};
 		}
@@ -10,64 +9,62 @@
 		static get config() {
 			// properties, observers meta data
 			return {
-				properties: {
-				}
+				properties: {}
 			};
 		}
 
-		subscribeForKey(key, callback){
-			if (key === null
-			|| key === undefined
-			|| key.length === 0){
+		subscribeForKey(key, callback) {
+			if (key === null ||
+				key === undefined ||
+				key.length === 0) {
 				console.warn('key is not valid ! ', key);
 				return;
 			}
-			if (callback === null
-			|| callback === undefined
-			|| !this._isFunction(callback)){
+			if (callback === null ||
+				callback === undefined ||
+				!this._isFunction(callback)) {
 				console.warn('Callback method is not valid ! ', callback);
 				return;
 			}
 
-			if (Array.isArray(key)){
-				key.forEach(( keyTmp )=>{
-					if (keyTmp === null
-					|| keyTmp === undefined
-					|| keyTmp.length === 0){
+			if (Array.isArray(key)) {
+				key.forEach((keyTmp) => {
+					if (keyTmp === null ||
+						keyTmp === undefined ||
+						keyTmp.length === 0) {
 						console.warn('keyTmp is not valid ! ', keyTmp);
-					}else{
+					} else {
 						this._registerKey(keyTmp, callback);
 					}
 				});
-			}else{
+			} else {
 				this._registerKey(key, callback);
 			}
 
 		}
 
-
-		unsubscribeKey(key){
-			try{
+		unsubscribeKey(key) {
+			try {
 				delete this.mapSubscription[key];
-			}catch(e){
+			} catch (e) {
 				console.warn(`Error while unsubscribing key '${key}'`);
 			}
 		}
 
-		broadcastAction(type, data){
-			 if (type === null
-			|| type === undefined
-			|| type.length === 0){
+		broadcastAction(type, data) {
+			if (type === null ||
+				type === undefined ||
+				type.length === 0) {
 				console.warn('type is not valid ! ', type);
 				return;
 			}
-			if (data === null
-			|| data === undefined ){
+			if (data === null ||
+				data === undefined) {
 				console.warn('data method is not valid ! ', data);
 				return;
 			}
 
-			if (Array.isArray(data)){
+			if (Array.isArray(data)) {
 				data.forEach((dataToBroadCast) => {
 					this.reduceAction({
 						detail: {
@@ -76,7 +73,7 @@
 						}
 					});
 				})
-			}else{
+			} else {
 				this.reduceAction({
 					detail: {
 						type: type,
@@ -86,11 +83,11 @@
 			}
 		}
 
-		reduceAction(event){
-			if (event.detail !== null && event.detail !== undefined){
+		reduceAction(event) {
+			if (event.detail !== null && event.detail !== undefined) {
 				const callBackArrayRegister = this.mapSubscription[event.detail.type];
-				if (callBackArrayRegister){
-					callBackArrayRegister.forEach((callback) =>{
+				if (callBackArrayRegister) {
+					callBackArrayRegister.forEach((callback) => {
 						callback(event.detail.type, event.detail.data);
 					});
 				}
@@ -103,10 +100,9 @@
 		 *
 		 */
 
-
-		_registerKey(key, callback){
+		_registerKey(key, callback) {
 			let callbackArray = this.mapSubscription[key];
-			if (!callbackArray){
+			if (!callbackArray) {
 				callbackArray = [];
 				this.mapSubscription[key] = callbackArray;
 			}
@@ -117,7 +113,6 @@
 			var getType = {};
 			return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 		}
-
 
 	};
 

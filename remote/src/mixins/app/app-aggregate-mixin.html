@@ -11,37 +11,33 @@
 <link rel="import" href="../models/timer-mixin.html">
 
 <script>
-
 	const AppAgregateMixin = subclass => class extends mix(subclass)
-									.with(DispatcherMixin,
-										EventBusMixin,
-										SocketMixin,
-										EngineMixin,
-										ConfModelMixin,
-										IndexModelMixin,
-										NotesModelMixin,
-										PluginsModelMixin,
-										TimerModelMixin)
-		 {
+		.with(DispatcherMixin,
+			EventBusMixin,
+			SocketMixin,
+			EngineMixin,
+			ConfModelMixin,
+			IndexModelMixin,
+			NotesModelMixin,
+			PluginsModelMixin,
+			TimerModelMixin) {
 
-		static get config() {
-			// properties, observers meta data
-			return {
-				properties: {
-				}
-			};
-		}
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {}
+				};
+			}
 
-		constructor(){
-			super();
-			this.subscribeForKey('update-model',this._modelUpdate.bind(this));
-			this.subscribeForKey([
+			constructor() {
+				super();
+				this.subscribeForKey('update-model', this._modelUpdate.bind(this));
+				this.subscribeForKey([
 				'toggle-drawer',
 				'expand-notes',
 				'scan-qr-code-finish'
-				]
-				,this._dispatchUiAction.bind(this));
-			this.subscribeForKey([
+				], this._dispatchUiAction.bind(this));
+				this.subscribeForKey([
 				'update-time',
 				'start-stop-timer',
 				'update-interval',
@@ -53,75 +49,73 @@
 				'activ-plugin',
 				'desactiv-plugin',
 				'plugin-communication'
-				]
-				,this._computeActions.bind(this));
-		}
-
-		connectedCallback() {
-			super.connectedCallback();
-		}
-
-		_computeActions(type, data){
-			switch(type){
-				case 'update-time':
-					this.totalTime = data.totalTime;
-				break;
-				case 'start-stop-timer':
-					this.toggleTimer();
-				break;
-				case 'reset-timer':
-					this.resetTimer();
-				break;
-				case 'reset-index':
-					this.engine.first();
-				break;
-				case 'update-interval':
-					this.defaultInterval = data.interval;
-				break;
-				case 'control-press':
-					this.sendMessage({
-						type : 'operation',
-			  			data : 'show',
-			  			index: this.indices
-					});
-				break;
-				case 'change-slides':
-					this.indices = data.indices;
-					this.nextSlideNumber = this.mapPosition[this.indices.h+'-'+this.indices.v];
-				break;
-				case 'register-plugin':
-					this.registerPlugin(data);
-				break;
-				case 'activ-plugin':
-					this.activPlugin = data;
-					this._dispatchUiAction(type, data);
-				break;
-				case 'desactiv-plugin':
-					const oldActivPlugin = Object.assign({}, this.activPlugin);
-					this.activPlugin = null;
-					this._dispatchUiAction(type, oldActivPlugin);
-				break;
-				case 'plugin-communication':
-					this.sendMessage({
-						type : 'communicate-plugin',
-						id: data.plugin,
-						data : data.data,
-					});
-				break;
+				], this._computeActions.bind(this));
 			}
-		}
 
-		_modelUpdate(type, data){
-			if (!data.readOnly){
-				this[data.key] = data.value;
+			connectedCallback() {
+				super.connectedCallback();
 			}
-		}
 
-		_dispatchUiAction(type, data){
+			_computeActions(type, data) {
+				switch (type) {
+					case 'update-time':
+						this.totalTime = data.totalTime;
+						break;
+					case 'start-stop-timer':
+						this.toggleTimer();
+						break;
+					case 'reset-timer':
+						this.resetTimer();
+						break;
+					case 'reset-index':
+						this.engine.first();
+						break;
+					case 'update-interval':
+						this.defaultInterval = data.interval;
+						break;
+					case 'control-press':
+						this.sendMessage({
+							type: 'operation',
+							data: 'show',
+							index: this.indices
+						});
+						break;
+					case 'change-slides':
+						this.indices = data.indices;
+						this.nextSlideNumber = this.mapPosition[this.indices.h + '-' + this.indices.v];
+						break;
+					case 'register-plugin':
+						this.registerPlugin(data);
+						break;
+					case 'activ-plugin':
+						this.activPlugin = data;
+						this._dispatchUiAction(type, data);
+						break;
+					case 'desactiv-plugin':
+						const oldActivPlugin = Object.assign({}, this.activPlugin);
+						this.activPlugin = null;
+						this._dispatchUiAction(type, oldActivPlugin);
+						break;
+					case 'plugin-communication':
+						this.sendMessage({
+							type: 'communicate-plugin',
+							id: data.plugin,
+							data: data.data,
+						});
+						break;
+				}
+			}
 
-		}
+			_modelUpdate(type, data) {
+				if (!data.readOnly) {
+					this[data.key] = data.value;
+				}
+			}
 
+			_dispatchUiAction(type, data) {
 
-	};
+			}
+
+		};
 
 </script>

@@ -113,55 +113,53 @@
 
 </template>
 
-<script>
+	<script>
+		// Extend Polymer.Element base class
+		class ControlsButtons extends DispatcherMixin(Polymer.Element) {
 
-	// Extend Polymer.Element base class
-	class ControlsButtons extends DispatcherMixin(Polymer.Element) {
+			static get is() { return 'controls-buttons' }
 
-		static get is() { return 'controls-buttons' }
-
-		static get config() {
-			// properties, observers meta data
-			return {
-				properties: {
-					upState:{
-						type: Boolean,
-						value: false
-					},
-					downState:{
-						type: Boolean,
-						value: false
-					},
-					leftState:{
-						type: Boolean,
-						value: false
-					},
-					rightState:{
-						type: Boolean,
-						value: false
-					},
-					showState:{
-						type: Boolean,
-						value: false
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {
+						upState: {
+							type: Boolean,
+							value: false
+						},
+						downState: {
+							type: Boolean,
+							value: false
+						},
+						leftState: {
+							type: Boolean,
+							value: false
+						},
+						rightState: {
+							type: Boolean,
+							value: false
+						},
+						showState: {
+							type: Boolean,
+							value: false
+						}
 					}
-				}
-			};
+				};
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
+
+			}
+
+			_tap(event) {
+				this.dispatchAction('control-press', { control: event.currentTarget.id });
+			}
+
 		}
 
+		// Register custom element definition using standard platform API
+		customElements.define(ControlsButtons.is, ControlsButtons);
 
-		connectedCallback() {
-			super.connectedCallback();
-
-		}
-
-		_tap(event){
-			this.dispatchAction('control-press', {control:event.currentTarget.id});
-		}
-
-	}
-
-	// Register custom element definition using standard platform API
-	customElements.define(ControlsButtons.is, ControlsButtons);
-
-</script>
+	</script>
 </dom-module>
