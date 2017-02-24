@@ -104,7 +104,7 @@
 			on-dispatch-action="reduceAction"
 			next-slide-number="[[nextSlideNumber]]"
 			nb-slides="[[nbSlides]]"
-			local-url="[[localUrl]]"
+			model-conf="[[modelConf]]"
 			engine="[[engine]]"></screen-preview>
 </div>
 
@@ -201,7 +201,7 @@
 						}
 						break;
 					case 'update-model':
-						if (data.key === 'conf') {
+						if (data.key === 'modelConf.conf') {
 							this._manageConfVisibility();
 						}
 						break;

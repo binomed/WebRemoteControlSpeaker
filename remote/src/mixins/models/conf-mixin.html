@@ -1,16 +1,23 @@
 <link rel="import" href="../helpers/event-bus-mixin.html">
 
 <script>
+	class ModelConf {
+
+		constructor() {
+			this.localUrl = ''; // var in order to see if the presentation has already be loaded
+			this.conf = {}; // Configuration corresponding to server
+		}
+	}
+
 	const ConfModelMixin = subclass => class extends EventBusMixin(subclass) {
 
 		static get config() {
 			// properties, observers meta data
 			return {
 				properties: {
-					localUrl: String, // var in order to see if the presentation has already be loaded
-					conf: { // Configuration corresponding to server
+					modelConf: {
 						type: Object,
-						value: () => { return {}; }
+						value: () => { return new ModelConf(); }
 					}
 				}
 			};
@@ -22,24 +29,25 @@
 			const port = this._getAllUrlParams()
 				.port;
 			if (port) {
-				this.conf.port = port;
+				this.set('modelConf.conf.port', port);
 			} else {
 				// Todo
 			}
 			this.broadcastAction('update-model', {
-				key: 'conf',
-				value: this.conf,
+				key: 'modelConf.conf',
+				value: this.modelConf.conf,
 				readOnly: true
 			});
 
 		}
 
 		isConfReady() {
-			return this.conf && this.conf.port;
+			return this.modelConf.conf && this.modelConf.conf.port;
 		}
 
 		updateLocalUrl(url) {
-			this.localUrl = url;
+			console.info('udpateLocalUrl', url);
+			this.set('modelConf.localUrl', url);
 		}
 
 		_getAllUrlParams(url) {
