@@ -96,14 +96,12 @@
 	<speaker-notes
 			id="speakerNotes"
 			on-dispatch-action="reduceAction"
-			current-slide-number="[[currentSlideNumber]]"
-			nb-slides="[[nbSlides]]"
+			model-states="[[modelStates]]"
 			content-notes="[[contentNotes]]"></speaker-notes>
 	<screen-preview
 			id="screenPreview"
 			on-dispatch-action="reduceAction"
-			next-slide-number="[[nextSlideNumber]]"
-			nb-slides="[[nbSlides]]"
+			model-states="[[modelStates]]"
 			model-conf="[[modelConf]]"
 			engine="[[engine]]"></screen-preview>
 </div>

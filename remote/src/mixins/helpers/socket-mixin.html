@@ -71,22 +71,22 @@
 								value: `http://${window.location.hostname}:${this.innerConf.port}${json.url}`
 							},
 							{
-								key: 'nbSlides',
+								key: 'modelStates.nbSlides',
 								value: json.nbSlides
 							},
 							{
-								key: 'mapPosition',
+								key: 'modelStates.mapPosition',
 								value: json.mapPosition
 							}
 						]);
 					} else if (json.indices) {
 						this.broadcastAction('update-model', [
 							{
-								key: 'indicesDist',
+								key: 'modelStates.indicesDist',
 								value: json.indices
 							},
 							{
-								key: 'currentSlideNumber',
+								key: 'modelStates.currentSlideNumber',
 								value: json.currentSlideNumber
 							}
 						]);

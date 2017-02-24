@@ -77,12 +77,13 @@
 						this.sendMessage({
 							type: 'operation',
 							data: 'show',
-							index: this.indices
+							index: this.modelStates.indices
 						});
 						break;
 					case 'change-slides':
-						this.indices = data.indices;
-						this.nextSlideNumber = this.mapPosition[this.indices.h + '-' + this.indices.v];
+						this.set('modelStates.indices', data.indices);
+						this.set('modelStates.nextSlideNumber',
+							this.modelStates.mapPosition[this.modelStates.indices.h + '-' + this.modelStates.indices.v]);
 						break;
 					case 'register-plugin':
 						this.registerPlugin(data);

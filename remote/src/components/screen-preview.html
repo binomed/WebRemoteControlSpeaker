@@ -55,7 +55,7 @@
 			on-load="_loadIFrame"></iframe>
 
 	<div class="index-slides">
-		<span class="current-slide">[[nextSlideNumber]]</span> / [[nbSlides]]
+		<span class="current-slide">[[modelStates.nextSlideNumber]]</span> / [[modelStates.nbSlides]]
 	</div>
 	<controls-buttons
 		on-dispatch-action="_dispatchAction"></controls-buttons>
@@ -73,16 +73,8 @@
 				// properties, observers meta data
 				return {
 					properties: {
-						nextSlideNumber: { // next slide number on preview
-							type: Number,
-							value: 1
-						},
-						nbSlides: { // Total Number of slides
-							type: Number,
-							value: 0
-						},
+						modelStates: Object,
 						modelConf: Object,
-						localUrl: String, // var in order to see if the presentation has already be loaded
 						engine: Object
 					}
 				};
