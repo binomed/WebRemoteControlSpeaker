@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/granite-qrcode-scanner/granite-qrcode-scanner.html">
 <link rel="import" href="../mixins/app/app-aggregate-mixin.html">
 <link rel="import" href="remote-header.html">
 <link rel="import" href="speaker-notes.html">
@@ -15,8 +16,6 @@
 <link rel="import" href="drawer-left.html">
 <link rel="import" href="drawer-right.html">
 <link rel="import" href="remote-styles.html">
-<link rel="import" href="../bower_components/granite-qrcode-scanner/granite-qrcode-scanner.html">
-<!--<link rel="import" href="qr-code/qr-code-reader.html">-->
 <link rel="import" href="../plugins/plugin-list.html">
 
 <dom-module id="remote-app">
@@ -61,7 +60,7 @@
 			height: 100%;
 		}
 
-		#mask{
+		#mask, .qrcode-scanner-parent{
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -78,12 +77,22 @@
 			height: 300px;
 		}
 
-		qr-code-reader, granite-qrcode-scanner{
+		qr-code-reader{
 			position: absolute;
 			top: 0;
 			left: 0;
 			width: 100%;
 			height: 100%;
+
+		}
+
+		granite-qrcode-scanner{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 300px;
+			height: 300px;
+			transform: translateX(-50%) translateY(-50%);
 		}
 
 	</style>
@@ -141,15 +150,14 @@
 			</paper-button>
 		</div>
 	</paper-card>
-	<granite-qrcode-scanner
-		hide$="[[hideQrReader]]"
-		data="{{qrCodeData}}"
-		active="[[!hideQrReader]]"></granite-qrcode-scanner>
-	<!--<qr-code-reader
-		hide$="[[hideQrReader]]"
-		id="qrReader"
-		on-dispatch-action="reduceAction"
-	></qr-code-reader>-->
+	<div class="qrcode-scanner-parent"
+		hide$="[[hideQrReader]]">
+		<granite-qrcode-scanner
+			data="{{qrCodeData}}"
+			active="[[!hideQrReader]]"
+			width="300"
+			height="300"></granite-qrcode-scanner>
+	</div>
 </div>
 
 </template>
@@ -215,7 +223,6 @@
 						}
 						break;
 					case 'scan-qr-code-finish':
-						//this.$.qrReader.desactivQrScan();
 						this.hideQrReader = true;
 						this._manageConfVisibility();
 						break;
@@ -223,7 +230,17 @@
 			}
 
 			_updateQrCode(qrCodeData) {
-				console.info(qrCodeData);
+				if (qrCodeData && qrCodeData.charAt(0) === '{' && qrCodeData.charAt(qrCodeData.length - 1) === '}') {
+					let confData = JSON.parse(qrCodeData);
+					if (confData.port) {
+						this.dispatchAction('update-model', {
+							key: 'modelConf.conf',
+							value: confData
+						});
+					}
+				}
+				this._manageConfVisibility();
+				console.debug('_updateQrCode', qrCodeData);
 			}
 
 			_manageConfVisibility() {
@@ -251,7 +268,6 @@
 
 			_requestScanQrCode() {
 				this.hideQrReader = false;
-				//this.$.qrReader.activeQrScan();
 			}
 
 			/**
