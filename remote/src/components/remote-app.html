@@ -115,7 +115,7 @@
 
 <plugin-list
 		id="pluginListComponent"
-		style="display:none"
+		hide$="[[hidePluginComponent]]"
 		activ-plugin="[[activPlugin]]"
 		desc-area="[[descPluginArea]]"
 		interaction-area="[[interactionPluginArea]]"
@@ -123,6 +123,7 @@
 </plugin-list>
 
 <div
+	hide$="[[hideMask]]"
 	id="mask">
 	 <paper-card heading="Waiting for configuration" >
 		 <div class="card-content">
@@ -140,7 +141,7 @@
 		</div>
 	</paper-card>
 	<qr-code-reader
-		style="display:none"
+		hide$="[[hideQrReader]]"
 		id="qrReader"
 		on-dispatch-action="reduceAction"
 	></qr-code-reader>
@@ -165,6 +166,9 @@
 				super();
 				this.descPluginArea = null;
 				this.interactionPluginArea = null;
+				this.hidePluginComponent = true;
+				this.hideQrReader = true;
+				this.hideMask = false;
 			}
 
 			connectedCallback() {
@@ -188,13 +192,13 @@
 						break;
 					case 'activ-plugin':
 						if (data) {
-							this.$.pluginListComponent.style.display = '';
+							this.hidePluginComponent = false;
 							this.$.pluginListComponent.activatePlugin(data);
 						}
 						break;
 					case 'desactiv-plugin':
 						if (data) {
-							this.$.pluginListComponent.style.display = 'none';
+							this.hidePluginComponent = true;
 							this.$.pluginListComponent.desactivatePlugin(data);
 						}
 						break;
@@ -205,14 +209,14 @@
 						break;
 					case 'scan-qr-code-finish':
 						this.$.qrReader.desactivQrScan();
-						this.$.qrReader.style.display = 'none';
+						this.hideQrReader = true;
 						this._manageConfVisibility();
 						break;
 				}
 			}
 
 			_manageConfVisibility() {
-				this.$.mask.style.display = this.isConfReady() ? 'none' : '';
+				this.hideMask = !!this.isConfReady();
 			}
 
 			_expandNotes(eventData) {
@@ -235,7 +239,7 @@
 			}
 
 			_requestScanQrCode() {
-				this.$.qrReader.style.display = '';
+				this.hideQrReader = false;
 				this.$.qrReader.activeQrScan();
 			}
 
