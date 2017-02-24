@@ -59,8 +59,7 @@
 			_computeActions(type, data) {
 				switch (type) {
 					case 'update-time':
-						this.totalTime = data.totalTime;
-						this.set('modelTimer.totalTime', this.totalTime);
+						this.set('modelTimer.totalTime', data.totalTime);
 						break;
 					case 'start-stop-timer':
 						this.toggleTimer();
@@ -72,8 +71,7 @@
 						this.engine.first();
 						break;
 					case 'update-interval':
-						this.defaultInterval = data.interval;
-						this.set('modelTimer.defaultInterval', this.defaultInterval);
+						this.set('modelTimer.defaultInterval', data.interval);
 						break;
 					case 'control-press':
 						this.sendMessage({

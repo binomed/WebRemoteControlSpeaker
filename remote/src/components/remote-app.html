@@ -92,10 +92,6 @@
 <div class="content" id="contentRemote">
 	<remote-header id="header"
 			on-dispatch-action="reduceAction"
-			running-timer="[[runningTimer]]"
-			total-time="[[totalTime]]"
-			default-interval="[[defaultInterval]]"
-			now="[[now]]"
 			model-timer="[[modelTimer]]"></remote-header>
 	<speaker-notes
 			id="speakerNotes"
@@ -114,8 +110,7 @@
 
 <drawer-left id="drawerLeft"
 	model-timer="[[modelTimer]]"
-	on-dispatch-action="reduceAction"
-	default-interval="[[defaultInterval]]"></drawer-left>
+	on-dispatch-action="reduceAction"></drawer-left>
 <drawer-right id="drawerRight"
 	on-dispatch-action="reduceAction"
 	plugin-list="[[pluginList]]"></drawer-right>

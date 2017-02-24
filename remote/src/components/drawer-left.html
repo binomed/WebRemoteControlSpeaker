@@ -91,6 +91,7 @@
 				this.playState = true;
 				this.iconPlayPause = 'play-arrow';
 				this.textPlayPause = 'play';
+				this.defaultInterval = 60;
 
 			}
 
@@ -98,19 +99,15 @@
 				// properties, observers meta data
 				return {
 					properties: {
-						defaultInterval: { // Time in minute of the conference
-							type: Number,
-							value: 60,
-							observer: '_updateInterval'
-						},
 						modelTimer: Object
 					},
-					observers: ['_updateInterval(modelTimer.defaultInterval)']
+					observers: ['_updateInterval(defaultInterval)']
 				};
 			}
 
 			connectedCallback() {
 				super.connectedCallback();
+				this.defaultInterval = this.modelTimer.defaultInterval;
 			}
 
 			toggleDrawer(event) {
@@ -142,7 +139,6 @@
 			}
 
 			_updateInterval(newInterval, oldInterval) {
-				console.log('_updateInteval', newInterval);
 				this.dispatchAction('update-interval', { interval: newInterval });
 			}
 
