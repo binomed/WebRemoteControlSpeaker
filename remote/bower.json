@@ -11,6 +11,8 @@
     "paper-listbox": "PolymerElements/paper-listbox#2.0-preview",
     "marked-element": "PolymerElements/marked-element#2.0-preview",
     "paper-card": "PolymerElements/paper-card#2.0-preview",
-    "paper-button": "PolymerElements/paper-button#2.0-preview"
+    "paper-button": "PolymerElements/paper-button#2.0-preview",
+    "granite-qrcode-scanner": "Binomed/granite-qrcode-scanner#2.0-preview",
+    "granite-file-reader": "Binomed/granite-file-reader#2.0-preview"
   }
 }
