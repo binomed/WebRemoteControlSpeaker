@@ -1,7 +1,7 @@
 'use strict';
 
 import { ScriptLoader } from './helpers/script-loader.js';
-import { _ajaxJSONGet, _extractPath, _loadAdditionnalScripts } from './helpers/js-helpers.js';
+import { _ajaxJSONGet, _extractPath, _loadAdditionnalScripts, _extractUrlParams } from './helpers/js-helpers.js';
 import { VERSION } from '../common/consts.js';
 
 /*
@@ -301,7 +301,8 @@ class WebRemoteControl {
 	init(conf) {
 		// We check if this script ins't in the iframe of the remote control
 		console.log('Initialize Client side');
-		const inIFrame = window.top != window.self;
+		const urlParameters = _extractUrlParams();
+		const isMainIFrame = window.top != window.self || urlParameters.webRemoteMain;
 		this.additionnalConfiguration = conf;
 		_checkAdditionnalConfiguration.bind(this)()
 			.then(_ => {
@@ -315,14 +316,14 @@ class WebRemoteControl {
 			})
 			.then(_ => {
 				return new Promise((resolve, reject) => {
-					if (!inIFrame) {
+					if (!isMainIFrame) {
 						_initWS.bind(this)();
 					}
 					resolve();
 				});
 			})
 			.then(_ => {
-				if (!inIFrame) {
+				if (!isMainIFrame) {
 					return _loadPlugins.bind(this)(conf.plugins);
 				}
 			})
