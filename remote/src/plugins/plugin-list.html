@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../mixins/helpers/dispatcher-mixin.html">
 <link rel="import" href="remote-pointer-plugin.html">
+<link rel="import" href="audio-play-plugin.html">
 
 <dom-module id="plugin-list">
 	<template>
@@ -36,6 +37,13 @@
 		desc-area="[[descArea]]"
 		interaction-area="[[interactionArea]]"
 		on-dispatch-action="_dispatchAction"></remote-pointer-plugin>
+	<audio-play-plugin class="plugin"
+		style="display:none"
+		id="ap"
+		activ-plugin="[[activPlugin]]"
+		desc-area="[[descArea]]"
+		interaction-area="[[interactionArea]]"
+		on-dispatch-action="_dispatchAction"></audio-play-plugin>
 </div>
 
 </template>

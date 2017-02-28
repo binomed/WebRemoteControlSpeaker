@@ -1,0 +1,153 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../mixins/helpers/plugin-mixin.html">
+
+<dom-module id="audio-play-plugin">
+	<template>
+
+		<!-- Styles MUST be inside template -->
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+			overflow: hidden;
+			--size-button:40px;
+		}
+
+		.sws-plugin-ap-desc {
+			padding : 10px;
+			overflow : auto;
+			font-size : 1.2em;
+			height : calc(100% - var(--size-button) - 15px);
+		}
+		.sws-plugin-box {
+			position : absolute;
+			width : var(--size-button);
+			height : var(--size-button);
+			top : 0;
+			text-align : center;
+			font-size : 25px;
+			line-height : var(--size-button);
+		}
+
+		.sws-plugin-ap-box.color {
+			box-shadow : 0px 0px 10px 0 black;
+			width: var(--size-button);
+			height: var(--size-button);
+			border-radius : var(--size-button);
+			border : solid 1px white;
+			bottom : 20px;
+			top : initial;
+			position: relative;
+		}
+
+		#parent{
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		#descArea{
+			position:absolute;
+			background: white;
+		}
+
+		#interactionArea{
+			position:absolute;
+			--border-color: red;
+			border-color: var(--border-color);
+			border-style: solid;
+			border-width: 5px;
+		}
+
+		app-toolbar {
+			background-color: var(--bg-color);
+		}
+
+		app-toolbar > paper-icon-button{
+			background-color: var(--bg-color-abs);
+			color: #fff;
+		}
+
+		.button-parent{
+			display: inline-flex;
+			height: calc(2* var(--size-button));
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			justify-content: space-around;
+		}
+
+	</style>
+
+<div id="parent">
+	<div id="descArea">
+		<app-toolbar>
+			<div main-title>Play Audio</div>
+			<paper-icon-button icon="close" on-tap="desactivPlugin"></paper-icon-button>
+		</app-toolbar>
+		<div class="sws-plugin-ap-desc">
+			<ol>
+				<li>Play / Pause the audio</li>
+			</ol>
+		</div>
+		<div class="button-parent">
+			<div id="red" class="sws-plugin-ap-box color" on-tap="_toggleAudio" on-click="_toggleAudio"></div>
+		</div>
+	</div>
+</div>
+
+
+</template>
+
+	<script>
+		// Extend Polymer.Element base class
+		class AudioPlayPlugin extends PluginMixin(Polymer.Element) {
+
+			static get is() { return 'audio-play-plugin' }
+
+			constructor() {
+				super();
+				this.idPlugin = 'ap';
+			}
+
+			static get config() {
+				// properties, observers meta data
+				return {
+					properties: {
+
+					}
+				};
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
+			}
+
+			getPlugin() {
+				return {
+					name: 'audio play',
+					icon: 'av:library-music',
+					id: this.idPlugin
+				}
+			}
+
+			_toggleAudio() {
+				this.dispatchAction('plugin-communication', {
+					plugin: this.idPlugin,
+					data: {}
+				});
+			}
+
+
+
+		}
+
+		// Register custom element definition using standard platform API
+		customElements.define(AudioPlayPlugin.is, AudioPlayPlugin);
+
+	</script>
+</dom-module>
