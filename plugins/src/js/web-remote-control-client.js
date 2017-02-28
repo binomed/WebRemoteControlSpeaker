@@ -109,13 +109,15 @@ function _showRemoteQrCode() {
 		});
 		let list = "<select id='sws-show-qr-code-select'>";
 		for (let i = 0; i < this.ips.length; i++) {
-			list += "<option value='" + this.ips[i].id + "' id='ip" + this.ips[i].id + "' index='" + this.ips[i].id + "' >" + this.ips[i].name + "</option>";
+			list += `<option value='${this.ips[i].id}' id='ip${this.ips[i].id}' index='${this.ips[i].id}' >${this.ips[i].name}</option>`;
 		}
-		list += "</select>";
-		list += "<button id='sws-show-qr-code-generate'>Generate</button>";
+		list += `</select>
+				<br><button id='sws-show-qr-code-generate'>Generate UrlQrCode</button>
+				<button id='sws-show-qr-code-generate-config'>Generate Config QrCode</button>`;
 		document.querySelector('#listIp')
 			.innerHTML = list;
 		const pathPlugin = _extractPath();
+
 		document.querySelector('#sws-show-qr-code-generate')
 			.addEventListener('click', (event) => {
 				const get_id = document.getElementById('sws-show-qr-code-select');
@@ -129,7 +131,21 @@ function _showRemoteQrCode() {
 				document.querySelector("#qrCodeLink")
 					.setAttribute("href", urlRemote);
 				document.querySelector("#sws-show-qr-url")
-					.innerHTML = '<span style="text-transform:uppercase; font-weight:bold;">Or goto : </span><br>' + urlRemote;
+					.innerHTML = `<span style="text-transform:uppercase; font-weight:bold;">Or goto : </span><br>${urlRemote}`;
+			});
+
+		document.querySelector('#sws-show-qr-code-generate-config')
+			.addEventListener('click', (event) => {
+				const get_id = document.getElementById('sws-show-qr-code-select');
+				const result = get_id.options[get_id.selectedIndex].value;
+				const jsonConfiguration = {
+					port : this.conf.port,
+					localUrl : this.ips[result.ip]
+				};
+				this.qrCode.clear();
+				this.qrCode.makeCode(JSON.stringify(jsonConfiguration));
+				document.querySelector("#qrCodeLink").setAttribute("href", "");
+				document.querySelector("#sws-show-qr-url").innerHTML = "";
 			});
 
 	}
