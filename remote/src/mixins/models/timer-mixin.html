@@ -3,11 +3,11 @@
 <script>
 	class ModelTimer {
 		constructor() {
-			this.runningTimer = false;
-			this.defaultInterval = 60;
-			this.limitAlert = 1;
-			this.totalTime = 0;
-			this.now = null;
+			this.runningTimer = false; // True if the timer is running
+			this.defaultInterval = 60; // Time in minute of the conference
+			this.limitAlert = 1; // time before the end where we have to alert the speaker (if defaultInterval is upper limitAlert)
+			this.totalTime = 0; // Total time ellapsed during the presentation
+			this.now = null; // The current time
 
 		}
 	}
@@ -18,26 +18,6 @@
 			// properties, observers meta data
 			return {
 				properties: {
-					runningTimer: { // True if the timer is running
-						type: Boolean,
-						value: false
-					},
-					defaultInterval: { // Time in minute of the conference
-						type: Number,
-						value: 60
-					},
-					limitAlert: { // time before the end where we have to alert the speaker (if defaultInterval is upper limitAlert)
-						type: Number,
-						value: 1
-					},
-					totalTime: { // Total time ellapsed during the presentation
-						type: Number,
-						value: 0
-					},
-					now: { // The current time
-						type: Number,
-						value: null
-					},
 					modelTimer: {
 						type: Object,
 						value: () => {
@@ -51,59 +31,52 @@
 
 		connectedCallback() {
 			super.connectedCallback();
-			this.now = Date.now();
-			this.set('modelTimer.now', this.now);
+			this.set('modelTimer.now', Date.now());
 
 		}
 
 		toggleTimer() {
-			this.runningTimer = !this.runningTimer;
-			this.set('modelTimer.runningTimer', this.runningTimer);
+			this.set('modelTimer.runningTimer', !this.modelTimer.runningTimer);
 			this.broadcastAction('update-model', {
-				key: 'runningTimer',
-				value: this.runningTimer,
+				key: 'modelTimer.runningTimer',
+				value: this.modelTimer.runningTimer,
 				readOnly: true
 			});
-			if (!this.runningTimer) {
-				this.totalTime += (Date.now() - this.now);
-				this.set('modelTimer.totalTime', this.totalTime);
+			if (!this.modelTimer.runningTimer) {
+				this.set('modelTimer.totalTime', this.modelTimer.totalTime + (Date.now() - this.modelTimer.now));
 				this.broadcastAction('update-model', {
-					key: 'totalTime',
-					value: this.totalTime,
+					key: 'modelTimer.totalTime',
+					value: this.modelTimer.totalTime,
 					readOnly: true
 				});
 			} else {
-				this.now = Date.now();
-				this.set('modelTimer.now', this.now);
+				this.set('modelTimer.now', Date.now());
 				this.broadcastAction('update-model', {
-					key: 'now',
-					value: this.now,
+					key: 'modelTimer.now',
+					value: this.modelTimer.now,
 					readOnly: true
 				});
 			}
 		}
 
 		resetTimer() {
-			this.runningTimer = false;
-			this.set('modelTimer.runningTimer', this.runningTimer);
-			this.totalTime = 0;
-			this.set('modelTimer.totalTime', this.totalTime);
-			this.now = Date.now();
-			this.set('modelTimer.now', this.now);
+			this.set('modelTimer.runningTimer', false);
+			this.set('modelTimer.totalTime', 0);
+			this.set('modelTimer.now', Date.now());
 			this.broadcastAction('update-model', [
 				{
-					key: 'runningTimer',
-					value: this.runningTimer,
+					key: 'modelTimer.runningTimer',
+					value: this.modelTimer.runningTimer,
 					readOnly: true
 					},
 				{
-					key: 'totalTime',
-					value: this.totalTime,
+					key: 'modelTimer.totalTime',
+					value: this.modelTimer.totalTime,
 					readOnly: true
 					},
 				{
-					key: 'now',
-					value: this.now,
+					key: 'modelTimer.now',
+					value: this.modelTimer.now,
 					readOnly: true
 					}
 					]);

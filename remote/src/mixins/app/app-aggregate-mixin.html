@@ -59,8 +59,7 @@
 			_computeActions(type, data) {
 				switch (type) {
 					case 'update-time':
-						this.totalTime = data.totalTime;
-						this.set('modelTimer.totalTime', this.totalTime);
+						this.set('modelTimer.totalTime', data.totalTime);
 						break;
 					case 'start-stop-timer':
 						this.toggleTimer();
@@ -72,19 +71,19 @@
 						this.engine.first();
 						break;
 					case 'update-interval':
-						this.defaultInterval = data.interval;
-						this.set('modelTimer.defaultInterval', this.defaultInterval);
+						this.set('modelTimer.defaultInterval', data.interval);
 						break;
 					case 'control-press':
 						this.sendMessage({
 							type: 'operation',
 							data: 'show',
-							index: this.indices
+							index: this.modelStates.indices
 						});
 						break;
 					case 'change-slides':
-						this.indices = data.indices;
-						this.nextSlideNumber = this.mapPosition[this.indices.h + '-' + this.indices.v];
+						this.set('modelStates.indices', data.indices);
+						this.set('modelStates.nextSlideNumber',
+							this.modelStates.mapPosition[this.modelStates.indices.h + '-' + this.modelStates.indices.v]);
 						break;
 					case 'register-plugin':
 						this.registerPlugin(data);

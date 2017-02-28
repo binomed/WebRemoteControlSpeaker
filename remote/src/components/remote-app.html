@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/granite-qrcode-scanner/granite-qrcode-scanner.html">
 <link rel="import" href="../mixins/app/app-aggregate-mixin.html">
 <link rel="import" href="remote-header.html">
 <link rel="import" href="speaker-notes.html">
@@ -15,7 +16,6 @@
 <link rel="import" href="drawer-left.html">
 <link rel="import" href="drawer-right.html">
 <link rel="import" href="remote-styles.html">
-<link rel="import" href="qr-code/qr-code-reader.html">
 <link rel="import" href="../plugins/plugin-list.html">
 
 <dom-module id="remote-app">
@@ -60,7 +60,7 @@
 			height: 100%;
 		}
 
-		#mask{
+		#mask, .qrcode-scanner-parent{
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -83,6 +83,16 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
+
+		}
+
+		granite-qrcode-scanner{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 300px;
+			height: 300px;
+			transform: translateX(-50%) translateY(-50%);
 		}
 
 	</style>
@@ -92,37 +102,30 @@
 <div class="content" id="contentRemote">
 	<remote-header id="header"
 			on-dispatch-action="reduceAction"
-			running-timer="[[runningTimer]]"
-			total-time="[[totalTime]]"
-			default-interval="[[defaultInterval]]"
-			now="[[now]]"
 			model-timer="[[modelTimer]]"></remote-header>
 	<speaker-notes
 			id="speakerNotes"
 			on-dispatch-action="reduceAction"
-			current-slide-number="[[currentSlideNumber]]"
-			nb-slides="[[nbSlides]]"
+			model-states="[[modelStates]]"
 			content-notes="[[contentNotes]]"></speaker-notes>
 	<screen-preview
 			id="screenPreview"
 			on-dispatch-action="reduceAction"
-			next-slide-number="[[nextSlideNumber]]"
-			nb-slides="[[nbSlides]]"
-			local-url="[[localUrl]]"
+			model-states="[[modelStates]]"
+			model-conf="[[modelConf]]"
 			engine="[[engine]]"></screen-preview>
 </div>
 
 <drawer-left id="drawerLeft"
 	model-timer="[[modelTimer]]"
-	on-dispatch-action="reduceAction"
-	default-interval="[[defaultInterval]]"></drawer-left>
+	on-dispatch-action="reduceAction"></drawer-left>
 <drawer-right id="drawerRight"
 	on-dispatch-action="reduceAction"
 	plugin-list="[[pluginList]]"></drawer-right>
 
 <plugin-list
 		id="pluginListComponent"
-		style="display:none"
+		hide$="[[hidePluginComponent]]"
 		activ-plugin="[[activPlugin]]"
 		desc-area="[[descPluginArea]]"
 		interaction-area="[[interactionPluginArea]]"
@@ -130,6 +133,7 @@
 </plugin-list>
 
 <div
+	hide$="[[hideMask]]"
 	id="mask">
 	 <paper-card heading="Waiting for configuration" >
 		 <div class="card-content">
@@ -146,11 +150,14 @@
 			</paper-button>
 		</div>
 	</paper-card>
-	<qr-code-reader
-		style="display:none"
-		id="qrReader"
-		on-dispatch-action="reduceAction"
-	></qr-code-reader>
+	<div class="qrcode-scanner-parent"
+		hide$="[[hideQrReader]]">
+		<granite-qrcode-scanner
+			data="{{qrCodeData}}"
+			active="[[!hideQrReader]]"
+			width="300"
+			height="300"></granite-qrcode-scanner>
+	</div>
 </div>
 
 </template>
@@ -164,7 +171,8 @@
 			static get config() {
 				// properties, observers meta data
 				return {
-					properties: {}
+					properties: {},
+					observers: ['_updateQrCode(qrCodeData)']
 				};
 			}
 
@@ -172,6 +180,10 @@
 				super();
 				this.descPluginArea = null;
 				this.interactionPluginArea = null;
+				this.hidePluginComponent = true;
+				this.hideQrReader = true;
+				this.hideMask = false;
+				this.qrCodeData = null;
 			}
 
 			connectedCallback() {
@@ -195,31 +207,44 @@
 						break;
 					case 'activ-plugin':
 						if (data) {
-							this.$.pluginListComponent.style.display = '';
+							this.hidePluginComponent = false;
 							this.$.pluginListComponent.activatePlugin(data);
 						}
 						break;
 					case 'desactiv-plugin':
 						if (data) {
-							this.$.pluginListComponent.style.display = 'none';
+							this.hidePluginComponent = true;
 							this.$.pluginListComponent.desactivatePlugin(data);
 						}
 						break;
 					case 'update-model':
-						if (data.key === 'conf') {
+						if (data.key === 'modelConf.conf') {
 							this._manageConfVisibility();
 						}
 						break;
 					case 'scan-qr-code-finish':
-						this.$.qrReader.desactivQrScan();
-						this.$.qrReader.style.display = 'none';
+						this.hideQrReader = true;
 						this._manageConfVisibility();
 						break;
 				}
 			}
 
+			_updateQrCode(qrCodeData) {
+				if (qrCodeData && qrCodeData.charAt(0) === '{' && qrCodeData.charAt(qrCodeData.length - 1) === '}') {
+					let confData = JSON.parse(qrCodeData);
+					if (confData.port) {
+						this.dispatchAction('update-model', {
+							key: 'modelConf.conf',
+							value: confData
+						});
+					}
+				}
+				this._manageConfVisibility();
+				console.debug('_updateQrCode', qrCodeData);
+			}
+
 			_manageConfVisibility() {
-				this.$.mask.style.display = this.isConfReady() ? 'none' : '';
+				this.hideMask = !!this.isConfReady();
 			}
 
 			_expandNotes(eventData) {
@@ -242,8 +267,7 @@
 			}
 
 			_requestScanQrCode() {
-				this.$.qrReader.style.display = '';
-				this.$.qrReader.activeQrScan();
+				this.hideQrReader = false;
 			}
 
 			/**

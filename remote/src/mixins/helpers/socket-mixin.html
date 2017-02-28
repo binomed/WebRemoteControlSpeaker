@@ -6,7 +6,7 @@
 		constructor() {
 			super();
 			this.socketIO = null;
-			this.conf = {};
+			this.innerConf = {};
 		}
 
 		static get config() {
@@ -30,16 +30,16 @@
 		}
 
 		_confUpdate(type, data) {
-			if (data.key === 'conf' && data.value.port) {
-				this.conf = data.value;
-				console.debug(this.conf);
+			if (data.key === 'modelConf.conf' && data.value.port) {
+				this.innerConf = data.value;
+				console.debug(this.innerConf);
 				this._initWebSocket();
 			}
 		}
 
 		_initWebSocket() {
 			if (typeof io != 'undefined') {
-				this.socketIO = io.connect('http://' + window.location.hostname + ':' + this.conf.port);
+				this.socketIO = io.connect('http://' + window.location.hostname + ':' + this.innerConf.port);
 
 				// Socket IO connect
 				this.socketIO.on('connect', _ => {
@@ -67,26 +67,26 @@
 					if (json.url) {
 						this.broadcastAction('update-model', [
 							{
-								key: 'localUrl',
-								value: `http://${window.location.hostname}:${this.conf.port}${json.url}`
+								key: 'modelConf.localUrl',
+								value: `http://${window.location.hostname}:${this.innerConf.port}${json.url}`
 							},
 							{
-								key: 'nbSlides',
+								key: 'modelStates.nbSlides',
 								value: json.nbSlides
 							},
 							{
-								key: 'mapPosition',
+								key: 'modelStates.mapPosition',
 								value: json.mapPosition
 							}
 						]);
 					} else if (json.indices) {
 						this.broadcastAction('update-model', [
 							{
-								key: 'indicesDist',
+								key: 'modelStates.indicesDist',
 								value: json.indices
 							},
 							{
-								key: 'currentSlideNumber',
+								key: 'modelStates.currentSlideNumber',
 								value: json.currentSlideNumber
 							}
 						]);

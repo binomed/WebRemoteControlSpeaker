@@ -70,7 +70,7 @@
 		<div class="markdown-html"></div>
 	</marked-element>
 	<div class="index-slides">
-		<span class="current-slide">[[currentSlideNumber]]</span> / [[nbSlides]]
+		<span class="current-slide">[[modelStates.currentSlideNumber]]</span> / [[modelStates.nbSlides]]
 	</div>
 </div>
 
@@ -90,14 +90,7 @@
 						expand: {
 							type: Object
 						},
-						currentSlideNumber: { // current slide number on client side
-							type: Number,
-							value: 1
-						},
-						nbSlides: { // Total Number of slides
-							type: Number,
-							value: 0
-						},
+						modelStates: Object,
 						contentNotes: { // The speaker notes of the current slide
 							type: String,
 							value: ''
