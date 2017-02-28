@@ -87,7 +87,7 @@
 
 			connectedCallback() {
 				super.connectedCallback();
-				if (this.iFrameReady) {
+				if (this.iFrameReady && this.engine) {
 					this.engine.initEngine(this.$.iframePrez, this.dispatchAction.bind(this));
 				}
 			}

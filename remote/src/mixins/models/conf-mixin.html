@@ -30,19 +30,19 @@
 				.port;
 			if (port) {
 				this.set('modelConf.conf.port', port);
+				this.broadcastAction('update-model', {
+					key: 'modelConf.conf',
+					value: this.modelConf.conf,
+					readOnly: true
+				});
 			} else {
 				// Todo
 			}
-			this.broadcastAction('update-model', {
-				key: 'modelConf.conf',
-				value: this.modelConf.conf,
-				readOnly: true
-			});
 
 		}
 
 		isConfReady() {
-			return this.modelConf.conf && this.modelConf.conf.port;
+			return this.modelConf && this.modelConf.conf && this.modelConf.conf.port;
 		}
 
 		updateLocalUrl(url) {

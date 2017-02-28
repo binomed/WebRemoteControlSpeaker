@@ -107,7 +107,7 @@
 
 			connectedCallback() {
 				super.connectedCallback();
-				this.defaultInterval = this.modelTimer.defaultInterval;
+				this.defaultInterval = this.modelTimer ? this.modelTimer.defaultInterval : 60;
 			}
 
 			toggleDrawer(event) {
