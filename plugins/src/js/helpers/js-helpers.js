@@ -57,7 +57,7 @@ export function _loadAdditionnalScripts(devMode) {
  */
 export function _extractUrlParams(url){
 	// get query string from url (optional) or window
-	const queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+	let queryString = url ? url.split('?')[1] : window.location.search.slice(1);
 
 	// we'll store the parameters here
 	const obj = {};
@@ -83,7 +83,7 @@ export function _extractUrlParams(url){
 			});
 
 			// set parameter value (use 'true' if empty)
-			const paramValue = typeof(a[1]) === 'undefined' ? true : a[1];
+			let paramValue = typeof(a[1]) === 'undefined' ? true : a[1];
 
 			// (optional) keep case consistent
 			paramName = paramName.toLowerCase();
