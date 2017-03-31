@@ -171,12 +171,14 @@
 
 			static get is() { return 'remote-app' }
 
-			static get config() {
+			static get properties() {
 				// properties, observers meta data
-				return {
-					properties: {},
-					observers: ['_updateQrCode(qrCodeData)']
-				};
+				return {};
+			}
+
+			static get observers() {
+				// properties, observers meta data
+				return ['_updateQrCode(qrCodeData)'];
 			}
 
 			constructor() {

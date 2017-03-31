@@ -69,14 +69,12 @@
 
 			static get is() { return 'screen-preview' }
 
-			static get config() {
+			static get properties() {
 				// properties, observers meta data
 				return {
-					properties: {
 						modelStates: Object,
 						modelConf: Object,
 						engine: Object
-					}
 				};
 			}
 

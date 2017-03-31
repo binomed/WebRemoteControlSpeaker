@@ -95,14 +95,16 @@
 
 			}
 
-			static get config() {
+			static get properties() {
 				// properties, observers meta data
 				return {
-					properties: {
 						modelTimer: Object
-					},
-					observers: ['_updateInterval(defaultInterval)']
-				};
+					};
+			}
+
+			static get observers() {
+				// properties, observers meta data
+				return ['_updateInterval(defaultInterval)']
 			}
 
 			connectedCallback() {

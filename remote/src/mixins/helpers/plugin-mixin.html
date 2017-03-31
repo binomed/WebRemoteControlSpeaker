@@ -9,10 +9,9 @@
 			this.interactionAreaRect = null;
 		}
 
-		static get config() {
+		static get properties() {
 			// properties, observers meta data
 			return {
-				properties: {
 					activPlugin: {
 						type: Object,
 						value: () => { return null; },
@@ -28,8 +27,7 @@
 						value: () => { return null; },
 						observer: '_updateAreas'
 					}
-				}
-			};
+				};
 		}
 
 		connectedCallback() {

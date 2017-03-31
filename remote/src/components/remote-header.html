@@ -128,16 +128,13 @@
 
 			static get is() { return 'remote-header' }
 
-			static get config() {
+			static get properties() {
 				// properties, observers meta data
 				return {
-					properties: {
 						modelTimer: {
 							type: Object
 						}
-					}
-
-				};
+					};
 			}
 
 			constructor() {

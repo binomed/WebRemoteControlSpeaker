@@ -22,13 +22,6 @@
 			PluginsModelMixin,
 			TimerModelMixin) {
 
-			static get config() {
-				// properties, observers meta data
-				return {
-					properties: {}
-				};
-			}
-
 			constructor() {
 				super();
 				this.subscribeForKey('update-model', this._modelUpdate.bind(this));

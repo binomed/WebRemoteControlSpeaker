@@ -14,10 +14,9 @@
 
 	const TimerModelMixin = subclass => class extends EventBusMixin(subclass) {
 
-		static get config() {
+		static get properties() {
 			// properties, observers meta data
 			return {
-				properties: {
 					modelTimer: {
 						type: Object,
 						value: () => {
@@ -25,8 +24,7 @@
 						}
 					}
 
-				}
-			};
+				};
 		}
 
 		connectedCallback() {

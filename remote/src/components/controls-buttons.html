@@ -120,10 +120,9 @@
 
 			static get is() { return 'controls-buttons' }
 
-			static get config() {
+			static get properties() {
 				// properties, observers meta data
 				return {
-					properties: {
 						upState: {
 							type: Boolean,
 							value: false
@@ -144,8 +143,7 @@
 							type: Boolean,
 							value: false
 						}
-					}
-				};
+					};
 			}
 
 			connectedCallback() {

@@ -83,10 +83,9 @@
 
 			static get is() { return 'speaker-notes' }
 
-			static get config() {
+			static get properties() {
 				// properties, observers meta data
 				return {
-					properties: {
 						expand: {
 							type: Object
 						},
@@ -95,8 +94,7 @@
 							type: String,
 							value: ''
 						}
-					}
-				};
+					};
 			}
 
 			connectedCallback() {

@@ -5,16 +5,14 @@
 <script>
 	const EngineMixin = subclass => class extends EventBusMixin(subclass) {
 
-		static get config() {
+		static get properties() {
 			// properties, observers meta data
 			return {
-				properties: {
 					engine: { // Configuration corresponding to server
 						type: Object,
 						value: () => { return new GenericEngine(); }
 					}
-				}
-			};
+				};
 		}
 
 		connectedCallback() {

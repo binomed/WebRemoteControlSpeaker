@@ -3,17 +3,15 @@
 <script>
 	const PluginsModelMixin = subclass => class extends PluginMixin(subclass) {
 
-		static get config() {
+		static get properties() {
 			// properties, observers meta data
 			return {
-				properties: {
 					currentPluginActiv: String, // The id of the currentPlugin
 					pluginList: { // List of plugin of application
 						type: Array,
 						value: () => { return []; }
 					}
-				}
-			};
+				};
 		}
 
 		connectedCallback() {

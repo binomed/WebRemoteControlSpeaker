@@ -11,16 +11,14 @@
 
 	const ConfModelMixin = subclass => class extends EventBusMixin(subclass) {
 
-		static get config() {
+		static get properties() {
 			// properties, observers meta data
 			return {
-				properties: {
 					modelConf: {
 						type: Object,
 						value: () => { return new ModelConf(); }
 					}
-				}
-			};
+				};
 		}
 
 		connectedCallback() {
