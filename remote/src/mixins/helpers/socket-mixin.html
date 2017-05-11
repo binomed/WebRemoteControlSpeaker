@@ -1,4 +1,5 @@
 <link rel="import" href="event-bus-mixin.html">
+<link rel="import" href="../../js/helpers/socket-helper.html">
 
 <script>
 	const SocketMixin = subclass => class extends EventBusMixin(subclass) {
@@ -16,7 +17,7 @@
 
 		sendMessage(message) {
 			try {
-				this.socketIO.emit('message', message);
+				this.socketIO.sendMessage(message);
 			} catch (e) {
 				console.warn(e);
 			}
@@ -31,26 +32,7 @@
 		}
 
 		_initWebSocket() {
-			if (typeof io != 'undefined') {
-				this.socketIO = io.connect('http://' + window.location.hostname + ':' + this.innerConf.port);
-
-				// Socket IO connect
-				this.socketIO.on('connect', _ => {
-					// Send a ping message for getting config
-					this.socketIO.emit('message', {
-						type: 'ping'
-					});
-
-					// Ask for plugins
-					this.socketIO.emit('message', {
-						type: 'ping-plugin'
-					});
-
-				});
-
-				// Message from presentation
-				this.socketIO.on("message", this._presentationMessage.bind(this));
-			}
+			this.socketIO = new WebSocketHelper(`http://${window.location.hostname}:${this.innerConf.port}`, this._presentationMessage.bind(this));
 		}
 
 		_presentationMessage(json) {
