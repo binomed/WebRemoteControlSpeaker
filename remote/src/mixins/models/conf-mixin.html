@@ -1,13 +1,8 @@
 <link rel="import" href="../helpers/event-bus-mixin.html">
+<link rel="import" href="../../js/models/model-conf.html">
 
 <script>
-	class ModelConf {
 
-		constructor() {
-			this.localUrl = ''; // var in order to see if the presentation has already be loaded
-			this.conf = {}; // Configuration corresponding to server
-		}
-	}
 
 	const ConfModelMixin = subclass => class extends EventBusMixin(subclass) {
 
