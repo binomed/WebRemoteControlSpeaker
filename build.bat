@@ -1,22 +1,22 @@
 echo "Start Remote build"
-cd remote 
-call npm install 
+cd remote
+call npm install
 call gulp build
 echo "Remote build done"
 echo ""
 echo "Start Plugins build"
-cd ../plugins 
-call npm install 
+cd ../plugins
+call npm install
 call gulp build
 echo "Plugins build done"
 echo ""
-echo "Start Server build"
-cd ../server 
-call npm install 
+echo "Start Ensuite build"
+cd ../ensuite
+call npm install
 call gulp build
-echo "Server build done"
+echo "Ensuite build done"
 echo ""
-cd ../dist/server
-echo "Load node modules for the server"
-call npm install 
+cd ../dist/ensuite
+echo "Load node modules for the Ensuite"
+call npm install
 cd ../..

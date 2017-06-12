@@ -1,9 +1,12 @@
 web-remote-control-slides
 ======================
 
+**NOT UP TO DATE,  WORK IN PROGRESS!**
+
+
 Web Remote Control is a plugin for speakers that offer a remote control of the presentation from your mobile located in the same network loop.
 
-The basic features ares : 
+The basic features ares :
 
 * Remote control of presentation, you could navigate throught your presentation on mobile and validate the slide to show it on your presentation screen.
 * You have access to the notes of the current slide
@@ -13,12 +16,12 @@ The basic features ares :
 
 # Require for installation
 
-This plugin use : 
+This plugin use :
 
  * NodeJS
- 
 
-1. For NodeJS you have to install [node.js](http://nodejs.org/download/). Don't forget to select to add node to the path ! 
+
+1. For NodeJS you have to install [node.js](http://nodejs.org/download/). Don't forget to select to add node to the path !
 
 
 **It is important that you have the right to write on the directory where the presentation is because the start of the server will write some files on your File System.**
@@ -31,9 +34,9 @@ The build is based on those tools
 
  * Gulp
 
-1. For Gulp : just execute ```npm install -g gulp-cli``` 
+1. For Gulp : just execute ```npm install -g gulp-cli```
 
-If you are behind a proxy, you have to configure npm to go throught proxy [npm behind proxy](http://jjasonclark.com/how-to-setup-node-behind-web-proxy) 
+If you are behind a proxy, you have to configure npm to go throught proxy [npm behind proxy](http://jjasonclark.com/how-to-setup-node-behind-web-proxy)
 
 ## Install
 
@@ -54,7 +57,7 @@ This should create a "dist" directory with the project compile and it has normal
 
 You have to add thoses line in your html
 
-1. ```<script src="/plugin/web-remote-control/dist/plugins/js/web-remote-control-client.js"></script>``` 
+1. ```<script src="/plugin/web-remote-control/dist/plugins/js/web-remote-control-client.js"></script>```
 2. initialize the RemoteControl object ```WebRemoteControl.init({engine: {name: 'revealjs'}});```
 3. the object to pass to init method has thoses parameters
  1. engine : the engine of presentation to use. Support engines are for the moment : revealjs.
@@ -62,10 +65,10 @@ You have to add thoses line in your html
  3. plugins : The list of plugins to activate. Each plugin is a javascript object with an src attribute that reference the path to the desire plugin
 4. ```<script src="/socket.io/socket.io.js"></script>``` in the import section of your javascripts
 
-According to the number of plugins you want to use with the remote control, add as many lines as you want somes plugins in the plugins attribute : 
- ```{ src: '{$HOME\_DIRECTORY}/plugin/web-remote-control/dist/plugins/plugins/*{thePluginYouWant}*.js'}``` 
+According to the number of plugins you want to use with the remote control, add as many lines as you want somes plugins in the plugins attribute :
+ ```{ src: '{$HOME\_DIRECTORY}/plugin/web-remote-control/dist/plugins/plugins/*{thePluginYouWant}*.js'}```
 
-Here is the list of plugin and their paths (according to plugins/plugins directory) : 
+Here is the list of plugin and their paths (according to plugins/plugins directory) :
 
  * ```sws-plugin-video-play.js``` : Could play or pause a html5 video tag in the current slide show on screen
  * ```sws-plugin-audio-play.js``` : Could play or pause a html5 audio tag in the current slide show on screen
@@ -88,7 +91,7 @@ Here is the list of plugin and their paths (according to plugins/plugins directo
 2. Tap on your keyboard CRTL+Q
 3. Select the right network and click on it
 4. Scan the QrCode with your smartphone
-5. Enjoy ! 
+5. Enjoy !
 
 
 **You could user node ```{PATH_TO_SERVER_JS}/server.js -h``` for getting the available commands**

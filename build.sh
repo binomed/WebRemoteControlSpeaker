@@ -11,13 +11,13 @@ sudo npm install
 gulp build
 echo "Plugins build done"
 echo ""
-echo "Start Server build"
-cd ../server
+echo "Start Ensuite build"
+cd ../ensuite
 sudo npm install
 gulp build
-echo "Server build done"
+echo "Ensuite build done"
 echo ""
-cd ../dist/server
-echo "Load node modules for the server"
-sudo npm install 
+cd ../dist/ensuite
+echo "Load node modules for the Ensuite"
+sudo npm install
 cd ../..

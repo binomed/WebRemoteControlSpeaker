@@ -9,11 +9,11 @@ cd ../plugins
 sudo npm install
 echo "Plugins build done"
 echo ""
-echo "Start Server build"
-cd ../server
+echo "Start Ensuite build"
+cd ../ensuite
 sudo npm install
 cd src
 sudo npm install
-echo "Server build done"
+echo "Ensuite build done"
 echo ""
 cd ../..

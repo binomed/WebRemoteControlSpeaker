@@ -1,13 +1,13 @@
-# Speaker WS : Server part
+# Speaker WS : Main part
 
-## How to use the server
+## How to use the ensuite programm
 
-Launch : 
+Launch :
 ```sh
-node $PATH_TO_SERVER_JS/server.js [options]
+node $PATH_TO_SERVER_JS/ensuite.js [options]
 ```
 
-Where options are : 
+Where options are :
 
 * -e : specify the path to presentation js
 * -d : true if in dev mode
