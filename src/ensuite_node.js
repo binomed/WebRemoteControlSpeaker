@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * Web Remote Control : Server V2.0.0
+ * Ensuite : Main Node V2.0.0
  *
  */
 

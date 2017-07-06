@@ -20,7 +20,7 @@ var es = require('event-stream');
 
 var extensions = ['.js','.json','.es6'];
 
-var distPlugins = "../dist/plugins/";
+var distPlugins = "../dist/";
 
 gulp.task("clean", function () {
   return del.sync([
@@ -35,13 +35,13 @@ gulp.task("clean", function () {
 gulp.task('browserify',function(){
 
   var files = [
-        {name: 'WebRemoteControl', path:'./src/js/web-remote-control-client.js'},
+        {name: 'WebRemoteControl', path:'./src/ensuite_client.js'},
         {name: 'GenericEngine', path:'./src/engines/generic-client-engine.js'},
         {name: 'RevealEngine', path:'./src/engines/revealjs-client-engine.js'},
-        {name: '', path:'./src/plugins/sws-plugin-audio-play.js'},
-        {name: '', path:'./src/plugins/sws-plugin-remote-pointer.js'},
-        {name: '', path:'./src/plugins/sws-plugin-sensor-pointer.js'},
-        {name: '', path:'./src/plugins/sws-plugin-video-play.js'},
+        {name: '', path:'./src/displays/plugins/sws-plugin-audio-play.js'},
+        {name: '', path:'./src/displays/plugins/sws-plugin-remote-pointer.js'},
+        {name: '', path:'./src/displays/plugins/sws-plugin-sensor-pointer.js'},
+        {name: '', path:'./src/displays/plugins/sws-plugin-video-play.js'},
   ];
 
   var taks = files.map(function(entry){
@@ -67,16 +67,15 @@ gulp.task('browserify',function(){
 
 gulp.task("copy", function () {
    return gulp.src([
-        "src/components/**",
-        "src/font/**",
+        "src/displays/**",,
         ], { "base" : "./src" })
     .pipe(gulp.dest(distPlugins));
 });
 
 gulp.task("mincss", function () {
-  return gulp.src("./src/css/*.css")
+  return gulp.src("./src/displays/css/*.css")
     .pipe(minifyCss())
-    .pipe(gulp.dest(distPlugins+"/css"));
+    .pipe(gulp.dest(distPlugins+"/displays/css"));
 });
 
 gulp.task("uglify-engines", function () {
@@ -86,9 +85,9 @@ gulp.task("uglify-engines", function () {
 });
 
 gulp.task("uglify-plugins", function () {
-  return gulp.src("./src/plugins/*.js")
+  return gulp.src("./src/displays/plugins/*.js")
     .pipe(uglify())
-    .pipe(gulp.dest(distPlugins+"/plugins"));
+    .pipe(gulp.dest(distPlugins+"/displays/plugins"));
 });
 
 gulp.task("uglify", function () {
@@ -102,28 +101,28 @@ gulp.task('serve',  ['sass'], function(){
   browserSync.init({
     server:'./'
   });
-  gulp.watch("src/sass/**/*.scss", ['sass']);
+  gulp.watch("src/displays/sass/**/*.scss", ['sass']);
   gulp.watch("./**/*.html").on('change', reload);
-  gulp.watch("./js/*.js").on('change', reload);
+  gulp.watch("./src/**/*.js").on('change', reload);
 });
 
 gulp.task('sass',function(){
-  return gulp.src('src/sass/**/*.scss')
+  return gulp.src('src/displays/sass/**/*.scss')
     .pipe(sourcemaps.init())
     .pipe(sass()).on('error', function logError(error) {
         console.error(error);
     })
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./src/css'))
+    .pipe(gulp.dest('./src/displays/css'))
     .pipe(reload({stream:true}));
 });
 
 gulp.task('sass-prod',function(){
-  return gulp.src('src/sass/**/*.scss')
+  return gulp.src('src/displays/sass/**/*.scss')
     .pipe(sass()).on('error', function logError(error) {
         console.error(error);
     })
-    .pipe(gulp.dest('./src/css'))
+    .pipe(gulp.dest('./src/displays/css'))
     .pipe(reload({stream:true}));
 });
 

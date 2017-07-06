@@ -1,1 +1,0 @@
-# Web Remote Control Plugin - Server Part

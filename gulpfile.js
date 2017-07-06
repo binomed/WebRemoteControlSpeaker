@@ -5,13 +5,13 @@ var path = require("path");
 var del = require("del");
 var runSequence = require('run-sequence');
 
-var distPlugins = "../dist/server/"
+var distPlugins = "../dist/"
 
 gulp.task("clean", function () {
   return del.sync([
     ".tmp",
     "../dist/**"
-  ], 
+  ],
   {
     force: true
   });
@@ -19,8 +19,8 @@ gulp.task("clean", function () {
 
 gulp.task("copy", function () {
    return gulp.src([
-        "src/server.js", 
-        "src/package.json", 
+        "src/ensuite_node.js",
+        "src/package.json",
         "src/README.md"
         ], { "base" : "./src" })
     .pipe(gulp.dest(distPlugins));

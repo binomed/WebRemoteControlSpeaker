@@ -2,10 +2,10 @@
 
 import { ScriptLoader } from './helpers/script-loader.js';
 import { _ajaxJSONGet, _extractPath, _loadAdditionnalScripts, _extractUrlParams } from './helpers/js-helpers.js';
-import { VERSION } from '../common/consts.js';
+import { VERSION } from './helpers/consts.js';
 
 /*
- * Web Remote Control : Plugin Client V2.0.0
+ * Ensuite : Main Javascript Client V2.0.0
  *
  */
 
