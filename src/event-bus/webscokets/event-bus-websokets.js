@@ -9,10 +9,6 @@ class SocketEventBus extends EventBus{
 		this.io.on('connection', (socket) => {
 			console.log('### connection');
 			this.sockets.push(socket);
-			socket.on('message', function(message) {
-				console.log('### message: ' + message);
-				socket.broadcast.emit('message', message);
-			});
 		});
 
 		this.sockets = [];
@@ -31,9 +27,12 @@ class SocketEventBus extends EventBus{
 	}
 
 	emit(key, data){
+		// Inner broadcast (same app)
 		super(key,data);
+		// System broadcast (several devices)
 		this.io.emit(key, data);
 	}
 
 }
 
+module.exports.SocketEventBus = SocketEventBus;

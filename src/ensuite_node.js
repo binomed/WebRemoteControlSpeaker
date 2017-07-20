@@ -68,14 +68,10 @@ server.listen(conf.port);
 console.log('Start server on port : ' + conf.port);
 
 app.use(express.static(process.cwd()));
-// Define socket part
-const io = require('socket.io')(server);
-io.on('connection', function(socket) {
-	console.log('### connection');
-	socket.on('message', function(message) {
-		console.log('### message: ' + message);
-		socket.broadcast.emit('message', message);
-	});
+
+const EventBusResolver = require('event-bus/event-bus-resolver.js');
+new EventBusResolver({
+	server : server
 });
 
 helperIps.requestIps(conf);
