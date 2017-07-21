@@ -43,10 +43,10 @@ export function _extractPath() {
 /**
  *  Load all the additionnals javascript libraries needed (QrCode)
  */
-export function _loadAdditionnalScripts(devMode) {
-	let path = _extractPath() + 'plugins/' + (devMode ? 'src/' : '');
+export function _loadAdditionnalScripts() {
+	let path = _extractPath() ;
 	let loader = new ScriptLoader();
-	loader.add(path + 'components/qrcode/qrcode.min.js', 'script');
+	loader.add(path + 'displays/qrcode/lib/qrcode.min.js', 'script');
 	loader.add(path + 'css/main.css', 'link');
 	return loader.loaded();
 }

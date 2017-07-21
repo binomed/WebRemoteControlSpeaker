@@ -46,7 +46,7 @@ function _initConfig() {
 				const confData = values[0];
 				this.conf = confData;
 				//initWS();
-				_loadAdditionnalScripts.bind(this)(this.conf.devMode);
+				_loadAdditionnalScripts.bind(this)();
 				const ipData = values[1];
 				this.ips = ipData;
 				resolve();
@@ -124,7 +124,6 @@ function _showRemoteQrCode() {
 				const result = get_id.options[get_id.selectedIndex].value;
 				const pathName = pathPlugin.substr(pathPlugin.indexOf(this.conf.port) + ('' + this.conf.port)
 					.length, pathPlugin.length);
-				// const pathToIndex = (this.conf.devMode ? "remote/src/" : "remote/")+"index.html";
 				const urlRemote = `http://${this.ips[result].ip}:${this.conf.port}${pathName}/remote/index.html?port=${this.conf.port}`;
 				this.qrCode.clear();
 				this.qrCode.makeCode(urlRemote);
@@ -244,7 +243,7 @@ function _engineCallBack(event) {
 
 function _loadEngine(engineConf) {
 	const loader = new ScriptLoader();
-	const path = _extractPath() + 'plugins/' + (this.conf.devMode ? '.tmp/src/' : '');
+	const path = _extractPath();
 	loader.add(`${path}/engines/${engineConf.name}-client-engine.js`, 'script');
 	return loader.loaded();
 }

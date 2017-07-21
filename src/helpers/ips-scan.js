@@ -14,12 +14,7 @@ function writeFile(conf) {
 		setTimeout(writeFile, 500, conf);
 	} else {
 		console.log('Write ip file');
-		var pathIpFile = null;
-		if (conf.devMode) {
-			pathIpFile = __dirname + '/../../plugins/conf/ips.json'; // Client
-		} else {
-			pathIpFile = __dirname + '/../plugins/conf/ips.json'; // Client
-		}
+		const pathIpFile = __dirname + '/../conf/ips.json'; // Client
 
 		fs.writeFile(pathIpFile, JSON.stringify(jsonNetWork), function(err) {
 			if (err) {

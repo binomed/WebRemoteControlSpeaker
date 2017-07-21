@@ -8,11 +8,11 @@
 // Configuration part
 const fs = require('fs'),
 	helperArgs = require('./helpers/cli-args.js'),
-	helperIps = require('./helpers/ips-scan.js');
+	helperIps = require('./helpers/ips-scan.js'),
+	helperConf = require('./helpers/conf-write.js');
 
 // If set as parameters, we get the engine directory path
 const conf = {
-	devMode: false,
 	port: 8080,
 	enginePath: ''
 };
@@ -29,33 +29,7 @@ if (process.argv.length > 2) {
 }
 
 // We will create the configuration files according to the configuration (dev or not)
-const confFileArray = [];
-const confFileJSON = JSON.stringify(conf);
-if (conf.devMode) {
-	confFileArray.push(__dirname + '/../../plugins/conf/conf.json'); // Client
-} else {
-	confFileArray.push(__dirname + '/../plugins/conf/conf.json'); // Client
-}
-for (let i = 0; i < confFileArray.length; i++) {
-
-	const confFile = confFileArray[i];
-	fs.mkdir(confFile.substring(0, confFile.indexOf('conf.json')), function(e) {
-		if (!e || (e && e.code === 'EEXIST')) {
-			//do something with contents
-		} else {
-			//debug
-			console.log(e);
-		}
-	});
-	fs.writeFile(confFile, confFileJSON, function(err) {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log('The file ' + confFile + ' was saved!');
-		}
-
-	});
-}
+helperConf.writeConfFile(conf);
 
 // Server part
 const express = require('express');
