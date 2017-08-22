@@ -1,8 +1,8 @@
-const socketBus = require('webscokets/event-bus-websokets.js');
+const {SocketEventBus} = require('./webscokets/event-bus-websokets.js');
 
 class EventBusResolver{
 	constructor(params){
-		new SocketEventBus(server);
+		new SocketEventBus(params.server);
 	}
 }
 

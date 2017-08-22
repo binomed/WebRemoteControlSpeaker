@@ -43,7 +43,7 @@ console.log('Start server on port : ' + conf.port);
 
 app.use(express.static(process.cwd()));
 
-const EventBusResolver = require('event-bus/event-bus-resolver.js');
+const {EventBusResolver} = require('./event-bus/event-bus-resolver.js');
 new EventBusResolver({
 	server : server
 });

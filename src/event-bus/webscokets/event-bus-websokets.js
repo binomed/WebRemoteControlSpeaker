@@ -1,5 +1,5 @@
 const {EventBus} = require('../event-bus.js');
-const socketIo = require('socket.io');
+const socketIO = require('socket.io');
 
 class SocketEventBus extends EventBus{
 
@@ -15,7 +15,7 @@ class SocketEventBus extends EventBus{
 	}
 
 	on(key, callback){
-		super(key, callback);
+		super.on(key, callback);
 		if(!key){
 			return;
 		}
@@ -28,7 +28,7 @@ class SocketEventBus extends EventBus{
 
 	emit(key, data){
 		// Inner broadcast (same app)
-		super(key,data);
+		super.emit(key,data);
 		// System broadcast (several devices)
 		this.io.emit(key, data);
 	}
