@@ -1,7 +1,7 @@
-const {EventBus} = require('../event-bus.js');
-const socketIO = require('socket.io');
+import {EventBus} from '../event-bus.js';
+import socketIO from 'socket.io';
 
-class SocketEventBus extends EventBus{
+export class SocketEventBus extends EventBus{
 
 	constructor(server){
 		super();
@@ -34,5 +34,3 @@ class SocketEventBus extends EventBus{
 	}
 
 }
-
-module.exports.SocketEventBus = SocketEventBus;

@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 
-function writeConfFile(conf){
+export function writeConfFile(conf){
 
 	const confFilePath = __dirname + '/../conf/conf.json'; //Client
 	const confFileJSON = JSON.stringify(conf);
@@ -23,7 +23,3 @@ function writeConfFile(conf){
 
 	});
 }
-
-module.exports = {
-	writeConfFile: writeConfFile
-};

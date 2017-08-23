@@ -12,7 +12,7 @@ const argList = [HELP_SHORT, HELP_LONG,
     PORT_SHORT, PORT_LONG
 ];
 
-function manageArgs(args, conf) {
+export function manageArgs(args, conf) {
 	let showHelp = false;
 	const newArgs = [];
 	if (args.length == 0) {
@@ -57,6 +57,3 @@ function manageArgs(args, conf) {
 	return manageArgs(newArgs, conf);
 }
 
-module.exports = {
-	manageArgs: manageArgs
-};

@@ -1,10 +1,11 @@
 'use strict'
 
 // Service for rendering adresses
-const os = require('os'),
-	http = require('http'),
-	fs = require('fs'),
-	ifaces = os.networkInterfaces();
+import os from 'os';
+import http from 'http';
+import fs from 'fs';
+
+const ifaces = os.networkInterfaces();
 
 let wait = true;
 const jsonNetWork = [];
@@ -28,7 +29,7 @@ function writeFile(conf) {
 	}
 }
 
-function requestIps(conf) {
+export function requestIps(conf) {
 	let index = 0;
 	for (let dev in ifaces) {
 		let alias = 0;
@@ -79,7 +80,3 @@ function requestIps(conf) {
 
 	writeFile(conf);
 }
-
-module.exports = {
-	requestIps: requestIps
-};

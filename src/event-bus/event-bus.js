@@ -1,4 +1,4 @@
-class EventBus{
+export class EventBus{
 	constructor(){
 		this.callBacks = {};
 	}
@@ -38,5 +38,3 @@ class EventBus{
 		});
 	}
 }
-
-module.exports.EventBus = EventBus;
