@@ -2,38 +2,31 @@
 
 // Service for rendering adresses
 import os from 'os';
-import http from 'http';
 import fs from 'fs';
+import fetch from 'node-fetch';
 
-const ifaces = os.networkInterfaces();
+function writeFile(jsonNetWork) {
+	console.log('Write ip file');
+	const pathIpFile = __dirname + '/../conf/ips.json'; // Client
 
-let wait = true;
-const jsonNetWork = [];
+	fs.writeFile(pathIpFile, JSON.stringify(jsonNetWork), function(err) {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log('The file ' + pathIpFile + ' was saved!');
+		}
 
-function writeFile(conf) {
-	if (wait) {
-		setTimeout(writeFile, 500, conf);
-	} else {
-		console.log('Write ip file');
-		const pathIpFile = __dirname + '/../conf/ips.json'; // Client
-
-		fs.writeFile(pathIpFile, JSON.stringify(jsonNetWork), function(err) {
-			if (err) {
-				console.log(err);
-			} else {
-				console.log('The file ' + pathIpFile + ' was saved!');
-			}
-
-			console.log('Finish server loading');
-		});
-	}
+		console.log('Finish server loading');
+	});
 }
 
 export function requestIps(conf) {
+	const ifaces = os.networkInterfaces();
+	const jsonNetWork = [];
 	let index = 0;
 	for (let dev in ifaces) {
 		let alias = 0;
-		ifaces[dev].forEach(function(details) {
+		ifaces[dev].forEach((details) => {
 			if (details.family == 'IPv4') {
 				jsonNetWork.push({
 					id: index,
@@ -47,36 +40,39 @@ export function requestIps(conf) {
 			}
 		});
 	}
-	console.log('Check Public ip');
-	const request = http.get('http://api.externalip.net/ip', function(res) {
-		res.on('data', function(data) {
+
+	writeFile(jsonNetWork);
+	const publicIpPromise = new Promise((resolve, reject) => {
+		console.log('Check Public ip');
+
+		fetch('https://api.ipify.org/?format=json',{
+			method:'GET',
+			timeout : 10000
+		})
+		.then((res) => res.json())
+		.then((data) => {
 			try {
 				jsonNetWork.push({
 					id: jsonNetWork.length,
 					name: 'public ip',
-					ip: '' + data,
+					ip: '' + data.ip,
 					enginePath: conf.enginePath
 				});
 				console.log('public ip found : ' + data);
-
+				resolve(jsonNetWork);
+				writeFile(jsonNetWork);
 			} catch (e) {
+				reject();
 				console.log('Warn : error geting ip from internet : ' + e.message);
 			}
-			wait = false;
-		});
-	});
-	request.on('error', function(e) {
-		console.log('Warn : error geting ip from internet : ' + e.message);
-		wait = false;
+		})
+		.catch((err) => {
+			reject();
+		})
 	});
 
-	setTimeout(function() {
-		if (wait) {
-			console.log('Request public ip timeout ! ');
-			request.abort();
-			wait = false;
-		}
-	}, 10000);
-
-	writeFile(conf);
+	return {
+		jsonNetWork : jsonNetWork,
+		promiseResults : publicIpPromise
+	};
 }

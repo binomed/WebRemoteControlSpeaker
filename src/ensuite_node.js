@@ -33,6 +33,8 @@ if (process.argv.length > 2) {
 
 // We will create the configuration files according to the configuration (dev or not)
 writeConfFile(conf);
+// We create the ip conf file
+const {jsonNetWork, promisePublicIP} = requestIps(conf);
 
 // Server part
 
@@ -50,4 +52,3 @@ new EventBusResolver({
 	server : server
 });
 
-requestIps(conf);
