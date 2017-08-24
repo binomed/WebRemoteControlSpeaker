@@ -6,10 +6,13 @@
  */
 
 // Configuration part
-import {fs} from 'fs';
+import fs from 'fs';
+import express from 'express';
+import http from 'http';
 import {manageArgs} from './helpers/cli-args.js';
 import {requestIps} from './helpers/ips-scan.js';
 import {writeConfFile} from './helpers/conf-write.js';
+import {EventBusResolver} from './event-bus/event-bus-resolver.js';
 
 // If set as parameters, we get the engine directory path
 const conf = {
@@ -32,18 +35,17 @@ if (process.argv.length > 2) {
 writeConfFile(conf);
 
 // Server part
-import express from 'express';
+
 const app = express();
 console.log(__dirname);
 console.log(process.cwd());
-import http from 'http';
+
 const server = http.createServer(app);
 server.listen(conf.port);
 console.log('Start server on port : ' + conf.port);
-
 app.use(express.static(process.cwd()));
 
-import {EventBusResolver} from './event-bus/event-bus-resolver.js';
+// Start eventBus
 new EventBusResolver({
 	server : server
 });
