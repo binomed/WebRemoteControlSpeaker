@@ -4,7 +4,7 @@
 
 Launch :
 ```sh
-node $PATH_TO_SERVER_JS/ensuite.js [options]
+npm start -- [options]
 ```
 
 Where options are :
