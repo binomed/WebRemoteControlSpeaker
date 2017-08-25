@@ -9,6 +9,7 @@
 import fs from 'fs';
 import express from 'express';
 import http from 'http';
+import opn from 'opn';
 import {manageArgs} from './helpers/cli-args.js';
 import {requestIps} from './helpers/ips-scan.js';
 import {writeConfFile} from './helpers/conf-write.js';
@@ -52,3 +53,4 @@ new EventBusResolver({
 	server : server
 });
 
+opn(`http://localhost:${conf.port}/src/layout-implementations/stage/index.html`);
