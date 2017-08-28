@@ -14,7 +14,7 @@ class EnsuiteClient{
 	}
 
 	_onStage(){
-		document.getElementById('btnValidate').addEventListener('click', ()=>{
+		const startDisplay = function(){
 			const urlPresentation = document.getElementById('inputPresentation').value;
 
 			document.getElementById('content').style.display = 'none';
@@ -22,7 +22,15 @@ class EnsuiteClient{
 			iFrame.style.display = '';
 			iFrame.src= urlPresentation;
 
+		};
+
+		document.getElementById('inputPresentation').addEventListener('keypress', (e)=>{
+			const key = e.which || e.keyCode;
+			if (key === 13){
+				startDisplay();
+			}
 		}, false);
+		document.getElementById('btnValidate').addEventListener('click', startDisplay, false);
 	}
 }
 

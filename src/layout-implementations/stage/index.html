@@ -42,15 +42,29 @@
 			width: 100px;
 			height: 50px;
 			line-height: 50px;
+			font-weight: 600;
 			color: white;
 			text-align: center;
+			cursor: pointer;
 		}
 
 		#stageFrame{
 			flex: 1;
+			border: 0;
+			width: 100%;
 		}
 
 	</style>
+
+	<script>
+		window.addEventListener('DOMContentLoaded', function() {
+			console.log( "ready!" );
+			EnsuiteClient.init({
+				mode: 'stage'
+			});
+		});
+
+	</script>
 </head>
 
 <body>
@@ -64,12 +78,7 @@
 
 	<iframe id="stageFrame" style="display:none">
 
-	<script type="text/javascript">
-		EnsuiteClient.init({
-			mode: 'stage'
-		});
 
-	</script>
 </body>
 
 </html>
