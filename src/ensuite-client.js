@@ -1,7 +1,12 @@
 'use sritct'
+import {EventBusResolver} from './event-bus/event-bus-resolver.js';
 
 class EnsuiteClient{
 	constructor(){
+		this.eventBus = new EventBusResolver({
+			client:true,
+			server : `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
+		});
 
 	}
 
@@ -31,6 +36,10 @@ class EnsuiteClient{
 			}
 		}, false);
 		document.getElementById('btnValidate').addEventListener('click', startDisplay, false);
+
+		document.addEventListener('keypress', (e) => {
+			console.debug(e);
+		}, false);
 	}
 }
 

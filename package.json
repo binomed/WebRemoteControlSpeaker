@@ -20,7 +20,8 @@
     "node-fetch": "^1.7.2",
     "normalize.css": "^7.0.0",
     "opn": "^5.1.0",
-    "socket.io": "^1.7.2"
+    "socket.io": "^1.7.2",
+    "socket.io-client": "^2.0.3"
   },
   "devDependencies": {
     "del": "^2.2.2",
