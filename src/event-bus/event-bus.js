@@ -37,4 +37,16 @@ export class EventBus{
 			},0);
 		});
 	}
+
+	getCallbacks(key){
+		if (!key){
+			console.warn('Key empty');
+			return [];
+		}
+		const arrayCallback = this.callBacks[key];
+		if (!arrayCallback){
+			return [];
+		}
+		return arrayCallback;
+	}
 }

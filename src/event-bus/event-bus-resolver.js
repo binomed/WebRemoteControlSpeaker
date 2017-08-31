@@ -3,10 +3,16 @@ import {SocketEventBusClient} from './webscokets/event-bus-websockets-client';
 
 export class EventBusResolver{
 	constructor(params){
-		if (params.client){
-			new SocketEventBusClient(params.server);
-		}else{
-			new SocketEventBus(params.server);
+		if (params.server){
+			if (params.client){
+				this.socketBus = new SocketEventBusClient(params.server);
+			}else{
+				this.socketBus = new SocketEventBus(params.server);
+			}
+		}
+
+		if(window){
+			this.postMessageBus = new PostMessageEventBus();
 		}
 	}
 }
