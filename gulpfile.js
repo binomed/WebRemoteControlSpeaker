@@ -35,7 +35,7 @@ gulp.task("clean", function () {
 gulp.task('browserify',function(){
 
   var files = [
-        {name: 'EnsuiteClient', path:'./src/ensuite-client.js'},
+        {name: 'Ensuite', path:'./src/ensuite-client.js'},
         {name: 'GenericEngine', path:'./src/engines/generic-client-engine.js'},
         {name: 'RevealEngine', path:'./src/engines/revealjs-client-engine.js'},
         {name: '', path:'./src/displays/plugins/sws-plugin-audio-play.js'},

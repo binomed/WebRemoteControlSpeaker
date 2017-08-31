@@ -1,7 +1,7 @@
 'use sritct'
 import {EventBusResolver} from './event-bus/event-bus-resolver.js';
 
-class EnsuiteClient{
+class Ensuite{
 	constructor(){
 		this.eventBus = new EventBusResolver({
 			client:true,
@@ -43,4 +43,4 @@ class EnsuiteClient{
 	}
 }
 
-export default new EnsuiteClient();
+export default new Ensuite();
