@@ -1,5 +1,6 @@
 import {SocketEventBus} from './webscokets/event-bus-websokets.js';
 import {SocketEventBusClient} from './webscokets/event-bus-websockets-client';
+import {PostMessageEventBus} from './postmessage/event-bus-postmessage';
 
 export class EventBusResolver{
 	constructor(params){
@@ -11,7 +12,7 @@ export class EventBusResolver{
 			}
 		}
 
-		if(window){
+		if(typeof window != "undefined"){
 			this.postMessageBus = new PostMessageEventBus();
 		}
 	}
