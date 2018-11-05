@@ -53,7 +53,8 @@ gulp.task('browserify',function(){
         extensions: extensions
       })
       .transform(babelify.configure({
-        plugins: ['add-module-exports']
+				plugins: ['add-module-exports'],
+				presets: ['@babel/preset-env']
       }))
       .on('error', gutil.log)
       .bundle()
