@@ -7,8 +7,8 @@ class EnsuiteClient{
 
 	}
 
-	init(){
-
+	init({devMode, engine, plugins}){
+		this.eventBus.postMessageBus.on('test',(msg)=>console.log('EnsuiteClient PostMessage', msg));
 	}
 
 }

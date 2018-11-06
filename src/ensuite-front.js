@@ -26,20 +26,47 @@ class Ensuite{
 			const iFrame = document.getElementById('stageFrame');
 			iFrame.style.display = '';
 			iFrame.src= urlPresentation;
+			this.eventBus.postMessageBus.on('test', (event)=>{
+				const eventIframe = new Event('message');
+				eventIframe.data = event;
+				iFrame.dispatchEvent(eventIframe);
+			});
+			iFrame.addEventListener('message', (event) => {
+				console.log('message from iframe');
+			})
 
 		};
 
 		document.getElementById('inputPresentation').addEventListener('keypress', (e)=>{
 			const key = e.which || e.keyCode;
 			if (key === 13){
-				startDisplay();
+				startDisplay.bind(this)();
 			}
 		}, false);
 		document.getElementById('btnValidate').addEventListener('click', startDisplay, false);
 
-		document.addEventListener('keypress', (e) => {
-			console.debug(e);
+		document.addEventListener('keyup', (e) => {
+			switch (event.key) {
+				case "Down": // IE specific value
+				case "ArrowDown":
+				  // Do something for "down arrow" key press.
+				  break;
+				case "Up": // IE specific value
+				case "ArrowUp":
+				  // Do something for "up arrow" key press.
+				  break;
+				case "Left": // IE specific value
+				case "ArrowLeft":
+				  // Do something for "left arrow" key press.
+				  break;
+				case "Right": // IE specific value
+				case "ArrowRight":
+				  // Do something for "right arrow" key press.
+				  this.eventBus.postMessageBus.emit('test',{data:'test'});
+				  break;
+			}
 		}, false);
+		
 	}
 }
 

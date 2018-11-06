@@ -14,11 +14,6 @@ export class PostMessageEventBus extends EventBus{
 		if(!key){
 			return;
 		}
-		this.sockets.forEach((socket) =>{
-			socket.on(key, (message) => {
-				this.emit(key, message);
-			});
-		});
 	}
 
 	emit(key, data){
