@@ -32,6 +32,9 @@ export class PostMessageEventBus extends EventBus{
 	}
 
 	_receiveMessageWindow(message) {
+		if (!!message || !!message.data || message.data.length === 0) {
+			return;
+		}
 		if (message.data.charAt(0) === '{' && message.data.charAt(message.data.length - 1) === '}') {
 			message = JSON.parse(message.data);
 			const callBacks = super.getCallbacks(message.type);
