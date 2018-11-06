@@ -9,4 +9,4 @@ yarn.lock
 dist
 conf
 bower_components
-css
+src/**/css
