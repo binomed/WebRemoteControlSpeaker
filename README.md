@@ -38,6 +38,12 @@ The build is based on those tools
 
 If you are behind a proxy, you have to configure npm to go throught proxy [npm behind proxy](http://jjasonclark.com/how-to-setup-node-behind-web-proxy)
 
+## Install with docker
+
+1. Clone the repository
+2. Build the docker image with the command ```docker build -t <your-docker-image>```
+3. Start the container with ```docker run -p 8080:<your-port-number> -d <your-docker-image>```
+
 ## Install
 
 1. Download of clone the repository
@@ -81,8 +87,6 @@ Here is the list of plugin and their paths (according to plugins/plugins directo
 * Reveal JS
 1. You have to check that markdown plugin is present in your presentation
 2. You have to check that you have the file lib/js/head.min.js in your presentation
-
-
 
 ### Use it
 
