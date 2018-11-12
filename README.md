@@ -41,8 +41,8 @@ If you are behind a proxy, you have to configure npm to go throught proxy [npm b
 ## Install with docker
 
 1. Clone the repository
-2. Build the docker image with the command 'docker build -t <your-docker-image>'
-3. Start the container with 'docker run -p 8080:<your-port-number> -d <your-docker-image>'
+2. Build the docker image with the command ```docker build -t <your-docker-image>```
+3. Start the container with ```docker run -p 8080:<your-port-number> -d <your-docker-image>```
 
 ## Install
 
