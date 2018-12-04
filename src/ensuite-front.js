@@ -1,12 +1,13 @@
 'use sritct'
-import {EventBusResolver} from './event-bus/event-bus-resolver.js';
+//import {EventBusResolver} from './event-bus/event-bus-resolver.js';
+import ReactiveLayoutEngine from './engines/layout-reactive-engine';
 
 class Ensuite{
 	constructor(){
-		this.eventBus = new EventBusResolver({
-			client:true,
-			server : `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
-		});
+		//this.eventBus = new EventBusResolver({
+		//	client:true,
+		//	server : `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
+		//});
 
 	}
 
@@ -24,16 +25,19 @@ class Ensuite{
 
 			document.getElementById('content').style.display = 'none';
 			const iFrame = document.getElementById('stageFrame');
+			this.engine = new ReactiveLayoutEngine(iFrame.contentWindow);
 			iFrame.style.display = '';
 			iFrame.src= urlPresentation;
-			this.eventBus.postMessageBus.on('test', (event)=>{
-				const eventIframe = new Event('message');
-				eventIframe.data = event;
-				iFrame.dispatchEvent(eventIframe);
-			});
-			iFrame.addEventListener('message', (event) => {
-				console.log('message from iframe');
-			})
+			this.engine.test();
+
+			//this.eventBus.postMessageBus.on('test', (event)=>{
+			//	const eventIframe = new Event('message');
+			//	eventIframe.data = event;
+			//	iFrame.dispatchEvent(eventIframe);
+			//});
+			//iFrame.addEventListener('message', (event) => {
+			//	console.log('message from iframe');
+			//})
 
 		};
 
@@ -62,7 +66,8 @@ class Ensuite{
 				case "Right": // IE specific value
 				case "ArrowRight":
 				  // Do something for "right arrow" key press.
-				  this.eventBus.postMessageBus.emit('test',{data:'test'});
+				  //this.eventBus.postMessageBus.emit('UPDATE',{data:'test'});
+				  this.engine.test();
 				  break;
 			}
 		}, false);

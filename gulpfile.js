@@ -37,12 +37,14 @@ gulp.task('browserify',function(){
   var files = [
         {name: 'Ensuite', path:'./src/ensuite-front.js'},
         {name: 'EnsuiteClient', path:'./src/ensuite-client.js'},
-        {name: 'GenericEngine', path:'./src/engines/generic-client-engine.js'},
-        {name: 'RevealEngine', path:'./src/engines/revealjs-client-engine.js'},
-        {name: '', path:'./src/displays/plugins/sws-plugin-audio-play.js'},
-        {name: '', path:'./src/displays/plugins/sws-plugin-remote-pointer.js'},
-        {name: '', path:'./src/displays/plugins/sws-plugin-sensor-pointer.js'},
-        {name: '', path:'./src/displays/plugins/sws-plugin-video-play.js'},
+        //{name: 'GenericEngine', path:'./src/engines/generic-client-engine.js'},
+        //{name: 'RevealEngine', path:'./src/engines/revealjs-client-engine.js'},
+        {name: 'ReactiveLayoutEngine', path:'./src/engines/layout-reactive-engine.js'},
+        {name: 'ReactiveRevealEngine', path:'./src/engines/revealjs-reactive-engine.js'},
+        //{name: '', path:'./src/displays/plugins/sws-plugin-audio-play.js'},
+        //{name: '', path:'./src/displays/plugins/sws-plugin-remote-pointer.js'},
+        //{name: '', path:'./src/displays/plugins/sws-plugin-sensor-pointer.js'},
+        //{name: '', path:'./src/displays/plugins/sws-plugin-video-play.js'},
   ];
 
   var taks = files.map(function(entry){
